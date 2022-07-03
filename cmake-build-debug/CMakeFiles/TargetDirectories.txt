@@ -1,0 +1,3 @@
+/home/dtpreda/parser/cmake-build-debug/CMakeFiles/parser.dir
+/home/dtpreda/parser/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/dtpreda/parser/cmake-build-debug/CMakeFiles/rebuild_cache.dir
