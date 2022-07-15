@@ -4,7 +4,7 @@ enable_testing()
 
 add_executable(
         configuration_test
-        test/configuration_test.cpp
+        configuration_test.cpp
 )
 target_link_libraries(
         configuration_test
