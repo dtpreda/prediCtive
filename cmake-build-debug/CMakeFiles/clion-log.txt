@@ -1,22 +1,4 @@
 /home/dtpreda/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/221.5921.27/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/home/dtpreda/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/221.5921.27/bin/ninja/linux/ninja -G Ninja -S /home/dtpreda/parser -B /home/dtpreda/parser/cmake-build-debug
-CMake Warning at google_test/lib/CMakeLists.txt:51 (project):
-  VERSION keyword not followed by a value or was followed by a value that
-  expanded to nothing.
-
-
--- Found Python: /usr/bin/python3.10 (found version "3.10.5") found components: Interpreter 
--- Looking for pthread.h
--- Looking for pthread.h - found
--- Performing Test CMAKE_HAVE_LIBC_PTHREAD
--- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
--- Found Threads: TRUE  
-CMake Error at google_test/lib/CMakeLists.txt:127 (set_target_properties):
-  set_target_properties called with incorrect number of arguments.
-
-
-CMake Error at google_test/lib/CMakeLists.txt:129 (set_target_properties):
-  set_target_properties called with incorrect number of arguments.
-
-
--- Configuring incomplete, errors occurred!
-See also "/home/dtpreda/parser/cmake-build-debug/CMakeFiles/CMakeOutput.log".
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/dtpreda/parser/cmake-build-debug
