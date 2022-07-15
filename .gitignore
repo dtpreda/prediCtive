@@ -1,1 +1,9 @@
 assets/
+cmake-build-debug/
+.idea
+CMakeCache.txt
+CMakeFiles/
+Makefile
+Testing/
+_deps/
+*.cmake
