@@ -2,7 +2,7 @@ SStart -> Start < EOF >
 
 Start -> Tokens Skip? Rules
 
-Tokens -> < TOKENS > < { > Token (, Token)* < } >
+Tokens -> < TOKENS > < { > Token ( < , > Token)* < } >
 
 Token -> < ID > < : > < ID >
 
