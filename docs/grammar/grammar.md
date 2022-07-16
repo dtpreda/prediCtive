@@ -1,3 +1,5 @@
+SStart -> Start < EOF > 
+
 Start -> Tokens Skip? Rules
 
 Tokens -> < TOKENS > < { > Token (, Token)* < } >
@@ -6,7 +8,7 @@ Token -> < ID > < : > < ID >
 
 Skip -> < SKIP > < { > < REGEX > (, REGEX)* < } >
 
-Rules -> < ID > < -> > Rule
+Rules -> (< ID > < -> > Rule < ; >)+
 
 Rule -> < ( > Rule < ) > Closure
 

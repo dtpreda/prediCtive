@@ -4,6 +4,8 @@ NULLABLE(X) = False
 
 For non-terminals:
 
+NULLABLLE(SStart) = false
+
 NULLABLLE(Start) = false
 
 NULLABLLE(Tokens) = false

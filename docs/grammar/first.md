@@ -2,7 +2,9 @@ For any terminal X:
 
 FIRST(X) = { X }
 
-For non-terminals: 
+For non-terminals:
+
+FIRST(SStart) = First(Start) = { < TOKENS > } 
 
 FIRST(Start) = { < TOKENS > }
 
