@@ -10,21 +10,25 @@ FIRST(Start) = { < TOKENS > }
 
 FIRST(Tokens) = { < TOKENS > }
 
+FIRST(NextToken) = { < , > }
+
 FIRST(Token) = { < ID > }
 
 FIRST(Skip) = { < SKIP > }
 
+FIRST(SkipExpression) = { < , > }
+
 FIRST(Rules) = { < ID > }
+
+FIRST(NextRule) = { < ID > }
 
 FIRST(Rule) = { < ( >, < < >, < ID > }
 
 FIRST(Closure) = { < * >, < + > }
 
-FIRST(BasicRule) = FIRST(RuleElement) = { < < >, < ID >}
+FIRST(RuleBlock) = { < < >, < ID >, < ( > }
 
-FIRST(RuleElement) = FIRST(RuleBlock) = { < < >, < ID >}
-
-FIRST(RuleBlock) = { < < >, < ID > }
+FIRST(NextRuleBlock) = { < < >, < ID >, < ( > }
 
 FIRST(Annotation) = { < { > }
 

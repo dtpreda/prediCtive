@@ -10,22 +10,26 @@ NULLABLLE(Start) = false
 
 NULLABLLE(Tokens) = false
 
+NULLABLE(NextToken) = true
+
 NULLABLLE(Token) = false
 
-NULLABLLE(Skip) = false
+NULLABLLE(Skip) = true
+
+NULLABLE(SkipExpression) = true
 
 NULLABLLE(Rules) = false
+
+NULLABLLE(NextRule) = false
 
 NULLABLLE(Rule) = false
 
 NULLABLLE(Closure) = false
 
-NULLABLLE(BasicRule) = false
-
-NULLABLLE(RuleElement) = false
-
 NULLABLLE(RuleBlock) = false
 
-NULLABLLE(Annotation) = false
+NULLABLLE(NextRuleBlock) = false
+
+NULLABLLE(Annotation) = true
 
 NULLABLLE(AnnotationOption) = false

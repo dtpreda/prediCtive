@@ -4,22 +4,26 @@ FOLLOW(Start) = { < EOF > }
 
 FOLLOW(Tokens) = { < SKIP >, < ID > }
 
+FOLLOW(NextToken) = { < } > }
+
 FOLLOW(Token) = { < } >, < , >}
 
 FOLLOW(Skip) = { < ID > }
 
+FOLLOW(SkipExpression) = { < } > }
+
 FOLLOW(Rules) = { < EOF > }
+
+FOLLOW(NextRule) = { < EOF > }
 
 FOLLOW(Rule) = { < ) >, < ; > }
 
-FOLLOW(Closure) = { < ) >, < ; > }
+FOLLOW(Closure) = { < ( >, < < >, < ID >, < { >, < ) >, < ; > }
 
-FOLLOW(BasicRule) = { < ) >, < ; > }
+FOLLOW(RuleBlock) = { < ( >, < < >, < ID >, < { >, < ) >, < ; > }
 
-FOLLOW(RuleElement) = { < ) >, < ; >  }
+FOLLOW(NextRuleBlock) = { < { >, < ) >, < ; > }
 
-FOLLOW(RuleBlock) = { < { >, < ) >, < ; > }
-
-FOLLOW(Annotation) = { < ) >, < ; >}
+FOLLOW(Annotation) = { < ( >, < < >, < ID >, < ) >, < ; > }
 
 FOLLOW(AnnotationOption) = { < } > }

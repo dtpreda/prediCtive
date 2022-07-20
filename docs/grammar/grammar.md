@@ -1,32 +1,48 @@
 SStart -> Start < EOF > 
 
-Start -> Tokens Skip? Rules
+Start -> Tokens Skip Rules
 
-Tokens -> < TOKENS > < { > Token ( < , > Token)* < } >
+Tokens -> < TOKENS > < { > Token NextToken < } >
+
+NextToken -> < , > Token NextToken
+
+NextToken -> ε
 
 Token -> < ID > < : > < ID >
 
-Skip -> < SKIP > < { > < REGEX > (, REGEX)* < } >
+Skip -> < SKIP > < { > < " > < REGEX_EXPR > < " > SkipExpression < } >
 
-Rules -> (< ID > < -> > Rule < ; >)+
+Skip -> ε
 
-Rule -> < ( > Rule < ) > Closure
+SkipExpression -> < , > < " > < REGEX_EXPR > < " > SkipExpression
 
-Rule -> BasicRule
+SkipExpression -> ε
 
-Closure -> < * >
+Rules -> < ID > < -> > Rule < ; > NextRule
 
-Closure -> < + >
+NextRule -> < ID > < -> > Rule < ; > NextRule
 
-BasicRule -> (RuleElement)+
+NextRule -> ε
 
-RuleElement -> RuleBlock (Annotation)?
+Rule -> RuleBlock Annotation NextRuleBlock
+
+NextRuleBlock -> RuleBlock Annotation NextRuleBlock
+
+NextRuleBlock -> ε
 
 RuleBlock -> < < > < ID > < > >
 
 RuleBlock -> < ID >
 
-Annotation -> < { > < ID > < : > AnnotationOption < } >
+RuleBlock -> < ( > Rule < ) > Closure
+
+Closure -> < * >
+
+Closure -> < + >
+
+Annotation -> < { > < " > < MATCH_ALL > < " > < : > AnnotationOption < } >
+
+Annotation -> ε
 
 AnnotationOption -> < " > < MATCH_ALL > < " >
 
