@@ -14,5 +14,10 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-add_executable(parser src/main.cpp)
+include_directories(src)
+
+set(TESTABLES src/parser/Terminal.cpp src/parser/Terminal.h)
+add_library(testables ${TESTABLES})
+
+add_executable(parser src/main.cpp src/parser/Terminal.cpp src/parser/Terminal.h)
 add_subdirectory(test)
