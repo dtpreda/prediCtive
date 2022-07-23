@@ -5,6 +5,15 @@
 #include <gtest/gtest.h>
 #include "parser/Terminal.h"
 
+TEST(SymbolClass, SymbolCreation) {
+    EXPECT_NO_FATAL_FAILURE(Symbol("testName"));
+}
+
+TEST(SymbolClass, SymbolName) {
+    Symbol testSymbol("testSymbol");
+    EXPECT_EQ("testSymbol", testSymbol.getName());
+}
+
 TEST(TerminalClass, TerminalCreation) {
     EXPECT_NO_FATAL_FAILURE(Terminal("testName", "testExpression"));
 }

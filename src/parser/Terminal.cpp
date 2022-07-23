@@ -4,11 +4,7 @@
 
 #include "Terminal.h"
 
-Terminal::Terminal(std::string name, std::string regexExpression) : name(name), regex(std::regex(regexExpression)) {}
-
-std::string Terminal::getName() const {
-    return this->name;
-}
+Terminal::Terminal(std::string name, std::string regexExpression) : Symbol(name), regex(std::regex(regexExpression)) {}
 
 std::regex Terminal::getRegex() const {
     return this->regex;

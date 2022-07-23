@@ -16,8 +16,11 @@ FetchContent_MakeAvailable(googletest)
 
 include_directories(src)
 
-set(TESTABLES src/parser/Terminal.cpp src/parser/Terminal.h)
-add_library(testables ${TESTABLES})
+set(SOURCE_FILES src/parser/Terminal.cpp src/parser/Terminal.h
+        src/parser/Symbol.cpp src/parser/Symbol.h
+        src/parser/NonTerminal.cpp src/parser/NonTerminal.h
+)
+add_library(testables ${SOURCE_FILES})
 
-add_executable(parser src/main.cpp src/parser/Terminal.cpp src/parser/Terminal.h)
+add_executable(parser src/main.cpp ${SOURCE_FILES})
 add_subdirectory(test)

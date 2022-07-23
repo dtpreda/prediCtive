@@ -8,14 +8,14 @@
 #include <string>
 #include <regex>
 
-class Terminal {
+#include "Symbol.h"
+
+class Terminal : public Symbol {
 public:
     Terminal(std::string name, std::string regexExpression);
 
-    std::string getName() const;
     std::regex getRegex() const;
 private:
-    const std::string name;
     const std::regex regex;
 };
 
