@@ -13,6 +13,7 @@ public:
 
     std::string getName() const;
     bool operator<(Symbol other) const;
+    bool operator==(Symbol other) const;
 private:
     const std::string name;
 };

@@ -19,7 +19,7 @@ include_directories(src)
 set(SOURCE_FILES src/parser/Terminal.cpp src/parser/Terminal.h
         src/parser/Symbol.cpp src/parser/Symbol.h
         src/parser/NonTerminal.cpp src/parser/NonTerminal.h
-)
+        src/parser/Recognizer.cpp src/parser/Recognizer.h)
 add_library(testables ${SOURCE_FILES})
 
 add_executable(parser src/main.cpp ${SOURCE_FILES})

@@ -14,9 +14,11 @@ class Terminal : public Symbol {
 public:
     Terminal(std::string name, std::string regexExpression);
 
-    std::regex getRegex() const;
+    std::string getRegexExpression() const;
+
+    static std::string NULL_TERMINAL;
 private:
-    const std::regex regex;
+    const std::string regex;
 };
 
 

@@ -13,3 +13,7 @@ std::string Symbol::getName() const {
 bool Symbol::operator<(const Symbol other) const {
     return this->name < other.name;
 }
+
+bool Symbol::operator==(const Symbol other) const {
+    return this->name == other.name;
+}

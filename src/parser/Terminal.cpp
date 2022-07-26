@@ -4,8 +4,10 @@
 
 #include "Terminal.h"
 
-Terminal::Terminal(std::string name, std::string regexExpression) : Symbol(name), regex(std::regex(regexExpression)) {}
+std::string Terminal::NULL_TERMINAL = "NULL TERMINAL";
 
-std::regex Terminal::getRegex() const {
+Terminal::Terminal(std::string name, std::string regexExpression) : Symbol(name), regex(regexExpression) {}
+
+std::string Terminal::getRegexExpression() const {
     return this->regex;
 }
