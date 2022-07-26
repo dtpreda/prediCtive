@@ -32,4 +32,4 @@ FIRST(NextRuleBlock) = { < < >, < ID >, < ( > }
 
 FIRST(Annotation) = { < { > }
 
-FIRST(AnnotationOption) = { < LAST >, < " >}
+FIRST(AnnotationOption) = { < LAST >, < QUOTE_EXPRESSION >}
