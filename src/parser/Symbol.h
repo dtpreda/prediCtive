@@ -12,6 +12,7 @@ public:
     Symbol(std::string name);
 
     std::string getName() const;
+    bool operator<(Symbol other) const;
 private:
     const std::string name;
 };

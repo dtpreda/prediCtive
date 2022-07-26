@@ -9,3 +9,7 @@ Symbol::Symbol(std::string name) : name(name) {}
 std::string Symbol::getName() const {
     return this->name;
 }
+
+bool Symbol::operator<(const Symbol other) const {
+    return this->name < other.name;
+}
