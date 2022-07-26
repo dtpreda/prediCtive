@@ -10,11 +10,11 @@ NextToken -> ε
 
 Token -> < ID > < : > < ID >
 
-Skip -> < SKIP > < { > < " > < REGEX_EXPR > < " > SkipExpression < } >
+Skip -> < SKIP > < { > < QUOTE_EXPRESSION > SkipExpression < } >
 
 Skip -> ε
 
-SkipExpression -> < , > < " > < REGEX_EXPR > < " > SkipExpression
+SkipExpression -> < , > < QUOTE_EXPRESSION > SkipExpression
 
 SkipExpression -> ε
 
@@ -40,10 +40,10 @@ Closure -> < * >
 
 Closure -> < + >
 
-Annotation -> < { > < " > < MATCH_ALL > < " > < : > AnnotationOption < } >
+Annotation -> < { > < QUOTE_EXPRESSION > < : > AnnotationOption < } >
 
 Annotation -> ε
 
-AnnotationOption -> < " > < MATCH_ALL > < " >
+AnnotationOption -> < QUOTE_EXPRESSION >
 
 AnnotationOption -> < LAST >
