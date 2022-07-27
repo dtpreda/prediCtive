@@ -6,6 +6,7 @@
 #include "parser/Terminal.h"
 #include "parser/NonTerminal.h"
 #include "parser/Recognizer.h"
+#include "parser/prediCtiveParser.h"
 
 TEST(SymbolClass, SymbolCreation) {
     ASSERT_NO_FATAL_FAILURE(Symbol("testName"));
@@ -205,4 +206,31 @@ TEST(RecognizerClass, RecognizerRecognizeFirstTerminalUnknown) {
 
     ASSERT_EQ(Terminal::NULL_TERMINAL, recognized.getName());
     ASSERT_EQ("t1", testString);
+}
+
+TEST(prediCtiveParser, prediCtiveParserRecognizeSimple) {
+    std::string testString1("TOKENS");
+    std::string testString2("identifier1");
+    std::string testString3("last_token");
+    std::string testString4("SKIP");
+
+    Terminal recognized1 = prediCtiveRecognizer.recognizeFirstTerminal(testString1);
+
+    ASSERT_EQ("Tokens", recognized1.getName());
+    ASSERT_EQ("", testString1);
+
+    Terminal recognized2 = prediCtiveRecognizer.recognizeFirstTerminal(testString2);
+
+    ASSERT_EQ("Identifier", recognized2.getName());
+    ASSERT_EQ("", testString2);
+
+    Terminal recognized3 = prediCtiveRecognizer.recognizeFirstTerminal(testString3);
+
+    ASSERT_EQ("Last", recognized3.getName());
+    ASSERT_EQ("", testString3);
+
+    Terminal recognized4 = prediCtiveRecognizer.recognizeFirstTerminal(testString4);
+
+    ASSERT_EQ("Skip", recognized4.getName());
+    ASSERT_EQ("", testString4);
 }
