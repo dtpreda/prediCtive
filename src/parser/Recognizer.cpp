@@ -29,3 +29,9 @@ Terminal Recognizer::recognizeFirstTerminal(std::string &toRecognize) {
 
     return {Terminal::NULL_TERMINAL, Terminal::NULL_TERMINAL};
 }
+
+Recognizer::Recognizer(std::vector<Terminal> terminals) {
+    for (auto& terminal : terminals) {
+        this->addTerminal(terminal);
+    }
+}

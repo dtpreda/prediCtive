@@ -96,6 +96,22 @@ TEST(NonTerminalClass, NonTerminalGetRule) {
     ASSERT_EQ(returnedRuleExpansion.at(2).getName(), testTerminal4.getName());
 }
 
+TEST(RecognizerClass, RecognizerCreation) {
+    Terminal testTerminal1("testTerminal1", "t1");
+    Terminal testTerminal2("testTerminal2", "t12");
+
+    std::vector<Terminal> testTerminals = { testTerminal1, testTerminal2 };
+
+    Recognizer testRecognizer(testTerminals);
+
+    std::string testString("t12");
+
+    Terminal recognized = testRecognizer.recognizeFirstTerminal(testString);
+
+    ASSERT_EQ("testTerminal1", recognized.getName());
+    ASSERT_EQ("2", testString);
+}
+
 TEST(RecognizerClass, RecognizerRecognizeFirstTerminalFullString) {
     Recognizer testRecognizer;
     Terminal testTerminal("testTerminal", "testRegexExpression");
