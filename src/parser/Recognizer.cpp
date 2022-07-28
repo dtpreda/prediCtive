@@ -17,7 +17,7 @@ void Recognizer::addTerminal(const Terminal& terminal) {
     this->terminals.push_back(toInsert);
 }
 
-Terminal Recognizer::recognizeFirstTerminal(std::string &toRecognize) {
+Terminal Recognizer::recognizeFirstTerminal(std::string &toRecognize) const {
     std::smatch matchResult;
     for (auto & terminal : this->terminals) {
         if (std::regex_search(toRecognize, matchResult, terminal.first) && matchResult.position() == 0) {

@@ -13,7 +13,7 @@
 
 class NonTerminal : public Symbol {
 public:
-    NonTerminal(std::string name);
+    explicit NonTerminal(std::string name);
 
     void addRule(const Terminal& first, const std::vector<Symbol>& expansion);
     std::vector<Symbol> getRule(const Terminal& first) const;

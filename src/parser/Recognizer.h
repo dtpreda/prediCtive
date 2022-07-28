@@ -15,7 +15,7 @@ public:
     Recognizer(std::vector<Terminal> terminals);
 
     void addTerminal(const Terminal& terminal);
-    Terminal recognizeFirstTerminal(std::string& toRecognize);
+    Terminal recognizeFirstTerminal(std::string& toRecognize) const;
 private:
     std::vector<std::pair<std::regex, Terminal>> terminals;
 };

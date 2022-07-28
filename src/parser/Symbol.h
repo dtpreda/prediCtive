@@ -9,7 +9,7 @@
 
 class Symbol {
 public:
-    Symbol(std::string name);
+    explicit Symbol(std::string name);
 
     std::string getName() const;
     bool operator<(const Symbol& other) const;
