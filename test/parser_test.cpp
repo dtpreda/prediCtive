@@ -135,10 +135,7 @@ TEST(RecognizerClass, RecognizerRecognizeFirstTerminalAfterNewline) {
 
     std::string testString("\ntestRegexExpression");
 
-    Terminal recognized = testRecognizer.recognizeFirstTerminal(testString);
-
-    ASSERT_EQ(Terminal::NULL_TERMINAL, recognized.getName());
-    ASSERT_EQ("\ntestRegexExpression", testString);
+    ASSERT_THROW(testRecognizer.recognizeFirstTerminal(testString), std::runtime_error);
 }
 
 TEST(RecognizerClass, RecognizerRecognizeFirstTerminalMultiple) {
@@ -202,10 +199,7 @@ TEST(RecognizerClass, RecognizerRecognizeFirstTerminalUnknown) {
 
     std::string testString("t1");
 
-    Terminal recognized = testRecognizer.recognizeFirstTerminal(testString);
-
-    ASSERT_EQ(Terminal::NULL_TERMINAL, recognized.getName());
-    ASSERT_EQ("t1", testString);
+    ASSERT_THROW(testRecognizer.recognizeFirstTerminal(testString), std::runtime_error);
 }
 
 TEST(prediCtiveParser, prediCtiveParserRecognizeSimple) {

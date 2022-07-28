@@ -27,7 +27,7 @@ Terminal Recognizer::recognizeFirstTerminal(std::string &toRecognize) {
         }
     }
 
-    return {Terminal::NULL_TERMINAL, Terminal::NULL_TERMINAL};
+    throw std::runtime_error("No matching terminal was found for the given input.");
 }
 
 Recognizer::Recognizer(std::vector<Terminal> terminals) {

@@ -12,8 +12,8 @@ public:
     Symbol(std::string name);
 
     std::string getName() const;
-    bool operator<(Symbol other) const;
-    bool operator==(Symbol other) const;
+    bool operator<(const Symbol& other) const;
+    bool operator==(const Symbol& other) const;
 private:
     const std::string name;
 };

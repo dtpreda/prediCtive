@@ -15,8 +15,6 @@ public:
     Terminal(std::string name, std::string regexExpression);
 
     std::string getRegexExpression() const;
-
-    static std::string NULL_TERMINAL;
 private:
     const std::string regex;
 };

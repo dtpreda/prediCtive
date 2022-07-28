@@ -3,10 +3,11 @@
 //
 
 #include <sstream>
+#include <utility>
 
 #include "NonTerminal.h"
 
-NonTerminal::NonTerminal(std::string name) : Symbol(name) {}
+NonTerminal::NonTerminal(std::string name) : Symbol(std::move(name)) {}
 
 void NonTerminal::addRule(const Terminal& first, const std::vector<Symbol>& expansion) {
     if (this->rules.find(first) != this->rules.end()) {
