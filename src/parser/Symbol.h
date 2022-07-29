@@ -10,7 +10,7 @@
 class Symbol {
 public:
     explicit Symbol(std::string name);
-    virtual ~Symbol() = default;;
+    virtual Symbol* clone() const = 0;
 
     std::string getName() const;
     bool operator<(const Symbol& other) const;

@@ -11,7 +11,7 @@ void Recognizer::addTerminal(const Terminal& terminal) {
     std::stringstream terminalRegexExpression;
     terminalRegexExpression << "^" << terminal.getRegexExpression();
 
-    std::regex terminalRegex(terminalRegexExpression.str());
+    std::regex terminalRegex(terminalRegexExpression.str(), std::regex::multiline);
 
     std::pair<std::regex, Terminal> toInsert(terminalRegex, terminal);
     this->terminals.push_back(toInsert);

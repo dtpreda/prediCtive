@@ -14,6 +14,10 @@
 class NonTerminal : public Symbol {
 public:
     explicit NonTerminal(std::string name);
+    NonTerminal(const NonTerminal& other);
+    ~NonTerminal();
+    Symbol* clone() const;
+
 
     void addToRule(const Terminal& first, const Terminal& expansion);
     void addToRule(const Terminal& first, const NonTerminal& expansion);

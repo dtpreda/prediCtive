@@ -12,4 +12,8 @@ std::string Terminal::getRegexExpression() const {
     return this->regex;
 }
 
+Symbol* Terminal::clone() const {
+    return new Terminal(static_cast<const Terminal&>(*this));
+}
+
 Terminal& Terminal::operator=(const Terminal& other) = default;

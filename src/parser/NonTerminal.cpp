@@ -38,3 +38,26 @@ std::vector<Symbol*> NonTerminal::getRule(const Terminal& first) const {
 
     return this->rules.find(first)->second;
 }
+
+NonTerminal::~NonTerminal() {
+    for (auto & rule : this->rules) {
+        while(!rule.second.empty()) {
+            delete rule.second.back();
+            rule.second.pop_back();
+        }
+    }
+}
+
+NonTerminal::NonTerminal(const NonTerminal& other) : Symbol(other.getName()) {
+    for (auto& rule : other.rules) {
+        std::vector<Symbol*> ruleExpansion;
+        for (auto& symbol : rule.second) {
+            ruleExpansion.push_back(symbol->clone());
+        }
+        this->rules.insert({rule.first, ruleExpansion});
+    }
+}
+
+Symbol* NonTerminal::clone() const {
+    return new NonTerminal(static_cast<const NonTerminal&>(*this));
+}
