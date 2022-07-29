@@ -9,18 +9,25 @@
 
 NonTerminal::NonTerminal(std::string name) : Symbol(std::move(name)) {}
 
-void NonTerminal::addRule(const Terminal& first, const std::vector<Symbol>& expansion) {
-    if (this->rules.find(first) != this->rules.end()) {
-        std::stringstream what;
-        what << "Non-terminal symbol " << this->getName() << " can't contain more than one rule for terminal symbol "
-             << first.getName() << "." << std::endl;
-        throw std::runtime_error(what.str());
+void NonTerminal::addToRule(const Terminal& first, const Terminal& expansion) {
+    Symbol *expansionPtr = new Terminal(expansion);
+    if (this->rules.find(first) == this->rules.end()) {
+        this->rules.insert({first, std::vector<Symbol*>({ expansionPtr })});
+    } else {
+        this->rules.find(first)->second.push_back(expansionPtr);
     }
-
-    this->rules.insert({first , expansion});
 }
 
-std::vector<Symbol> NonTerminal::getRule(const Terminal &first) const {
+void NonTerminal::addToRule(const Terminal& first, const NonTerminal& expansion) {
+    Symbol *expansionPtr = new NonTerminal(expansion);
+    if (this->rules.find(first) == this->rules.end()) {
+        this->rules.insert({first, std::vector<Symbol*>({ expansionPtr })});
+    } else {
+        this->rules.find(first)->second.push_back(expansionPtr);
+    }
+}
+
+std::vector<Symbol*> NonTerminal::getRule(const Terminal& first) const {
     auto correspondingRule = this->rules.find(first);
     if (correspondingRule == this->rules.end()) {
         std::stringstream what;
@@ -28,5 +35,6 @@ std::vector<Symbol> NonTerminal::getRule(const Terminal &first) const {
              << "." << std::endl;
         throw std::runtime_error(what.str());
     }
+
     return this->rules.find(first)->second;
 }

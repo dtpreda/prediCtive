@@ -15,10 +15,11 @@ class NonTerminal : public Symbol {
 public:
     explicit NonTerminal(std::string name);
 
-    void addRule(const Terminal& first, const std::vector<Symbol>& expansion);
-    std::vector<Symbol> getRule(const Terminal& first) const;
+    void addToRule(const Terminal& first, const Terminal& expansion);
+    void addToRule(const Terminal& first, const NonTerminal& expansion);
+    std::vector<Symbol*> getRule(const Terminal& first) const;
 private:
-    std::map<Terminal, std::vector<Symbol>> rules;
+    std::map<Terminal, std::vector<Symbol*>> rules;
 };
 
 
