@@ -19,3 +19,5 @@ bool Symbol::operator<(const Symbol& other) const {
 bool Symbol::operator==(const Symbol& other) const {
     return this->name == other.name;
 }
+
+Symbol& Symbol::operator=(const Symbol &other) = default;

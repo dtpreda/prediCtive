@@ -15,8 +15,9 @@ public:
     Terminal(std::string name, std::string regexExpression);
 
     std::string getRegexExpression() const;
+    Terminal& operator=(const Terminal& other);
 private:
-    const std::string regex;
+    std::string regex;
 };
 
 

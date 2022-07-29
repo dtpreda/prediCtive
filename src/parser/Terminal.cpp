@@ -11,3 +11,5 @@ Terminal::Terminal(std::string name, std::string regexExpression) : Symbol(std::
 std::string Terminal::getRegexExpression() const {
     return this->regex;
 }
+
+Terminal& Terminal::operator=(const Terminal& other) = default;

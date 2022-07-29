@@ -10,12 +10,14 @@
 class Symbol {
 public:
     explicit Symbol(std::string name);
+    virtual ~Symbol() = default;;
 
     std::string getName() const;
     bool operator<(const Symbol& other) const;
     bool operator==(const Symbol& other) const;
+    Symbol& operator=(const Symbol& other);
 private:
-    const std::string name;
+    std::string name;
 };
 
 

@@ -24,6 +24,15 @@ TEST(SymbolClass, SymbolComparison) {
     ASSERT_LT(testSymbol1, testSymbol2);
 }
 
+TEST(SymbolClass, SymbolAssignmentOperator) {
+    Symbol testSymbol1("testSymbol1");
+    Symbol testSymbol2("testSymbol2");
+
+    testSymbol1 = testSymbol2;
+
+    ASSERT_EQ("testSymbol2", testSymbol1.getName());
+}
+
 TEST(TerminalClass, TerminalCreation) {
     ASSERT_NO_FATAL_FAILURE(Terminal("testName", "testExpression"));
 }
@@ -40,6 +49,16 @@ TEST(TerminalClass, TerminalExpression) {
     std::regex terminalRegex(testTerminal.getRegexExpression());
 
     ASSERT_TRUE(std::regex_match(testString, terminalRegex));
+}
+
+TEST(TerminalClass, TerminalAssignmentOperator) {
+    Terminal testTerminal1("testTerminal1", "testTerminal1");
+    Terminal testTerminal2("testTerminal2", "testTerminal2");
+
+    testTerminal1 = testTerminal2;
+
+    ASSERT_EQ("testTerminal2", testTerminal1.getName());
+    ASSERT_EQ("testTerminal2", testTerminal1.getRegexExpression());
 }
 
 TEST(NonTerminalClass, NonTerminalCreation) {
