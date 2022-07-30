@@ -12,7 +12,7 @@
 class Recognizer {
 public:
     Recognizer() = default;
-    Recognizer(std::vector<Terminal> terminals);
+    explicit Recognizer(std::vector<Terminal> terminals);
 
     void addTerminal(const Terminal& terminal);
     Terminal recognizeFirstTerminal(std::string& toRecognize) const;

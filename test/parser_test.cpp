@@ -9,31 +9,6 @@
 #include "parser/Parser.h"
 #include "parser/prediCtiveParser.h"
 
-TEST(SymbolClass, SymbolCreation) {
-    ASSERT_NO_FATAL_FAILURE(Symbol("testName"));
-}
-
-TEST(SymbolClass, SymbolName) {
-    Symbol testSymbol("testSymbol");
-    ASSERT_EQ("testSymbol", testSymbol.getName());
-}
-
-TEST(SymbolClass, SymbolComparison) {
-    Symbol testSymbol1("testSymbol1");
-    Symbol testSymbol2("testSymbol2");
-
-    ASSERT_LT(testSymbol1, testSymbol2);
-}
-
-TEST(SymbolClass, SymbolAssignmentOperator) {
-    Symbol testSymbol1("testSymbol1");
-    Symbol testSymbol2("testSymbol2");
-
-    testSymbol1 = testSymbol2;
-
-    ASSERT_EQ("testSymbol2", testSymbol1.getName());
-}
-
 TEST(TerminalClass, TerminalCreation) {
     ASSERT_NO_FATAL_FAILURE(Terminal("testName", "testExpression"));
 }
@@ -76,9 +51,9 @@ TEST(NonTerminalClass, NonTerminalAddAndGetRule) {
     NonTerminal testNonTerminal("testNonTerminal");
 
     Terminal testTerminal1("testTerminal1", "testTerminal1");
-    Terminal testTerminal3("testTerminal2", "testTerminal2");
-    Terminal testTerminal4("testTerminal3", "testTerminal3");
-    Terminal testTerminal2("testTerminal4", "testTerminal4");
+    Terminal testTerminal2("testTerminal2", "testTerminal2");
+    Terminal testTerminal3("testTerminal3", "testTerminal3");
+    Terminal testTerminal4("testTerminal4", "testTerminal4");
     NonTerminal testNonTerminal2("testNonTerminal2");
 
     ASSERT_THROW(testNonTerminal.getRule(testTerminal1), std::runtime_error);
@@ -95,7 +70,7 @@ TEST(NonTerminalClass, NonTerminalAddAndGetRule) {
     ASSERT_EQ(4, expansionRule.size());
     ASSERT_EQ("testTerminal2", expansionRule.at(0)->getName());
     ASSERT_EQ("testTerminal3", expansionRule.at(1)->getName());
-    ASSERT_EQ("testTerminal3", expansionRule.at(2)->getName());
+    ASSERT_EQ("testTerminal4", expansionRule.at(2)->getName());
     ASSERT_EQ("testNonTerminal2", expansionRule.at(3)->getName());
 }
 
@@ -229,4 +204,66 @@ TEST(prediCtiveParser, prediCtiveParserRecognizeSimple) {
 
     ASSERT_EQ("Skip", recognized4.getName());
     ASSERT_EQ("", testString4);
+}
+
+TEST(ParserClass, ParserCreation) {
+    ASSERT_NO_FATAL_FAILURE(Parser(Recognizer(), NonTerminal("testSymbol")));
+}
+
+TEST(ParserClass, ParserParseSimple) {
+    NonTerminal testStartSymbol("Start");
+    Terminal testTerminal1("Hello", "Hello");
+    Terminal testTerminal2("WhiteSpace", "\\s");
+    Terminal testTerminal3("World", "World!");
+    Terminal testTerminal4("EOF", "\\$");
+
+    testStartSymbol.addToRule(testTerminal1, testTerminal1);
+    testStartSymbol.addToRule(testTerminal1, testTerminal2);
+    testStartSymbol.addToRule(testTerminal1, testTerminal3);
+    testStartSymbol.addToRule(testTerminal1, testTerminal4);
+
+    Recognizer testRecognizer;
+    testRecognizer.addTerminal(testTerminal1);
+    testRecognizer.addTerminal(testTerminal2);
+    testRecognizer.addTerminal(testTerminal3);
+    testRecognizer.addTerminal(testTerminal4);
+
+    Parser testParser(testRecognizer, testStartSymbol);
+
+    std::string testString("Hello World!$");
+    ASSERT_TRUE(testParser.parse(testString));
+}
+
+TEST(ParserClass, ParserParseWithNonTerminals) {
+    NonTerminal testStartSymbol("Start");
+    Terminal testTerminal1("Hello", "Hello");
+    Terminal testTerminal2("WhiteSpace", "\\s");
+    Terminal testTerminal3("World", "World!");
+    Terminal testTerminal4("EOF", "\\$");
+
+    NonTerminal testExpansion1("Hello World!");
+    NonTerminal testExpansion2("World! Hello");
+
+    testExpansion1.addToRule(testTerminal1, testTerminal1);
+    testExpansion1.addToRule(testTerminal1, testTerminal2);
+    testExpansion1.addToRule(testTerminal1, testTerminal3);
+
+    testExpansion2.addToRule(testTerminal3, testTerminal3);
+    testExpansion2.addToRule(testTerminal3, testTerminal2);
+    testExpansion2.addToRule(testTerminal3, testTerminal1);
+    testExpansion2.addToRule(testTerminal3, testTerminal4);
+
+    testStartSymbol.addToRule(testTerminal1, testExpansion1);
+    testStartSymbol.addToRule(testTerminal1, testExpansion2);
+
+    Recognizer testRecognizer;
+    testRecognizer.addTerminal(testTerminal1);
+    testRecognizer.addTerminal(testTerminal2);
+    testRecognizer.addTerminal(testTerminal3);
+    testRecognizer.addTerminal(testTerminal4);
+
+    Parser testParser(testRecognizer, testStartSymbol);
+
+    std::string testString("Hello World!World! Hello$");
+    ASSERT_TRUE(testParser.parse(testString));
 }
