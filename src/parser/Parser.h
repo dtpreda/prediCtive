@@ -9,15 +9,18 @@
 
 #include "Recognizer.h"
 #include "NonTerminal.h"
+#include "Node.h"
 
 class Parser {
 public:
     Parser(Recognizer recognizer, const NonTerminal& startSymbol);
 
-    bool parse(std::string toParse) const;
+    Node parse(std::string toParse) const;
 private:
     Recognizer recognizer;
     NonTerminal startSymbol;
+
+    Node parse(std::string& toParse, Terminal& currentTerminal, Node rootNode, Symbol* currentSymbol) const;
 };
 
 

@@ -231,7 +231,7 @@ TEST(ParserClass, ParserParseSimple) {
     Parser testParser(testRecognizer, testStartSymbol);
 
     std::string testString("Hello World!$");
-    ASSERT_TRUE(testParser.parse(testString));
+    ASSERT_NO_THROW(testParser.parse(testString));
 
     std::string testStringFail("World!$ Hello");
     ASSERT_THROW(testParser.parse(testStringFail), std::runtime_error);
@@ -268,8 +268,8 @@ TEST(ParserClass, ParserParseWithNonTerminals) {
     Parser testParser(testRecognizer, testStartSymbol);
 
     std::string testString("Hello World!World! Hello$");
-    ASSERT_TRUE(testParser.parse(testString));
+    ASSERT_NO_THROW(testParser.parse(testString));
 
-    std::string testStringFail("Hello World!World! Hello");
-    ASSERT_FALSE(testParser.parse(testStringFail));
+    std::string testStringFail("Hello World!World! Hello$$");
+    ASSERT_THROW(testParser.parse(testStringFail), std::runtime_error);
 }
