@@ -74,6 +74,32 @@ TEST(NonTerminalClass, NonTerminalAddAndGetRule) {
     ASSERT_EQ("testNonTerminal2", expansionRule.at(3)->getName());
 }
 
+TEST(NonTerminalClass, NonTerminalAddAndGetRuleVector) {
+    NonTerminal testNonTerminal("testNonTerminal");
+
+    Terminal testTerminal1("testTerminal1", "testTerminal1");
+    Terminal testTerminal2("testTerminal2", "testTerminal2");
+    Terminal testTerminal3("testTerminal3", "testTerminal3");
+    Terminal testTerminal4("testTerminal4", "testTerminal4");
+    NonTerminal testNonTerminal2("testNonTerminal2");
+
+    ASSERT_THROW(testNonTerminal.getRule(testTerminal1), std::runtime_error);
+
+    std::vector<Symbol*> expansion = { &testTerminal2, &testTerminal3, &testTerminal4, &testNonTerminal2 };
+
+    ASSERT_NO_FATAL_FAILURE(testNonTerminal.addToRule(testTerminal1, expansion));
+
+    ASSERT_NO_THROW(testNonTerminal.getRule(testTerminal1));
+
+    std::vector<Symbol*> expansionRule = testNonTerminal.getRule(testTerminal1);
+
+    ASSERT_EQ(4, expansionRule.size());
+    ASSERT_EQ("testTerminal2", expansionRule.at(0)->getName());
+    ASSERT_EQ("testTerminal3", expansionRule.at(1)->getName());
+    ASSERT_EQ("testTerminal4", expansionRule.at(2)->getName());
+    ASSERT_EQ("testNonTerminal2", expansionRule.at(3)->getName());
+}
+
 TEST(RecognizerClass, RecognizerCreation) {
     Terminal testTerminal1("testTerminal1", "t1");
     Terminal testTerminal2("testTerminal2", "t12");

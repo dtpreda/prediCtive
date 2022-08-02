@@ -27,6 +27,28 @@ void NonTerminal::addToRule(const Terminal& first, const NonTerminal& expansion)
     }
 }
 
+void NonTerminal::addToRule(const Terminal &first, const Symbol* expansion) {
+    auto* terminal = dynamic_cast<const Terminal*>(expansion);
+
+    if (terminal) {
+        this->addToRule(first, *terminal);
+    } else {
+        auto* nonTerminal = dynamic_cast<const NonTerminal*>(expansion);
+
+        if (nonTerminal) {
+            this->addToRule(first, *nonTerminal);
+        } else {
+            throw std::runtime_error("Corrupted Symbol object.");
+        }
+    }
+}
+
+void NonTerminal::addToRule(const Terminal &first, const std::vector<Symbol*>& expansion) {
+    for(auto &expansionElement : expansion) {
+        this->addToRule(first, expansionElement);
+    }
+}
+
 std::vector<Symbol*> NonTerminal::getRule(const Terminal& first) const {
     auto correspondingRule = this->rules.find(first);
     if (correspondingRule == this->rules.end()) {
