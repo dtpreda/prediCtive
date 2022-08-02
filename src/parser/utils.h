@@ -5,6 +5,10 @@
 #ifndef PARSER_UTILS_H
 #define PARSER_UTILS_H
 
-#define END_OF_INPUT "END_OF_INPUT"
+#include <memory>
+
+#include "Terminal.h"
+
+extern std::shared_ptr<Terminal> END_OF_INPUT;
 
 #endif //PARSER_UTILS_H

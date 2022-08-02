@@ -23,10 +23,12 @@ set(SOURCE_FILES src/parser/Terminal.cpp src/parser/Terminal.h
         src/parser/prediCtiveParser.cpp src/parser/prediCtiveParser.h
         src/parser/Parser.cpp src/parser/Parser.h
         src/parser/Node.cpp src/parser/Node.h
-        src/parser/utils.h)
+        src/parser/utils.h src/parser/utils.cpp
+)
 set(TEST_ASSETS assets/annotate.cg assets/closures.cg
         assets/ignore.cg assets/options.cg
-        assets/rules.cg assets/tokens.cg
+        assets/rules.cg assets/simpleGrammar.cg
+        assets/tokens.cg
 )
 add_library(testables ${SOURCE_FILES} ${TEST_ASSETS})
 

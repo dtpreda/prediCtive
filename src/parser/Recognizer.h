@@ -6,13 +6,14 @@
 #define PARSER_RECOGNIZER_H
 
 #include <vector>
+#include <memory>
 
 #include "Terminal.h"
 
 class Recognizer {
 public:
     Recognizer() = default;
-    explicit Recognizer(std::vector<Terminal> terminals);
+    explicit Recognizer(const std::vector<std::shared_ptr<Terminal>>& terminals);
 
     void addTerminal(const Terminal& terminal);
     Terminal recognizeFirstTerminal(std::string& toRecognize) const;

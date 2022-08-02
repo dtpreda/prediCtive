@@ -30,8 +30,8 @@ Terminal Recognizer::recognizeFirstTerminal(std::string &toRecognize) const {
     throw std::runtime_error("No matching terminal was found for the given input.");
 }
 
-Recognizer::Recognizer(std::vector<Terminal> terminals) {
+Recognizer::Recognizer(const std::vector<std::shared_ptr<Terminal>>& terminals) {
     for (auto& terminal : terminals) {
-        this->addTerminal(terminal);
+        this->addTerminal(*terminal);
     }
 }

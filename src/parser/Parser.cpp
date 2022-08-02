@@ -21,14 +21,14 @@ Node Parser::parse(std::string toParse) const {
     std::vector<std::shared_ptr<Symbol>> nextSymbols = this->startSymbol.getRule(currentTerminal);
 
     for (auto & nextSymbol : nextSymbols) {
-        if (currentTerminal.getName() == END_OF_INPUT) {
+        if (currentTerminal.getName() == END_OF_INPUT->getName() && nextSymbol->getName() != END_OF_INPUT->getName()) {
             throw std::runtime_error("Unable to correctly match expression given.");
         }
         Node childNode = this->parse(toParse, currentTerminal, Node(nextSymbol->getName()), nextSymbol);
         root.addChild(childNode);
     }
 
-    if (!toParse.empty() || currentTerminal.getName() != END_OF_INPUT) {
+    if (!toParse.empty() || currentTerminal.getName() != END_OF_INPUT->getName()) {
         throw std::runtime_error("Unable to correctly match expression given.");
     }
 
@@ -57,7 +57,7 @@ Node Parser::parse(std::string& toParse, Terminal& currentTerminal, Node rootNod
             currentTerminal = (this->recognizer).recognizeFirstTerminal(toParse);
         } catch (std::runtime_error& e) {
             if (toParse.empty()) {
-                currentTerminal = Terminal(END_OF_INPUT, "");
+                currentTerminal = *END_OF_INPUT;
                 return rootNode;
             } else {
                 throw e;
