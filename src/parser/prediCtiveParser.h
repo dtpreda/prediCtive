@@ -5,8 +5,8 @@
 #ifndef PARSER_PREDICTIVEPARSER_H
 #define PARSER_PREDICTIVEPARSER_H
 
-#include "Recognizer.h"
+#include "Parser.h"
 
-extern Recognizer prediCtiveRecognizer;
+Parser buildPrediCtiveParser();
 
 #endif //PARSER_PREDICTIVEPARSER_H

@@ -13,7 +13,7 @@
 class Terminal : public Symbol {
 public:
     Terminal(std::string name, std::string regexExpression);
-    Symbol* clone() const;
+    ~Terminal() override;
 
     std::string getRegexExpression() const;
     Terminal& operator=(const Terminal& other);

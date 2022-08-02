@@ -11,14 +11,14 @@
 
 #include <utility>
 
-Parser::Parser(Recognizer recognizer, const NonTerminal& startSymbol) : recognizer(std::move(recognizer)), startSymbol(startSymbol){}
+Parser::Parser(Recognizer recognizer, NonTerminal startSymbol) : recognizer(std::move(recognizer)), startSymbol(std::move(startSymbol)){}
 
 Node Parser::parse(std::string toParse) const {
     Node root = Node(this->startSymbol.getName());
 
     Terminal currentTerminal = (this->recognizer).recognizeFirstTerminal(toParse);
 
-    std::vector<Symbol*> nextSymbols = this->startSymbol.getRule(currentTerminal);
+    std::vector<std::shared_ptr<Symbol>> nextSymbols = this->startSymbol.getRule(currentTerminal);
 
     for (auto & nextSymbol : nextSymbols) {
         if (currentTerminal.getName() == END_OF_INPUT) {
@@ -35,12 +35,12 @@ Node Parser::parse(std::string toParse) const {
     return root;
 }
 
-Node Parser::parse(std::string& toParse, Terminal& currentTerminal, Node rootNode, Symbol* currentSymbol) const {
-    auto* nextTerminal = dynamic_cast<const Terminal*>(currentSymbol);
-    auto* nextNonTerminal = dynamic_cast<const NonTerminal*>(currentSymbol);
+Node Parser::parse(std::string& toParse, Terminal& currentTerminal, Node rootNode, const std::shared_ptr<Symbol>& currentSymbol) const {
+    auto nextTerminal = std::dynamic_pointer_cast<const Terminal>(currentSymbol);
+    auto nextNonTerminal = std::dynamic_pointer_cast<const NonTerminal>(currentSymbol);
 
     if (nextNonTerminal) {
-        std::vector<Symbol*> nextSymbols = nextNonTerminal->getRule(currentTerminal);
+        std::vector<std::shared_ptr<Symbol>> nextSymbols = nextNonTerminal->getRule(currentTerminal);
 
         for (auto & nextSymbol : nextSymbols) {
             Node childNode = this->parse(toParse, currentTerminal, Node(nextSymbol->getName()), nextSymbol);
