@@ -8,7 +8,7 @@ NextToken -> < , > Token NextToken
 
 NextToken -> ε
 
-Token -> < ID > < : > < ID >
+Token -> < ID > < : > < QUOTE_EXPRESSION >
 
 Skip -> < SKIP > < { > < QUOTE_EXPRESSION > SkipExpression < } >
 

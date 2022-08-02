@@ -44,6 +44,9 @@ void NonTerminal::addToRule(const Terminal &first, const std::shared_ptr<Symbol>
 }
 
 void NonTerminal::addToRule(const Terminal &first, const std::vector<std::shared_ptr<Symbol>>& expansion) {
+    if (expansion.empty()) {
+        this->rules.insert({ first, std::vector<std::shared_ptr<Symbol>>() });
+    }
     for(auto &expansionElement : expansion) {
         this->addToRule(first, expansionElement);
     }

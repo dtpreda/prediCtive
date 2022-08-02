@@ -3,11 +3,32 @@
 //
 
 #include <gtest/gtest.h>
+#include <string>
+#include <sstream>
+#include <fstream>
+
 #include "parser/Terminal.h"
 #include "parser/NonTerminal.h"
 #include "parser/Recognizer.h"
 #include "parser/Parser.h"
 #include "parser/prediCtiveParser.h"
+
+std::string openPrediCtiveFile(std::string path) {
+    std::ifstream file(path);
+    std::stringstream filteredFile;
+
+    char c;
+
+    while (file >> c) {
+        if (c != '\n' && c != '\t' && c != ' ') {
+            filteredFile << c;
+        }
+    }
+
+    file.close();
+
+    return filteredFile.str();
+}
 
 TEST(TerminalClass, TerminalCreation) {
     ASSERT_NO_FATAL_FAILURE(Terminal("testName", "testExpression"));
@@ -101,10 +122,10 @@ TEST(NonTerminalClass, NonTerminalAddAndGetRuleVector) {
 }
 
 TEST(RecognizerClass, RecognizerCreation) {
-    Terminal testTerminal1("testTerminal1", "t1");
-    Terminal testTerminal2("testTerminal2", "t12");
+    std::shared_ptr<Terminal> testTerminal1 = std::make_shared<Terminal>("testTerminal1", "t1");
+    std::shared_ptr<Terminal> testTerminal2 = std::make_shared<Terminal>("testTerminal2", "t12");
 
-    std::vector<Terminal> testTerminals = { testTerminal1, testTerminal2 };
+    std::vector<std::shared_ptr<Terminal>> testTerminals = { testTerminal1, testTerminal2 };
 
     Recognizer testRecognizer(testTerminals);
 
@@ -241,7 +262,7 @@ TEST(ParserClass, ParserParseSimple) {
     std::shared_ptr<Terminal> testTerminal1 = std::make_shared<Terminal>("Hello", "Hello");
     std::shared_ptr<Terminal> testTerminal2 = std::make_shared<Terminal>("WhiteSpace", "\\s");
     std::shared_ptr<Terminal> testTerminal3 = std::make_shared<Terminal>("World", "World!");
-    std::shared_ptr<Terminal> testTerminal4 = std::make_shared<Terminal>("EOF", "\\$");
+    std::shared_ptr<Terminal> testTerminal4 = std::make_shared<Terminal>("Dollar Sign", "\\$");
 
     testStartSymbol.addToRule(*testTerminal1, testTerminal1);
     testStartSymbol.addToRule(*testTerminal1, testTerminal2);
@@ -268,7 +289,7 @@ TEST(ParserClass, ParserParseWithNonTerminals) {
     std::shared_ptr<Terminal> testTerminal1 = std::make_shared<Terminal>("Hello", "Hello");
     std::shared_ptr<Terminal> testTerminal2 = std::make_shared<Terminal>("WhiteSpace", "\\s");
     std::shared_ptr<Terminal> testTerminal3 = std::make_shared<Terminal>("World", "World!");
-    std::shared_ptr<Terminal> testTerminal4 = std::make_shared<Terminal>("EOF", "\\$");
+    std::shared_ptr<Terminal> testTerminal4 = std::make_shared<Terminal>("Dollar Sign", "\\$");
 
     std::shared_ptr<NonTerminal> testExpansion1 = std::make_shared<NonTerminal>("Hello World!");
     std::shared_ptr<NonTerminal> testExpansion2 = std::make_shared<NonTerminal>("World! Hello");
@@ -298,6 +319,12 @@ TEST(ParserClass, ParserParseWithNonTerminals) {
 
     std::string testStringFail("Hello World!World! Hello$$");
     ASSERT_THROW(testParser.parse(testStringFail), std::runtime_error);
+}
 
-    buildPrediCtiveParser();
+TEST(prediCtiveParser, SimpleGrammar) {
+    std::string contents = openPrediCtiveFile("assets/simpleGrammar.cg");
+
+    Parser prediCtiveParser = buildPrediCtiveParser();
+
+    ASSERT_NO_THROW(prediCtiveParser.parse(contents));
 }
