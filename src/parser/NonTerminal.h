@@ -22,8 +22,11 @@ public:
     void addToRule(const Terminal& first, const std::shared_ptr<NonTerminal>& expansion);
     void addToRule(const Terminal &first, const std::vector<std::shared_ptr<Symbol>>& expansion);
     std::vector<std::shared_ptr<Symbol>> getRule(const Terminal& first) const;
+
+    bool isNullable() const override;
 private:
     std::map<Terminal, std::vector<std::shared_ptr<Symbol>>> rules;
+    int nullExpansions = 0;
 };
 
 

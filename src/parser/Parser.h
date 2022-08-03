@@ -14,14 +14,14 @@
 
 class Parser {
 public:
-    Parser(Recognizer recognizer, NonTerminal  startSymbol);
+    Parser(Recognizer recognizer, const NonTerminal&  startSymbol);
 
-    Node parse(std::string toParse) const;
+    Node parse(std::string toParse);
 private:
     Recognizer recognizer;
     NonTerminal startSymbol;
 
-    Node parse(std::string& toParse, Terminal& currentTerminal, Node rootNode, const std::shared_ptr<Symbol>& currentSymbol) const;
+    Node parse(std::string& toParse, Terminal& currentTerminal, Node rootNode, const std::shared_ptr<Symbol>& currentSymbol);
 };
 
 

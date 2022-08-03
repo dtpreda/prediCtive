@@ -11,11 +11,13 @@ class Symbol {
 public:
     explicit Symbol(std::string name);
     virtual ~Symbol() = default;
-
     std::string getName() const;
+
     bool operator<(const Symbol& other) const;
     bool operator==(const Symbol& other) const;
     Symbol& operator=(const Symbol& other);
+
+    virtual bool isNullable() const = 0;
 private:
     std::string name;
 };

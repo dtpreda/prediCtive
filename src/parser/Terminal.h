@@ -17,6 +17,8 @@ public:
 
     std::string getRegexExpression() const;
     Terminal& operator=(const Terminal& other);
+
+    bool isNullable() const override;
 private:
     std::string regex;
 };

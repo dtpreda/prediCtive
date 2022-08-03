@@ -12,6 +12,10 @@ std::string Terminal::getRegexExpression() const {
     return this->regex;
 }
 
+bool Terminal::isNullable() const {
+    return this->regex.empty() || this->regex == "$";
+}
+
 Terminal::~Terminal() = default;
 
 Terminal& Terminal::operator=(const Terminal& other) = default;
