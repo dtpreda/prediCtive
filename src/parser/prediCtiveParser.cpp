@@ -39,11 +39,11 @@ Parser buildPrediCtiveParser() {
 
     std::shared_ptr<NonTerminal> Annotation = std::make_shared<NonTerminal>(("Annotation"));
     Annotation->addToRule(*ID, std::vector<std::shared_ptr<Symbol>>({}));
-    Annotation->addToRule(*LEFT_CURLY_BRACKET, std::vector<std::shared_ptr<Symbol>>({ LEFT_CURLY_BRACKET, QUOTE_EXPRESSION, COLON, AnnotationOption }));
+    Annotation->addToRule(*LEFT_CURLY_BRACKET, std::vector<std::shared_ptr<Symbol>>({ LEFT_CURLY_BRACKET, QUOTE_EXPRESSION, COLON, AnnotationOption, RIGHT_CURLY_BRACKET }));
     Annotation->addToRule(*SEMICOLON, std::vector<std::shared_ptr<Symbol>>({}));
     Annotation->addToRule(*OPEN_BRACKET, std::vector<std::shared_ptr<Symbol>>({}));
     Annotation->addToRule(*OPEN_PARENTHESES, std::vector<std::shared_ptr<Symbol>>({}));
-    Annotation->addToRule(*OPEN_PARENTHESES, std::vector<std::shared_ptr<Symbol>>({}));
+    Annotation->addToRule(*CLOSE_PARENTHESES, std::vector<std::shared_ptr<Symbol>>({}));
 
     std::shared_ptr<NonTerminal> Closure = std::make_shared<NonTerminal>(("Closure"));
     Closure->addToRule(*ASTERISK, std::vector<std::shared_ptr<Symbol>>({ ASTERISK }));

@@ -4,9 +4,15 @@ TOKENS {
     ID: "[[:alpha:]][[:alnum:]_]*"
 }
 
-Start -> First Second;
+SKIP {
+    " ",
+    "\n",
+    "\t"
+}
 
-First -> < INT >;
+Start -> (First)* { "name" : "first" } Second;
+
+First -> < INT > { "hello" : last_token } ;
 First -> < VOID >;
 
-Second -> < ID >;
+Second -> (< ID >)+;
