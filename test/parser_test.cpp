@@ -7,28 +7,12 @@
 #include <sstream>
 #include <fstream>
 
+#include "TestUtils.h"
 #include "parser/Terminal.h"
 #include "parser/NonTerminal.h"
 #include "parser/Recognizer.h"
 #include "parser/Parser.h"
 #include "parser/prediCtiveParser.h"
-
-std::string openPrediCtiveFile(std::string path) {
-    std::ifstream file(path);
-    std::stringstream filteredFile;
-
-    char c;
-
-    while (file >> c) {
-        if (c != '\n' && c != '\t' && c != ' ') {
-            filteredFile << c;
-        }
-    }
-
-    file.close();
-
-    return filteredFile.str();
-}
 
 TEST(TerminalClass, TerminalCreation) {
     ASSERT_NO_FATAL_FAILURE(Terminal("testName", "testExpression"));
@@ -322,7 +306,7 @@ TEST(ParserClass, ParserParseWithNonTerminals) {
 }
 
 TEST(prediCtiveParser, SimpleGrammar) {
-    std::string contents = openPrediCtiveFile("assets/simpleGrammar.cg");
+    std::string contents = TestUtils::openPrediCtiveFile("assets/simpleGrammar.cg");
 
     Parser prediCtiveParser = buildPrediCtiveParser();
 

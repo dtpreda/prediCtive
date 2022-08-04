@@ -1,0 +1,12 @@
+TOKENS {
+    INT: "int",
+    VOID: "void",
+    ID: ""[[:alpha:]][[:alnum:]_]*""
+}
+
+Start -> First Second;
+
+First -> < INT >;
+First -> < VOID >;
+
+Second -> < ID >;

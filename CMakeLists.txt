@@ -29,7 +29,7 @@ set(TEST_ASSETS assets/annotate.cg assets/closures.cg
         assets/ignore.cg assets/options.cg
         assets/rules.cg assets/simpleGrammar.cg
         assets/tokens.cg
-)
+        test/TestUtils.cpp test/TestUtils.h)
 add_library(testables ${SOURCE_FILES} ${TEST_ASSETS})
 
 add_executable(parser src/main.cpp ${SOURCE_FILES})
