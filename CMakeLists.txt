@@ -4,8 +4,6 @@ project(parser)
 # GoogleTest requires at least C++14
 set(CMAKE_CXX_STANDARD 17)
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
-
 include(FetchContent)
 FetchContent_Declare(
         googletest
@@ -27,11 +25,7 @@ set(SOURCE_FILES src/parser/Terminal.cpp src/parser/Terminal.h
         src/parser/Node.cpp src/parser/Node.h
         src/parser/utils.h src/parser/utils.cpp
 )
-set(TEST_ASSETS assets/annotate.cg assets/closures.cg
-        assets/ignore.cg assets/options.cg
-        assets/rules.cg assets/simpleGrammar.cg
-        assets/tokens.cg
-        test/TestUtils.cpp test/TestUtils.h)
+set(TEST_ASSETS test/TestUtils.cpp test/TestUtils.h)
 add_library(testables ${SOURCE_FILES} ${TEST_ASSETS})
 
 add_executable(parser src/main.cpp ${SOURCE_FILES})

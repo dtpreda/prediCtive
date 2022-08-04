@@ -17,7 +17,7 @@ protected:
 };
 
 TEST_F(prediCtiveParserTest, SimpleGrammar) {
-    std::string contents = TestUtils::openPrediCtiveFile("assets/simpleGrammar.cg");
+    std::string contents = TestUtils::openPrediCtiveFile("simpleGrammar.cg");
 
     ASSERT_NO_THROW(prediCtiveParser.parse(contents));
 

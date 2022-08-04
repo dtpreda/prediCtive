@@ -37,6 +37,8 @@ target_link_libraries(
 include(GoogleTest)
 include(CTest)
 
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/assets/simpleGrammar.cg ${CMAKE_CURRENT_BINARY_DIR} COPYONLY)
+
 gtest_discover_tests(configuration_test parser_test grammar_test)
 
 add_test(NAME configuration_test COMMAND configuration_test)
