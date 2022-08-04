@@ -3,25 +3,14 @@
 //
 
 #include <gtest/gtest.h>
+#include <string>
+#include <sstream>
+#include <fstream>
+
 #include "parser/Terminal.h"
 #include "parser/NonTerminal.h"
 #include "parser/Recognizer.h"
-
-TEST(SymbolClass, SymbolCreation) {
-    ASSERT_NO_FATAL_FAILURE(Symbol("testName"));
-}
-
-TEST(SymbolClass, SymbolName) {
-    Symbol testSymbol("testSymbol");
-    ASSERT_EQ("testSymbol", testSymbol.getName());
-}
-
-TEST(SymbolClass, SymbolComparison) {
-    Symbol testSymbol1("testSymbol1");
-    Symbol testSymbol2("testSymbol2");
-
-    ASSERT_LT(testSymbol1, testSymbol2);
-}
+#include "parser/Parser.h"
 
 TEST(TerminalClass, TerminalCreation) {
     ASSERT_NO_FATAL_FAILURE(Terminal("testName", "testExpression"));
@@ -41,6 +30,16 @@ TEST(TerminalClass, TerminalExpression) {
     ASSERT_TRUE(std::regex_match(testString, terminalRegex));
 }
 
+TEST(TerminalClass, TerminalAssignmentOperator) {
+    Terminal testTerminal1("testTerminal1", "testTerminal1");
+    Terminal testTerminal2("testTerminal2", "testTerminal2");
+
+    testTerminal1 = testTerminal2;
+
+    ASSERT_EQ("testTerminal2", testTerminal1.getName());
+    ASSERT_EQ("testTerminal2", testTerminal1.getRegexExpression());
+}
+
 TEST(NonTerminalClass, NonTerminalCreation) {
     ASSERT_NO_FATAL_FAILURE(NonTerminal("testNonTerminal"));
 }
@@ -51,49 +50,73 @@ TEST(NonTerminalClass, NonTerminalName) {
     ASSERT_EQ("testNonTerminal", testNonTerminal.getName());
 }
 
-TEST(NonTerminalClass, NonTerminalAddRule) {
+TEST(NonTerminalClass, NonTerminalAddAndGetRule) {
     NonTerminal testNonTerminal("testNonTerminal");
 
-    Terminal testTerminal1("testTerminal1", "testTerminal1");
-    Terminal testTerminal3("testTerminal2", "testTerminal2");
-    Terminal testTerminal4("testTerminal3", "testTerminal3");
-    Terminal testTerminal2("testTerminal4", "testTerminal4");
+    std::shared_ptr<Terminal> testTerminal1 = std::make_shared<Terminal>("testTerminal1", "testTerminal1");
+    std::shared_ptr<Terminal> testTerminal2 = std::make_shared<Terminal>("testTerminal2", "testTerminal2");
+    std::shared_ptr<Terminal> testTerminal3 = std::make_shared<Terminal>("testTerminal3", "testTerminal3");
+    std::shared_ptr<Terminal> testTerminal4 = std::make_shared<Terminal>("testTerminal4", "testTerminal4");
+    std::shared_ptr<NonTerminal> testNonTerminal2 = std::make_shared<NonTerminal>("testNonTerminal2");
 
-    std::vector<Symbol> testRuleExpansion;
-    testRuleExpansion.push_back(testTerminal2);
-    testRuleExpansion.push_back(testTerminal3);
-    testRuleExpansion.push_back(testTerminal4);
+    ASSERT_THROW(testNonTerminal.getRule(*testTerminal1), std::runtime_error);
 
-    ASSERT_NO_THROW(testNonTerminal.addRule(testTerminal1, testRuleExpansion));
+    ASSERT_NO_FATAL_FAILURE(testNonTerminal.addToRule(*testTerminal1, testTerminal2));
+    ASSERT_NO_FATAL_FAILURE(testNonTerminal.addToRule(*testTerminal1, testTerminal3));
+    ASSERT_NO_FATAL_FAILURE(testNonTerminal.addToRule(*testTerminal1, testTerminal4));
+    ASSERT_NO_FATAL_FAILURE(testNonTerminal.addToRule(*testTerminal1, testNonTerminal2));
 
-    ASSERT_THROW(testNonTerminal.addRule(testTerminal1, testRuleExpansion), std::runtime_error);
+    ASSERT_NO_THROW(testNonTerminal.getRule(*testTerminal1));
 
-    ASSERT_THROW(testNonTerminal.addRule(testTerminal1, std::vector<Symbol>()), std::runtime_error);
+    std::vector<std::shared_ptr<Symbol>> expansionRule = testNonTerminal.getRule(*testTerminal1);
+
+    ASSERT_EQ(4, expansionRule.size());
+    ASSERT_EQ("testTerminal2", expansionRule.at(0)->getName());
+    ASSERT_EQ("testTerminal3", expansionRule.at(1)->getName());
+    ASSERT_EQ("testTerminal4", expansionRule.at(2)->getName());
+    ASSERT_EQ("testNonTerminal2", expansionRule.at(3)->getName());
 }
 
-TEST(NonTerminalClass, NonTerminalGetRule) {
+TEST(NonTerminalClass, NonTerminalAddAndGetRuleVector) {
     NonTerminal testNonTerminal("testNonTerminal");
 
-    Terminal testTerminal1("testTerminal1", "testTerminal1");
-    Terminal testTerminal3("testTerminal2", "testTerminal2");
-    Terminal testTerminal4("testTerminal3", "testTerminal3");
-    Terminal testTerminal2("testTerminal4", "testTerminal4");
+    std::shared_ptr<Terminal> testTerminal1 = std::make_shared<Terminal>("testTerminal1", "testTerminal1");
+    std::shared_ptr<Terminal> testTerminal2 = std::make_shared<Terminal>("testTerminal2", "testTerminal2");
+    std::shared_ptr<Terminal> testTerminal3 = std::make_shared<Terminal>("testTerminal3", "testTerminal3");
+    std::shared_ptr<Terminal> testTerminal4 = std::make_shared<Terminal>("testTerminal4", "testTerminal4");
+    std::shared_ptr<NonTerminal> testNonTerminal2 = std::make_shared<NonTerminal>("testNonTerminal2");
 
-    std::vector<Symbol> testRuleExpansion;
-    testRuleExpansion.push_back(testTerminal2);
-    testRuleExpansion.push_back(testTerminal3);
-    testRuleExpansion.push_back(testTerminal4);
+    ASSERT_THROW(testNonTerminal.getRule(*testTerminal1), std::runtime_error);
 
-    ASSERT_THROW(testNonTerminal.getRule(testTerminal1), std::runtime_error);
+    std::vector<std::shared_ptr<Symbol>> expansion = { testTerminal2, testTerminal3, testTerminal4, testNonTerminal2 };
 
-    ASSERT_NO_THROW(testNonTerminal.addRule(testTerminal1, testRuleExpansion));
+    ASSERT_NO_FATAL_FAILURE(testNonTerminal.addToRule(*testTerminal1, expansion));
 
-    std::vector<Symbol> returnedRuleExpansion = testNonTerminal.getRule(testTerminal1);
+    ASSERT_NO_THROW(testNonTerminal.getRule(*testTerminal1));
 
-    ASSERT_EQ(returnedRuleExpansion.size(), 3);
-    ASSERT_EQ(returnedRuleExpansion.at(0).getName(), testTerminal2.getName());
-    ASSERT_EQ(returnedRuleExpansion.at(1).getName(), testTerminal3.getName());
-    ASSERT_EQ(returnedRuleExpansion.at(2).getName(), testTerminal4.getName());
+    std::vector<std::shared_ptr<Symbol>> expansionRule = testNonTerminal.getRule(*testTerminal1);
+
+    ASSERT_EQ(4, expansionRule.size());
+    ASSERT_EQ("testTerminal2", expansionRule.at(0)->getName());
+    ASSERT_EQ("testTerminal3", expansionRule.at(1)->getName());
+    ASSERT_EQ("testTerminal4", expansionRule.at(2)->getName());
+    ASSERT_EQ("testNonTerminal2", expansionRule.at(3)->getName());
+}
+
+TEST(RecognizerClass, RecognizerCreation) {
+    std::shared_ptr<Terminal> testTerminal1 = std::make_shared<Terminal>("testTerminal1", "t1");
+    std::shared_ptr<Terminal> testTerminal2 = std::make_shared<Terminal>("testTerminal2", "t12");
+
+    std::vector<std::shared_ptr<Terminal>> testTerminals = { testTerminal1, testTerminal2 };
+
+    Recognizer testRecognizer(testTerminals);
+
+    std::string testString("t12");
+
+    Terminal recognized = testRecognizer.recognizeFirstTerminal(testString);
+
+    ASSERT_EQ("testTerminal1", recognized.getName());
+    ASSERT_EQ("2", testString);
 }
 
 TEST(RecognizerClass, RecognizerRecognizeFirstTerminalFullString) {
@@ -118,10 +141,7 @@ TEST(RecognizerClass, RecognizerRecognizeFirstTerminalAfterNewline) {
 
     std::string testString("\ntestRegexExpression");
 
-    Terminal recognized = testRecognizer.recognizeFirstTerminal(testString);
-
-    ASSERT_EQ(Terminal::NULL_TERMINAL, recognized.getName());
-    ASSERT_EQ("\ntestRegexExpression", testString);
+    ASSERT_THROW(testRecognizer.recognizeFirstTerminal(testString), std::runtime_error);
 }
 
 TEST(RecognizerClass, RecognizerRecognizeFirstTerminalMultiple) {
@@ -185,8 +205,73 @@ TEST(RecognizerClass, RecognizerRecognizeFirstTerminalUnknown) {
 
     std::string testString("t1");
 
-    Terminal recognized = testRecognizer.recognizeFirstTerminal(testString);
+    ASSERT_THROW(testRecognizer.recognizeFirstTerminal(testString), std::runtime_error);
+}
 
-    ASSERT_EQ(Terminal::NULL_TERMINAL, recognized.getName());
-    ASSERT_EQ("t1", testString);
+TEST(ParserClass, ParserCreation) {
+    ASSERT_NO_FATAL_FAILURE(Parser(Recognizer(), NonTerminal("testSymbol")));
+}
+
+TEST(ParserClass, ParserParseSimple) {
+    NonTerminal testStartSymbol("Start");
+    std::shared_ptr<Terminal> testTerminal1 = std::make_shared<Terminal>("Hello", "Hello");
+    std::shared_ptr<Terminal> testTerminal2 = std::make_shared<Terminal>("WhiteSpace", "\\s");
+    std::shared_ptr<Terminal> testTerminal3 = std::make_shared<Terminal>("World", "World!");
+    std::shared_ptr<Terminal> testTerminal4 = std::make_shared<Terminal>("Dollar Sign", "\\$");
+
+    testStartSymbol.addToRule(*testTerminal1, testTerminal1);
+    testStartSymbol.addToRule(*testTerminal1, testTerminal2);
+    testStartSymbol.addToRule(*testTerminal1, testTerminal3);
+    testStartSymbol.addToRule(*testTerminal1, testTerminal4);
+
+    Recognizer testRecognizer;
+    testRecognizer.addTerminal(*testTerminal1);
+    testRecognizer.addTerminal(*testTerminal2);
+    testRecognizer.addTerminal(*testTerminal3);
+    testRecognizer.addTerminal(*testTerminal4);
+
+    Parser testParser(testRecognizer, testStartSymbol);
+
+    std::string testString("Hello World!$");
+    ASSERT_NO_THROW(testParser.parse(testString));
+
+    std::string testStringFail("World!$ Hello");
+    ASSERT_THROW(testParser.parse(testStringFail), std::runtime_error);
+}
+
+TEST(ParserClass, ParserParseWithNonTerminals) {
+    NonTerminal testStartSymbol("Start");
+    std::shared_ptr<Terminal> testTerminal1 = std::make_shared<Terminal>("Hello", "Hello");
+    std::shared_ptr<Terminal> testTerminal2 = std::make_shared<Terminal>("WhiteSpace", "\\s");
+    std::shared_ptr<Terminal> testTerminal3 = std::make_shared<Terminal>("World", "World!");
+    std::shared_ptr<Terminal> testTerminal4 = std::make_shared<Terminal>("Dollar Sign", "\\$");
+
+    std::shared_ptr<NonTerminal> testExpansion1 = std::make_shared<NonTerminal>("Hello World!");
+    std::shared_ptr<NonTerminal> testExpansion2 = std::make_shared<NonTerminal>("World! Hello");
+
+    testExpansion1->addToRule(*testTerminal1, testTerminal1);
+    testExpansion1->addToRule(*testTerminal1, testTerminal2);
+    testExpansion1->addToRule(*testTerminal1, testTerminal3);
+
+    testExpansion2->addToRule(*testTerminal3, testTerminal3);
+    testExpansion2->addToRule(*testTerminal3, testTerminal2);
+    testExpansion2->addToRule(*testTerminal3, testTerminal1);
+    testExpansion2->addToRule(*testTerminal3, testTerminal4);
+
+    testStartSymbol.addToRule(*testTerminal1, testExpansion1);
+    testStartSymbol.addToRule(*testTerminal1, testExpansion2);
+
+    Recognizer testRecognizer;
+    testRecognizer.addTerminal(*testTerminal1);
+    testRecognizer.addTerminal(*testTerminal2);
+    testRecognizer.addTerminal(*testTerminal3);
+    testRecognizer.addTerminal(*testTerminal4);
+
+    Parser testParser(testRecognizer, testStartSymbol);
+
+    std::string testString("Hello World!World! Hello$");
+    ASSERT_NO_THROW(testParser.parse(testString));
+
+    std::string testStringFail("Hello World!World! Hello$$");
+    ASSERT_THROW(testParser.parse(testStringFail), std::runtime_error);
 }

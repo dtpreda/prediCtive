@@ -13,12 +13,14 @@
 class Terminal : public Symbol {
 public:
     Terminal(std::string name, std::string regexExpression);
+    ~Terminal() override;
 
     std::string getRegexExpression() const;
+    Terminal& operator=(const Terminal& other);
 
-    static std::string NULL_TERMINAL;
+    bool isNullable() const override;
 private:
-    const std::string regex;
+    std::string regex;
 };
 
 

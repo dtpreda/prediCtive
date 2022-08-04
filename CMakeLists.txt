@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.22)
 project(parser)
 
 # GoogleTest requires at least C++14
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 
 include(FetchContent)
 FetchContent_Declare(
@@ -19,8 +19,14 @@ include_directories(src)
 set(SOURCE_FILES src/parser/Terminal.cpp src/parser/Terminal.h
         src/parser/Symbol.cpp src/parser/Symbol.h
         src/parser/NonTerminal.cpp src/parser/NonTerminal.h
-        src/parser/Recognizer.cpp src/parser/Recognizer.h)
-add_library(testables ${SOURCE_FILES})
+        src/parser/Recognizer.cpp src/parser/Recognizer.h
+        src/parser/prediCtiveParser.cpp src/parser/prediCtiveParser.h
+        src/parser/Parser.cpp src/parser/Parser.h
+        src/parser/Node.cpp src/parser/Node.h
+        src/parser/utils.h src/parser/utils.cpp
+)
+set(TEST_ASSETS test/TestUtils.cpp test/TestUtils.h)
+add_library(testables ${SOURCE_FILES} ${TEST_ASSETS})
 
 add_executable(parser src/main.cpp ${SOURCE_FILES})
 add_subdirectory(test)

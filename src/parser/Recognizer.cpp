@@ -17,7 +17,7 @@ void Recognizer::addTerminal(const Terminal& terminal) {
     this->terminals.push_back(toInsert);
 }
 
-Terminal Recognizer::recognizeFirstTerminal(std::string &toRecognize) {
+Terminal Recognizer::recognizeFirstTerminal(std::string &toRecognize) const {
     std::smatch matchResult;
     for (auto & terminal : this->terminals) {
         if (std::regex_search(toRecognize, matchResult, terminal.first) && matchResult.position() == 0) {
@@ -27,5 +27,11 @@ Terminal Recognizer::recognizeFirstTerminal(std::string &toRecognize) {
         }
     }
 
-    return {Terminal::NULL_TERMINAL, Terminal::NULL_TERMINAL};
+    throw std::runtime_error("No matching terminal was found for the given input.");
+}
+
+Recognizer::Recognizer(const std::vector<std::shared_ptr<Terminal>>& terminals) {
+    for (auto& terminal : terminals) {
+        this->addTerminal(*terminal);
+    }
 }

@@ -10,15 +10,23 @@
 
 #include "Symbol.h"
 #include "Terminal.h"
+#include <memory>
 
 class NonTerminal : public Symbol {
 public:
-    NonTerminal(std::string name);
+    explicit NonTerminal(std::string name);
+    ~NonTerminal() override;
 
-    void addRule(const Terminal& first, const std::vector<Symbol>& expansion);
-    std::vector<Symbol> getRule(const Terminal& first) const;
+    void addToRule(const Terminal &first, const std::shared_ptr<Symbol>& expansion);
+    void addToRule(const Terminal& first, const std::shared_ptr<Terminal>& expansion);
+    void addToRule(const Terminal& first, const std::shared_ptr<NonTerminal>& expansion);
+    void addToRule(const Terminal &first, const std::vector<std::shared_ptr<Symbol>>& expansion);
+    std::vector<std::shared_ptr<Symbol>> getRule(const Terminal& first) const;
+
+    bool isNullable() const override;
 private:
-    std::map<Terminal, std::vector<Symbol>> rules;
+    std::map<Terminal, std::vector<std::shared_ptr<Symbol>>> rules;
+    int nullExpansions = 0;
 };
 
 

@@ -9,13 +9,17 @@
 
 class Symbol {
 public:
-    Symbol(std::string name);
-
+    explicit Symbol(std::string name);
+    virtual ~Symbol() = default;
     std::string getName() const;
-    bool operator<(Symbol other) const;
-    bool operator==(Symbol other) const;
+
+    bool operator<(const Symbol& other) const;
+    bool operator==(const Symbol& other) const;
+    Symbol& operator=(const Symbol& other);
+
+    virtual bool isNullable() const = 0;
 private:
-    const std::string name;
+    std::string name;
 };
 
 

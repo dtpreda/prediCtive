@@ -1,0 +1,8 @@
+TOKENS {
+    INT: "int",
+    VOID: "void",
+    STRING: "string",
+    BOOLEAN: "bool",
+    FUNCTION: "func",
+    ID: ""[[:alpha:]][[:alnum:]_-]*""
+}

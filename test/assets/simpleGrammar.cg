@@ -1,0 +1,18 @@
+TOKENS {
+    INT: "int",
+    VOID: "void",
+    ID: "[[:alpha:]][[:alnum:]_]*"
+}
+
+SKIP {
+    " ",
+    "\n",
+    "\t"
+}
+
+Start -> (First)* { "name" : "first" } Second;
+
+First -> < INT > { "hello" : last_token } ;
+First -> < VOID >;
+
+Second -> (< ID >)+;

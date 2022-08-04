@@ -3,23 +3,63 @@
 //
 
 #include <sstream>
+#include <utility>
 
 #include "NonTerminal.h"
 
-NonTerminal::NonTerminal(std::string name) : Symbol(name) {}
+NonTerminal::NonTerminal(std::string name) : Symbol(std::move(name)) {}
 
-void NonTerminal::addRule(const Terminal& first, const std::vector<Symbol>& expansion) {
-    if (this->rules.find(first) != this->rules.end()) {
-        std::stringstream what;
-        what << "Non-terminal symbol " << this->getName() << " can't contain more than one rule for terminal symbol "
-             << first.getName() << "." << std::endl;
-        throw std::runtime_error(what.str());
+void NonTerminal::addToRule(const Terminal& first, const std::shared_ptr<Terminal>& expansion) {
+    auto expansionPtr(expansion);
+    if (this->rules.find(first) == this->rules.end()) {
+        this->rules.insert({first, std::vector<std::shared_ptr<Symbol>>({ expansionPtr })});
+    } else {
+        if (this->rules.find(first)->second.empty()) {
+            this->nullExpansions -= 1;
+        }
+        this->rules.find(first)->second.push_back(expansionPtr);
     }
-
-    this->rules.insert({first , expansion});
 }
 
-std::vector<Symbol> NonTerminal::getRule(const Terminal &first) const {
+void NonTerminal::addToRule(const Terminal& first, const std::shared_ptr<NonTerminal>& expansion) {
+    auto expansionPtr(expansion);
+    if (this->rules.find(first) == this->rules.end()) {
+        this->rules.insert({first, std::vector<std::shared_ptr<Symbol>>({ expansionPtr })});
+    } else {
+        if (this->rules.find(first)->second.empty()) {
+            this->nullExpansions -= 1;
+        }
+        this->rules.find(first)->second.push_back(expansionPtr);
+    }
+}
+
+void NonTerminal::addToRule(const Terminal &first, const std::shared_ptr<Symbol>& expansion) {
+    auto terminal = std::dynamic_pointer_cast<Terminal>(expansion);
+
+    if (terminal) {
+        this->addToRule(first, terminal);
+    } else {
+        auto nonTerminal = std::dynamic_pointer_cast<NonTerminal>(expansion);
+
+        if (nonTerminal) {
+            this->addToRule(first, nonTerminal);
+        } else {
+            throw std::runtime_error("Corrupted Symbol object.");
+        }
+    }
+}
+
+void NonTerminal::addToRule(const Terminal &first, const std::vector<std::shared_ptr<Symbol>>& expansion) {
+    if (expansion.empty()) {
+        this->rules.insert({ first, std::vector<std::shared_ptr<Symbol>>() });
+        this->nullExpansions += 1;
+    }
+    for(auto &expansionElement : expansion) {
+        this->addToRule(first, expansionElement);
+    }
+}
+
+std::vector<std::shared_ptr<Symbol>> NonTerminal::getRule(const Terminal& first) const {
     auto correspondingRule = this->rules.find(first);
     if (correspondingRule == this->rules.end()) {
         std::stringstream what;
@@ -27,5 +67,12 @@ std::vector<Symbol> NonTerminal::getRule(const Terminal &first) const {
              << "." << std::endl;
         throw std::runtime_error(what.str());
     }
+
     return this->rules.find(first)->second;
 }
+
+bool NonTerminal::isNullable() const {
+    return this->nullExpansions > 0;
+}
+
+NonTerminal::~NonTerminal() = default;
