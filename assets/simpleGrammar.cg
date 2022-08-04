@@ -1,7 +1,7 @@
 TOKENS {
     INT: "int",
     VOID: "void",
-    ID: ""[[:alpha:]][[:alnum:]_]*""
+    ID: "[[:alpha:]][[:alnum:]_]*"
 }
 
 Start -> First Second;
