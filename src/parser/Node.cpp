@@ -48,3 +48,7 @@ Node::Node(const Node& other) {
         this->children.push_back(new Node(*child));
     }
 }
+
+std::string Node::getName() const {
+    return this->name;
+}

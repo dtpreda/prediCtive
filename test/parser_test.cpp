@@ -7,12 +7,10 @@
 #include <sstream>
 #include <fstream>
 
-#include "TestUtils.h"
 #include "parser/Terminal.h"
 #include "parser/NonTerminal.h"
 #include "parser/Recognizer.h"
 #include "parser/Parser.h"
-#include "parser/prediCtiveParser.h"
 
 TEST(TerminalClass, TerminalCreation) {
     ASSERT_NO_FATAL_FAILURE(Terminal("testName", "testExpression"));
@@ -210,33 +208,6 @@ TEST(RecognizerClass, RecognizerRecognizeFirstTerminalUnknown) {
     ASSERT_THROW(testRecognizer.recognizeFirstTerminal(testString), std::runtime_error);
 }
 
-/*TEST(prediCtiveParser, prediCtiveParserRecognizeSimple) {
-    std::string testString1("TOKENS");
-    std::string testString2("identifier1");
-    std::string testString3("last_token");
-    std::string testString4("SKIP");
-
-    Terminal recognized1 = prediCtiveRecognizer.recognizeFirstTerminal(testString1);
-
-    ASSERT_EQ("Tokens", recognized1.getName());
-    ASSERT_EQ("", testString1);
-
-    Terminal recognized2 = prediCtiveRecognizer.recognizeFirstTerminal(testString2);
-
-    ASSERT_EQ("Identifier", recognized2.getName());
-    ASSERT_EQ("", testString2);
-
-    Terminal recognized3 = prediCtiveRecognizer.recognizeFirstTerminal(testString3);
-
-    ASSERT_EQ("Last", recognized3.getName());
-    ASSERT_EQ("", testString3);
-
-    Terminal recognized4 = prediCtiveRecognizer.recognizeFirstTerminal(testString4);
-
-    ASSERT_EQ("Skip", recognized4.getName());
-    ASSERT_EQ("", testString4);
-}*/
-
 TEST(ParserClass, ParserCreation) {
     ASSERT_NO_FATAL_FAILURE(Parser(Recognizer(), NonTerminal("testSymbol")));
 }
@@ -303,12 +274,4 @@ TEST(ParserClass, ParserParseWithNonTerminals) {
 
     std::string testStringFail("Hello World!World! Hello$$");
     ASSERT_THROW(testParser.parse(testStringFail), std::runtime_error);
-}
-
-TEST(prediCtiveParser, SimpleGrammar) {
-    std::string contents = TestUtils::openPrediCtiveFile("assets/simpleGrammar.cg");
-
-    Parser prediCtiveParser = buildPrediCtiveParser();
-
-    ASSERT_NO_THROW(prediCtiveParser.parse(contents));
 }

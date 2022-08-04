@@ -14,7 +14,7 @@ Parser buildPrediCtiveParser() {
     std::shared_ptr<Terminal> TOKENS = std::make_shared<Terminal>(Terminal("Tokens", "TOKENS"));
     std::shared_ptr<Terminal> ID = std::make_shared<Terminal>(Terminal("Identifier", "[[:alpha:]][[:alnum:]_]*"));
     std::shared_ptr<Terminal> SKIP = std::make_shared<Terminal>(Terminal("Skip", "SKIP"));
-    std::shared_ptr<Terminal> QUOTE_EXPRESSION = std::make_shared<Terminal>(Terminal("Quote Expression", "\".*\""));
+    std::shared_ptr<Terminal> QUOTE_EXPRESSION = std::make_shared<Terminal>(Terminal("Quote Expression", "\"(.*?)\""));
     std::shared_ptr<Terminal> COMMA = std::make_shared<Terminal>(Terminal("Comma", ","));
     std::shared_ptr<Terminal> LEFT_CURLY_BRACKET = std::make_shared<Terminal>(Terminal("Left Curly Bracket", "\\{"));
     std::shared_ptr<Terminal> RIGHT_CURLY_BRACKET = std::make_shared<Terminal>(Terminal("Right Curly Bracket", "\\}"));
@@ -32,8 +32,6 @@ Parser buildPrediCtiveParser() {
     std::vector<std::shared_ptr<Terminal>> terminals = { TOKENS, SKIP, QUOTE_EXPRESSION, LAST, ASTERISK, PLUS, ID, OPEN_BRACKET,
                                                CLOSE_BRACKET, OPEN_PARENTHESES, CLOSE_PARENTHESES, COMMA, COLON, SEMICOLON,
                                                RIGHT_ARROW, LEFT_CURLY_BRACKET, RIGHT_CURLY_BRACKET, END_OF_INPUT };
-
-    //Recognizer prediCtiveRecognizer(terminals);
 
     std::shared_ptr<NonTerminal> AnnotationOption = std::make_shared<NonTerminal>(("AnnotationOption"));
     AnnotationOption->addToRule(*QUOTE_EXPRESSION, std::vector<std::shared_ptr<Symbol>>({ QUOTE_EXPRESSION }));

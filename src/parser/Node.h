@@ -15,6 +15,8 @@ public:
     Node(const Node& other);
     ~Node();
 
+    std::string getName() const;
+
     void addChild(const Node& child);
     Node getChild(int index) const;
 
