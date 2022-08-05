@@ -7,7 +7,7 @@
 
 #include <memory>
 
-#include "Terminal.h"
+#include "parser/grammar/Terminal.h"
 
 extern std::shared_ptr<Terminal> END_OF_INPUT;
 

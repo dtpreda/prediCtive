@@ -16,13 +16,13 @@ FetchContent_MakeAvailable(googletest)
 
 include_directories(src)
 
-set(SOURCE_FILES src/parser/Terminal.cpp src/parser/Terminal.h
-        src/parser/Symbol.cpp src/parser/Symbol.h
-        src/parser/NonTerminal.cpp src/parser/NonTerminal.h
-        src/parser/Recognizer.cpp src/parser/Recognizer.h
+set(SOURCE_FILES src/parser/grammar/Terminal.cpp src/parser/grammar/Terminal.h
+        src/parser/grammar/Symbol.cpp src/parser/grammar/Symbol.h
+        src/parser/grammar/NonTerminal.cpp src/parser/grammar/NonTerminal.h
+        src/parser/grammar/Recognizer.cpp src/parser/grammar/Recognizer.h
         src/parser/prediCtiveParser.cpp src/parser/prediCtiveParser.h
         src/parser/Parser.cpp src/parser/Parser.h
-        src/parser/Node.cpp src/parser/Node.h
+        src/parser/ast/Node.cpp src/parser/ast/Node.h
         src/parser/utils.h src/parser/utils.cpp
 )
 set(TEST_ASSETS test/TestUtils.cpp test/TestUtils.h)

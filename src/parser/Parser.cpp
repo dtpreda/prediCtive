@@ -3,10 +3,10 @@
 //
 
 #include "Parser.h"
-#include "Symbol.h"
-#include "Terminal.h"
-#include "NonTerminal.h"
-#include "Node.h"
+#include "parser/grammar/Symbol.h"
+#include "parser/grammar/Terminal.h"
+#include "parser/grammar/NonTerminal.h"
+#include "parser/ast/Node.h"
 #include "utils.h"
 
 #include <utility>

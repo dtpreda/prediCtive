@@ -8,9 +8,9 @@
 #include <vector>
 #include <memory>
 
-#include "Recognizer.h"
-#include "NonTerminal.h"
-#include "Node.h"
+#include "parser/grammar/Recognizer.h"
+#include "parser/grammar/NonTerminal.h"
+#include "parser/ast/Node.h"
 
 class Parser {
 public:

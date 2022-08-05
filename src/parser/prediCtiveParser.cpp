@@ -7,8 +7,8 @@
 
 #include "prediCtiveParser.h"
 #include "utils.h"
-#include "Terminal.h"
-#include "NonTerminal.h"
+#include "parser/grammar/Terminal.h"
+#include "parser/grammar/NonTerminal.h"
 
 Parser buildPrediCtiveParser() {
     std::shared_ptr<Terminal> TOKENS = std::make_shared<Terminal>(Terminal("Tokens", "TOKENS"));

@@ -7,7 +7,7 @@
 
 #include <vector>
 
-#include "Symbol.h"
+#include "parser/grammar/Symbol.h"
 
 class Node {
 public:
