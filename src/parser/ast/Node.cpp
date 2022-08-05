@@ -6,6 +6,7 @@
 
 #include <stdexcept>
 #include <utility>
+#include <sstream>
 
 Node::Node(std::string name) : name(std::move(name)) {}
 
@@ -55,4 +56,24 @@ void Node::setParent(const std::shared_ptr<Node>& parentPtr) {
 
 Node Node::getParent() const {
     return *(this->parent.lock());
+}
+
+void Node::addAnnotation(const std::string& key, const std::string& annotation) {
+    if (this->annotations.find(key) != this->annotations.end()) {
+        std::stringstream what;
+        what << "Node already contains an annotation with a " << key << " key.";
+        throw std::runtime_error(what.str());
+    }
+
+    this->annotations.insert({key, annotation});
+}
+
+std::string Node::getAnnotation(const std::string& key) const {
+    if (this->annotations.find(key) == this->annotations.end()) {
+        std::stringstream what;
+        what << "Node does not contain an annotation with a " << key << " key.";
+        throw std::runtime_error(what.str());
+    }
+
+    return this->annotations.at(key);
 }

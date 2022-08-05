@@ -7,6 +7,8 @@
 
 #include <vector>
 #include <memory>
+#include <map>
+#include <string>
 
 #include "parser/grammar/Symbol.h"
 
@@ -23,11 +25,15 @@ public:
     void setParent(const std::shared_ptr<Node>& parent);
     Node getParent() const;
 
+    void addAnnotation(const std::string& key, const std::string& annotation);
+    std::string getAnnotation(const std::string& key) const;
+
     Node& operator=(const Node& other);
 private:
     std::string name;
     std::vector<std::shared_ptr<Node>> children;
     std::weak_ptr<Node> parent;
+    std::map<std::string, std::string> annotations;
 };
 
 
