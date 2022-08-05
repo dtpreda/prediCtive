@@ -9,8 +9,8 @@
 
 Node::Node(std::string name) : name(std::move(name)) {}
 
-void Node::addChild(const Node& child) {
-    this->children.push_back(new Node(child));
+void Node::addChild(const std::shared_ptr<Node>& child) {
+    this->children.push_back(std::make_shared<Node>(*child));
 }
 
 Node Node::getChild(int index) const {
@@ -27,17 +27,10 @@ Node &Node::operator=(const Node &other) {
 
         this->children.clear();
         for (auto& child : other.children) {
-            this->children.push_back(new Node(*child));
+            this->children.push_back(std::make_unique<Node>(*child));
         }
     }
     return *this;
-}
-
-Node::~Node() {
-    for (auto& child: this->children) {
-        delete child;
-        child = nullptr;
-    }
 }
 
 Node::Node(const Node& other) {
@@ -45,10 +38,21 @@ Node::Node(const Node& other) {
 
     this->children.clear();
     for (auto& child : other.children) {
-        this->children.push_back(new Node(*child));
+        this->children.push_back(std::make_shared<Node>(*child));
     }
+
+    this->parent = other.parent;
 }
 
 std::string Node::getName() const {
     return this->name;
+}
+
+void Node::setParent(const std::shared_ptr<Node>& parentPtr) {
+    std::weak_ptr<Node> as = std::weak_ptr<Node>(parentPtr);
+    this->parent = std::weak_ptr<Node>(parentPtr);
+}
+
+Node Node::getParent() const {
+    return *(this->parent.lock());
 }

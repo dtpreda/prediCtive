@@ -14,7 +14,7 @@
 Parser::Parser(Recognizer recognizer, const NonTerminal& startSymbol) : recognizer(std::move(recognizer)), startSymbol(startSymbol) {}
 
 Node Parser::parse(std::string toParse) {
-    Node root = Node(this->startSymbol.getName());
+    std::shared_ptr<Node> root = std::make_shared<Node>(Node(this->startSymbol.getName()));
 
     Terminal currentTerminal = (this->recognizer).recognizeFirstTerminal(toParse);
 
@@ -24,18 +24,22 @@ Node Parser::parse(std::string toParse) {
         if (currentTerminal.getName() == END_OF_INPUT->getName() && !nextSymbol->isNullable()) {
             throw std::runtime_error("Unable to correctly match expression given.");
         }
-        Node childNode = this->parse(toParse, currentTerminal, Node(nextSymbol->getName()), nextSymbol);
-        root.addChild(childNode);
+        std::shared_ptr<Node> childNode = this->parse(
+                toParse, currentTerminal,
+                std::make_shared<Node>(Node(nextSymbol->getName())), nextSymbol
+                );
+        childNode->setParent(root);
+        root->addChild(childNode);
     }
 
     if (!toParse.empty() || currentTerminal.getName() != END_OF_INPUT->getName()) {
         throw std::runtime_error("Unable to correctly match expression given.");
     }
 
-    return root;
+    return *root;
 }
 
-Node Parser::parse(std::string& toParse, Terminal& currentTerminal, Node rootNode, const std::shared_ptr<Symbol>& currentSymbol) {
+std::shared_ptr<Node> Parser::parse(std::string& toParse, Terminal& currentTerminal, const std::shared_ptr<Node>& rootNode, const std::shared_ptr<Symbol>& currentSymbol) {
     auto nextTerminal = std::dynamic_pointer_cast<const Terminal>(currentSymbol);
     auto nextNonTerminal = std::dynamic_pointer_cast<const NonTerminal>(currentSymbol);
 
@@ -46,15 +50,17 @@ Node Parser::parse(std::string& toParse, Terminal& currentTerminal, Node rootNod
             if (currentTerminal.getName() == END_OF_INPUT->getName() && !nextSymbol->isNullable()) {
                 throw std::runtime_error("Unable to correctly match expression given.");
             }
-            Node childNode = this->parse(toParse, currentTerminal, Node(nextSymbol->getName()), nextSymbol);
-            rootNode.addChild(childNode);
+            std::shared_ptr<Node> childNode = this->parse(
+                    toParse, currentTerminal,
+                    std::make_shared<Node>(Node(nextSymbol->getName())), nextSymbol
+                    );
+            childNode->setParent(rootNode);
+            rootNode->addChild(childNode);
         }
     } else if (nextTerminal) {
         if (nextTerminal->getName() != currentTerminal.getName()) {
             throw std::runtime_error("Unable to correctly match expression given.");
         }
-
-        //rootNode.addChild(Node(nextTerminal->getName()));
 
         try {
             currentTerminal = (this->recognizer).recognizeFirstTerminal(toParse);

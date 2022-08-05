@@ -6,6 +6,7 @@
 #define PARSER_NODE_H
 
 #include <vector>
+#include <memory>
 
 #include "parser/grammar/Symbol.h"
 
@@ -13,17 +14,20 @@ class Node {
 public:
     explicit Node(std::string name);
     Node(const Node& other);
-    ~Node();
 
     std::string getName() const;
 
-    void addChild(const Node& child);
+    void addChild(const std::shared_ptr<Node>& child);
     Node getChild(int index) const;
+
+    void setParent(const std::shared_ptr<Node>& parent);
+    Node getParent() const;
 
     Node& operator=(const Node& other);
 private:
     std::string name;
-    std::vector<Node*> children;
+    std::vector<std::shared_ptr<Node>> children;
+    std::weak_ptr<Node> parent;
 };
 
 

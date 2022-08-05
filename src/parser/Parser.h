@@ -21,7 +21,7 @@ private:
     Recognizer recognizer;
     NonTerminal startSymbol;
 
-    Node parse(std::string& toParse, Terminal& currentTerminal, Node rootNode, const std::shared_ptr<Symbol>& currentSymbol);
+    std::shared_ptr<Node> parse(std::string& toParse, Terminal& currentTerminal, const std::shared_ptr<Node>& rootNode, const std::shared_ptr<Symbol>& currentSymbol);
 };
 
 
