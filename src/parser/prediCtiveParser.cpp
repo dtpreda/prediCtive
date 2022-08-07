@@ -11,9 +11,9 @@
 #include "parser/grammar/NonTerminal.h"
 
 Parser buildPrediCtiveParser() {
-    std::shared_ptr<Terminal> TOKENS = std::make_shared<Terminal>(Terminal("Tokens", "TOKENS"));
+    std::shared_ptr<Terminal> TOKENS = std::make_shared<Terminal>(Terminal("TokensTerminal", "TOKENS"));
     std::shared_ptr<Terminal> ID = std::make_shared<Terminal>(Terminal("Identifier", "[[:alpha:]][[:alnum:]_]*"));
-    std::shared_ptr<Terminal> SKIP = std::make_shared<Terminal>(Terminal("Skip", "SKIP"));
+    std::shared_ptr<Terminal> SKIP = std::make_shared<Terminal>(Terminal("SkipTerminal", "SKIP"));
     std::shared_ptr<Terminal> QUOTE_EXPRESSION = std::make_shared<Terminal>(Terminal("Quote Expression", "\"(.*?)\""));
     std::shared_ptr<Terminal> COMMA = std::make_shared<Terminal>(Terminal("Comma", ","));
     std::shared_ptr<Terminal> LEFT_CURLY_BRACKET = std::make_shared<Terminal>(Terminal("Left Curly Bracket", "\\{"));
@@ -27,7 +27,7 @@ Parser buildPrediCtiveParser() {
     std::shared_ptr<Terminal> CLOSE_PARENTHESES = std::make_shared<Terminal>(Terminal("Close Parentheses", "\\)"));
     std::shared_ptr<Terminal> ASTERISK = std::make_shared<Terminal>(Terminal("Asterisk", "\\*"));
     std::shared_ptr<Terminal> PLUS = std::make_shared<Terminal>(Terminal("Plus", "\\+"));
-    std::shared_ptr<Terminal> LAST = std::make_shared<Terminal>(Terminal("Last", "last_token"));
+    std::shared_ptr<Terminal> LAST = std::make_shared<Terminal>(Terminal("Last Token", "last_token"));
 
     std::vector<std::shared_ptr<Terminal>> terminals = { TOKENS, SKIP, QUOTE_EXPRESSION, LAST, ASTERISK, PLUS, ID, OPEN_BRACKET,
                                                CLOSE_BRACKET, OPEN_PARENTHESES, CLOSE_PARENTHESES, COMMA, COLON, SEMICOLON,

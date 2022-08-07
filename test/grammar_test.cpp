@@ -6,6 +6,7 @@
 #include "TestUtils.h"
 
 #include "parser/prediCtiveParser.h"
+#include "parser/ast/TokenExtractorVisitor.h"
 
 class prediCtiveParserTest : public ::testing::Test {
 protected:

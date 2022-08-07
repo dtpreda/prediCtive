@@ -14,6 +14,10 @@ void Node::addChild(const std::shared_ptr<Node>& child) {
     this->children.push_back(std::make_shared<Node>(*child));
 }
 
+void Node::addChild(Node& child) {
+    this->children.push_back(std::make_shared<Node>(child));
+}
+
 Node Node::getChild(int index) const {
     if (this->children.size() <= index) {
         throw std::runtime_error("No such child index.");
@@ -43,6 +47,11 @@ Node::Node(const Node& other) {
     }
 
     this->parent = other.parent;
+
+    this->annotations.clear();
+    for (auto& annotation : other.annotations) {
+        this->annotations.insert({annotation.first, annotation.second});
+    }
 }
 
 std::string Node::getName() const {
@@ -76,4 +85,12 @@ std::string Node::getAnnotation(const std::string& key) const {
     }
 
     return this->annotations.at(key);
+}
+
+std::vector<std::shared_ptr<Node>> Node::getChildren() const {
+    return this->children;
+}
+
+void Node::clearChildren() {
+    this->children.clear();
 }

@@ -20,7 +20,10 @@ public:
     std::string getName() const;
 
     void addChild(const std::shared_ptr<Node>& child);
+    void addChild(Node& child);
     Node getChild(int index) const;
+    std::vector<std::shared_ptr<Node>> getChildren() const;
+    void clearChildren();
 
     void setParent(const std::shared_ptr<Node>& parent);
     Node getParent() const;

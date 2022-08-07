@@ -18,9 +18,13 @@ public:
     std::string getRegexExpression() const;
     Terminal& operator=(const Terminal& other);
 
+    std::string getLastMatch() const;
+    void setLastMatch(std::string lastMatch);
+
     bool isNullable() const override;
 private:
     std::string regex;
+    std::string lastMatch;
 };
 
 

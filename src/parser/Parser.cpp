@@ -62,6 +62,8 @@ std::shared_ptr<Node> Parser::parse(std::string& toParse, Terminal& currentTermi
             throw std::runtime_error("Unable to correctly match expression given.");
         }
 
+        rootNode->addAnnotation("consumed_token", currentTerminal.getLastMatch());
+
         try {
             currentTerminal = (this->recognizer).recognizeFirstTerminal(toParse);
         } catch (std::runtime_error& e) {
