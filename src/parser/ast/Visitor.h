@@ -14,14 +14,14 @@
 template <class T>
 class Visitor {
 public:
-    T visit(Node& node);
+    T visit(std::shared_ptr<Node> node);
     virtual ~Visitor() = default;
 
-    void setVisit(std::string nodeName, std::function<T(Visitor<T>*, Node&)> method);
-    void setDefaultVisit(std::function<T(Visitor<T>*, Node&)> defaultVisit);
+    void setVisit(std::string nodeName, std::function<T(Visitor<T>*, std::shared_ptr<Node>)> method);
+    void setDefaultVisit(std::function<T(Visitor<T>*, std::shared_ptr<Node>)> defaultVisit);
 private:
-    std::map<std::string, std::function<T(Visitor<T>*, Node&)>> methods;
-    std::function<T(Visitor<T>*, Node&)> defaultVisit;
+    std::map<std::string, std::function<T(Visitor<T>*, std::shared_ptr<Node>)>> methods;
+    std::function<T(Visitor<T>*, std::shared_ptr<Node>)> defaultVisit;
 };
 
 template class Visitor<bool>;

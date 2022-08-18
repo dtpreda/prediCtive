@@ -7,7 +7,7 @@
 #include <sstream>
 #include <stdexcept>
 
-bool visitTokens(Visitor<bool>* context, Node &node) {
+static bool visitTokens(Visitor<bool>* context, const std::shared_ptr<Node>& node) {
     auto parseTreeFlatenner = dynamic_cast<TokenExtractorVisitor*>(context);
     if (!parseTreeFlatenner) {
         std::stringstream what;
@@ -15,24 +15,24 @@ bool visitTokens(Visitor<bool>* context, Node &node) {
         throw std::runtime_error(what.str());
     }
 
-    Node token = node.getChild(2);
+    std::shared_ptr<Node> token = node->getChild(2);
     context->visit(token);
 
-    Node nextToken = node.getChild(3);
-    if (!nextToken.getChildren().empty()) {
+    std::shared_ptr<Node> nextToken = node->getChild(3);
+    if (!nextToken->getChildren().empty()) {
         context->visit(nextToken);
     }
 
-    node.clearChildren();
-    for (auto& child : parseTreeFlatenner->tokenCollector) {
-        child.clearChildren();
-        node.addChild(child);
+    node->clearChildren();
+    for (auto& child : parseTreeFlatenner->getTokenCollector()) {
+        child->clearChildren();
+        node->addChild(child);
     }
 
     return true;
 }
 
-bool visitToken(Visitor<bool>* context, Node &node) {
+static bool visitToken(Visitor<bool>* context, const std::shared_ptr<Node>& node) {
     auto parseTreeFlatenner = dynamic_cast<TokenExtractorVisitor*>(context);
     if (!parseTreeFlatenner) {
         std::stringstream what;
@@ -40,21 +40,21 @@ bool visitToken(Visitor<bool>* context, Node &node) {
         throw std::runtime_error(what.str());
     }
 
-    Node identifier = node.getChild(0);
-    Node regex = node.getChild(2);
+    std::shared_ptr<Node> identifier = node->getChild(0);
+    std::shared_ptr<Node> regex = node->getChild(2);
 
-    node.addAnnotation("name", identifier.getAnnotation("consumed_token"));
+    node->addAnnotation("name", identifier->getAnnotation("consumed_token"));
 
-    std::string regexExpr = regex.getAnnotation("consumed_token");
+    std::string regexExpr = regex->getAnnotation("consumed_token");
     regexExpr = regexExpr.substr(1, regexExpr.length() - 2);
 
-    node.addAnnotation("regex", regexExpr);
+    node->addAnnotation("regex", regexExpr);
 
-    parseTreeFlatenner->tokenCollector.push_back(node);
+    parseTreeFlatenner->addToken(node);
     return true;
 }
 
-bool visitNextToken(Visitor<bool>* context, Node &node) {
+static bool visitNextToken(Visitor<bool>* context, const std::shared_ptr<Node>& node) {
     auto parseTreeFlatenner = dynamic_cast<TokenExtractorVisitor*>(context);
     if (!parseTreeFlatenner) {
         std::stringstream what;
@@ -62,31 +62,31 @@ bool visitNextToken(Visitor<bool>* context, Node &node) {
         throw std::runtime_error(what.str());
     }
 
-    Node token = node.getChild(1);
+    std::shared_ptr<Node> token = node->getChild(1);
     context->visit(token);
 
-    Node nextToken = node.getChild(2);
-    if (!nextToken.getChildren().empty()) {
+    std::shared_ptr<Node> nextToken = node->getChild(2);
+    if (!nextToken->getChildren().empty()) {
         context->visit(nextToken);
     }
 
     return true;
 }
 
-bool descend(Visitor<bool>* context, Node &node) {
-    for (auto& child : node.getChildren()) {
-        context->visit(*child);
+static bool descend(Visitor<bool>* context, const std::shared_ptr<Node>& node) {
+    for (auto& child : node->getChildren()) {
+        context->visit(child);
     }
 
     return true;
 }
 
-bool idle(Visitor<bool> *context, Node &node) {
+static bool idle(Visitor<bool> *context, const std::shared_ptr<Node>& node) {
     return true;
 }
 
 TokenExtractorVisitor::TokenExtractorVisitor() {
-    this->tokenCollector = std::vector<Node>({});
+    this->tokenCollector = std::vector<std::shared_ptr<Node>>({});
 
     this->setVisit("Tokens", visitTokens);
     this->setVisit("Token", visitToken);
@@ -95,4 +95,12 @@ TokenExtractorVisitor::TokenExtractorVisitor() {
     this->setVisit("Start", descend);
 
     this->setDefaultVisit(idle);
+}
+
+std::vector<std::shared_ptr<Node>> TokenExtractorVisitor::getTokenCollector() {
+    return this->tokenCollector;
+}
+
+void TokenExtractorVisitor::addToken(const std::shared_ptr<Node>& token) {
+    this->tokenCollector.push_back(token);
 }

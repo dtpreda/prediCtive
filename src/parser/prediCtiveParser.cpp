@@ -49,32 +49,32 @@ Parser buildPrediCtiveParser() {
     Closure->addToRule(*ASTERISK, std::vector<std::shared_ptr<Symbol>>({ ASTERISK }));
     Closure->addToRule(*PLUS, std::vector<std::shared_ptr<Symbol>>({ PLUS }));
 
-    std::shared_ptr<NonTerminal> Rule = std::make_shared<NonTerminal>(("Rule"));
+    std::shared_ptr<NonTerminal> Expansion = std::make_shared<NonTerminal>(("Expansion"));
 
-    std::shared_ptr<NonTerminal> RuleBlock = std::make_shared<NonTerminal>(("RuleBlock"));
-    RuleBlock->addToRule(*ID, std::vector<std::shared_ptr<Symbol>>({ ID }));
-    RuleBlock->addToRule(*OPEN_BRACKET, std::vector<std::shared_ptr<Symbol>>({ OPEN_BRACKET, ID, CLOSE_BRACKET }));
-    RuleBlock->addToRule(*OPEN_PARENTHESES, std::vector<std::shared_ptr<Symbol>>({ OPEN_PARENTHESES, Rule, CLOSE_PARENTHESES, Closure }));
+    std::shared_ptr<NonTerminal> ExpansionBlock = std::make_shared<NonTerminal>(("ExpansionBlock"));
+    ExpansionBlock->addToRule(*ID, std::vector<std::shared_ptr<Symbol>>({ ID }));
+    ExpansionBlock->addToRule(*OPEN_BRACKET, std::vector<std::shared_ptr<Symbol>>({ OPEN_BRACKET, ID, CLOSE_BRACKET }));
+    ExpansionBlock->addToRule(*OPEN_PARENTHESES, std::vector<std::shared_ptr<Symbol>>({ OPEN_PARENTHESES, Expansion, CLOSE_PARENTHESES, Closure }));
 
-    std::shared_ptr<NonTerminal> NextRuleBlock = std::make_shared<NonTerminal>(("NextRuleBlock"));
-    NextRuleBlock->addToRule(*ID, std::vector<std::shared_ptr<Symbol>>({ RuleBlock, Annotation, NextRuleBlock }));
-    NextRuleBlock->addToRule(*LEFT_CURLY_BRACKET, std::vector<std::shared_ptr<Symbol>>({}));
-    NextRuleBlock->addToRule(*SEMICOLON, std::vector<std::shared_ptr<Symbol>>({}));
-    NextRuleBlock->addToRule(*OPEN_BRACKET, std::vector<std::shared_ptr<Symbol>>({ RuleBlock, AnnotationOption, NextRuleBlock }));
-    NextRuleBlock->addToRule(*OPEN_PARENTHESES, std::vector<std::shared_ptr<Symbol>>({ RuleBlock, Annotation, NextRuleBlock }));
-    NextRuleBlock->addToRule(*CLOSE_PARENTHESES, std::vector<std::shared_ptr<Symbol>>({}));
+    std::shared_ptr<NonTerminal> NextExpansionBlock = std::make_shared<NonTerminal>(("NextExpansionBlock"));
+    NextExpansionBlock->addToRule(*ID, std::vector<std::shared_ptr<Symbol>>({ ExpansionBlock, Annotation, NextExpansionBlock }));
+    NextExpansionBlock->addToRule(*LEFT_CURLY_BRACKET, std::vector<std::shared_ptr<Symbol>>({}));
+    NextExpansionBlock->addToRule(*SEMICOLON, std::vector<std::shared_ptr<Symbol>>({}));
+    NextExpansionBlock->addToRule(*OPEN_BRACKET, std::vector<std::shared_ptr<Symbol>>({ ExpansionBlock, AnnotationOption, NextExpansionBlock }));
+    NextExpansionBlock->addToRule(*OPEN_PARENTHESES, std::vector<std::shared_ptr<Symbol>>({ ExpansionBlock, Annotation, NextExpansionBlock }));
+    NextExpansionBlock->addToRule(*CLOSE_PARENTHESES, std::vector<std::shared_ptr<Symbol>>({}));
 
-    Rule->addToRule(*ID, std::vector<std::shared_ptr<Symbol>>({ RuleBlock, Annotation, NextRuleBlock }));
-    Rule->addToRule(*OPEN_BRACKET, std::vector<std::shared_ptr<Symbol>>({ RuleBlock, Annotation, NextRuleBlock }));
-    Rule->addToRule(*OPEN_PARENTHESES, std::vector<std::shared_ptr<Symbol>>({ RuleBlock, Annotation, NextRuleBlock }));
+    Expansion->addToRule(*ID, std::vector<std::shared_ptr<Symbol>>({ ExpansionBlock, Annotation, NextExpansionBlock }));
+    Expansion->addToRule(*OPEN_BRACKET, std::vector<std::shared_ptr<Symbol>>({ ExpansionBlock, Annotation, NextExpansionBlock }));
+    Expansion->addToRule(*OPEN_PARENTHESES, std::vector<std::shared_ptr<Symbol>>({ ExpansionBlock, Annotation, NextExpansionBlock }));
 
     std::shared_ptr<NonTerminal> Rules = std::make_shared<NonTerminal>(("Rules"));
 
     std::shared_ptr<NonTerminal> NextRule = std::make_shared<NonTerminal>(("NextRule"));
     NextRule->addToRule(*END_OF_INPUT, std::vector<std::shared_ptr<Symbol>>({}));
-    NextRule->addToRule(*ID, std::vector<std::shared_ptr<Symbol>>({ ID, RIGHT_ARROW, Rule, SEMICOLON, NextRule }));
+    NextRule->addToRule(*ID, std::vector<std::shared_ptr<Symbol>>({ ID, RIGHT_ARROW, Expansion, SEMICOLON, NextRule }));
 
-    Rules->addToRule(*ID, std::vector<std::shared_ptr<Symbol>>({ ID, RIGHT_ARROW, Rule, SEMICOLON, NextRule }));
+    Rules->addToRule(*ID, std::vector<std::shared_ptr<Symbol>>({ ID, RIGHT_ARROW, Expansion, SEMICOLON, NextRule }));
 
     std::shared_ptr<NonTerminal> Skip = std::make_shared<NonTerminal>(("Skip"));
 

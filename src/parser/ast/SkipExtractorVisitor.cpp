@@ -7,7 +7,7 @@
 #include <sstream>
 #include <stdexcept>
 
-bool visitSkip(Visitor<bool>* context, Node& node) {
+bool visitSkip(Visitor<bool>* context, const std::shared_ptr<Node>& node) {
     auto skipExtractor = dynamic_cast<SkipExtractorVisitor*>(context);
     if (!skipExtractor) {
         std::stringstream what;
@@ -15,28 +15,28 @@ bool visitSkip(Visitor<bool>* context, Node& node) {
         throw std::runtime_error(what.str());
     }
 
-    Node regex = node.getChild(2);
-    Node skipExpression = node.getChild(3);
+    std::shared_ptr<Node> regex = node->getChild(2);
+    std::shared_ptr<Node> skipExpression = node->getChild(3);
 
-    std::string regexExpr = regex.getAnnotation("consumed_token");
+    std::string regexExpr = regex->getAnnotation("consumed_token");
     regexExpr = regexExpr.substr(1, regexExpr.length() - 2);
 
     skipExtractor->addRegexExpression(regexExpr);
 
     skipExtractor->visit(skipExpression);
 
-    node.clearChildren();
+    node->clearChildren();
     for (auto& regexExpression: skipExtractor->getRegexExpressions()) {
-        Node child("SkipExpression");
-        child.addAnnotation("regex", regexExpression);
+        std::shared_ptr<Node> child = std::make_shared<Node>("SkipExpression");
+        child->addAnnotation("regex", regexExpression);
 
-        node.addChild(child);
+        node->addChild(child);
     }
 
     return true;
 }
 
-bool visitSkipExpression(Visitor<bool>* context, Node& node) {
+bool visitSkipExpression(Visitor<bool>* context, const std::shared_ptr<Node>& node) {
     auto skipExtractor = dynamic_cast<SkipExtractorVisitor*>(context);
     if (!skipExtractor) {
         std::stringstream what;
@@ -44,14 +44,14 @@ bool visitSkipExpression(Visitor<bool>* context, Node& node) {
         throw std::runtime_error(what.str());
     }
 
-    if (node.getChildren().empty()) {
+    if (node->getChildren().empty()) {
         return false;
     }
 
-    Node regex = node.getChild(1);
-    Node skipExpression = node.getChild(2);
+    std::shared_ptr<Node> regex = node->getChild(1);
+    std::shared_ptr<Node> skipExpression = node->getChild(2);
 
-    std::string regexExpr = regex.getAnnotation("consumed_token");
+    std::string regexExpr = regex->getAnnotation("consumed_token");
     regexExpr = regexExpr.substr(1, regexExpr.length() - 2);
 
     skipExtractor->addRegexExpression(regexExpr);
@@ -61,15 +61,15 @@ bool visitSkipExpression(Visitor<bool>* context, Node& node) {
     return true;
 }
 
-static bool descend(Visitor<bool>* context, Node &node) {
-    for (auto& child : node.getChildren()) {
-        context->visit(*child);
+static bool descend(Visitor<bool>* context, const std::shared_ptr<Node>& node) {
+    for (auto& child : node->getChildren()) {
+        context->visit(child);
     }
 
     return true;
 }
 
-static bool idle(Visitor<bool> *context, Node &node) {
+static bool idle(Visitor<bool> *context, const std::shared_ptr<Node>& node) {
     return true;
 }
 

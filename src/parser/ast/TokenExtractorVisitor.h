@@ -12,14 +12,11 @@ class TokenExtractorVisitor : public Visitor<bool> {
 public:
     TokenExtractorVisitor();
     ~TokenExtractorVisitor() override = default;
-private:
-    friend bool visitTokens(Visitor<bool>* context, Node& node);
-    friend bool visitToken(Visitor<bool>* context, Node& node);
-    friend bool visitNextToken(Visitor<bool>* context, Node& node);
-    friend bool descend(Visitor<bool>* context, Node& node);
-    friend bool idle(Visitor<bool>* context, Node& node);
 
-    std::vector<Node> tokenCollector;
+    std::vector<std::shared_ptr<Node>> getTokenCollector();
+    void addToken(const std::shared_ptr<Node>& token);
+private:
+    std::vector<std::shared_ptr<Node>> tokenCollector;
 };
 
 

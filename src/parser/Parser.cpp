@@ -13,7 +13,7 @@
 
 Parser::Parser(Recognizer recognizer, const NonTerminal& startSymbol) : recognizer(std::move(recognizer)), startSymbol(startSymbol) {}
 
-Node Parser::parse(std::string toParse) {
+std::shared_ptr<Node> Parser::parse(std::string toParse) {
     std::shared_ptr<Node> root = std::make_shared<Node>(Node(this->startSymbol.getName()));
 
     Terminal currentTerminal = (this->recognizer).recognizeFirstTerminal(toParse);
@@ -36,7 +36,7 @@ Node Parser::parse(std::string toParse) {
         throw std::runtime_error("Unable to correctly match expression given.");
     }
 
-    return *root;
+    return root;
 }
 
 std::shared_ptr<Node> Parser::parse(std::string& toParse, Terminal& currentTerminal, const std::shared_ptr<Node>& rootNode, const std::shared_ptr<Symbol>& currentSymbol) {

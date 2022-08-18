@@ -22,13 +22,13 @@ FIRST(Rules) = { < ID > }
 
 FIRST(NextRule) = { < ID > }
 
-FIRST(Rule) = { < ( >, < < >, < ID > }
+FIRST(Expansion) = { < ( >, < < >, < ID > }
 
 FIRST(Closure) = { < * >, < + > }
 
-FIRST(RuleBlock) = { < < >, < ID >, < ( > }
+FIRST(ExpansionBlock) = { < < >, < ID >, < ( > }
 
-FIRST(NextRuleBlock) = { < < >, < ID >, < ( > }
+FIRST(NextExpansionBlock) = { < < >, < ID >, < ( > }
 
 FIRST(Annotation) = { < { > }
 

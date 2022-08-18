@@ -16,13 +16,13 @@ FOLLOW(Rules) = { < EOF > }
 
 FOLLOW(NextRule) = { < EOF > }
 
-FOLLOW(Rule) = { < ) >, < ; > }
+FOLLOW(Expansion) = { < ) >, < ; > }
 
 FOLLOW(Closure) = { < ( >, < < >, < ID >, < { >, < ) >, < ; > }
 
-FOLLOW(RuleBlock) = { < ( >, < < >, < ID >, < { >, < ) >, < ; > }
+FOLLOW(ExpansionBlock) = { < ( >, < < >, < ID >, < { >, < ) >, < ; > }
 
-FOLLOW(NextRuleBlock) = { < { >, < ) >, < ; > }
+FOLLOW(NextExpansionBlock) = { < { >, < ) >, < ; > }
 
 FOLLOW(Annotation) = { < ( >, < < >, < ID >, < ) >, < ; > }
 

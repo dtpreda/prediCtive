@@ -14,16 +14,12 @@ void Node::addChild(const std::shared_ptr<Node>& child) {
     this->children.push_back(std::make_shared<Node>(*child));
 }
 
-void Node::addChild(Node& child) {
-    this->children.push_back(std::make_shared<Node>(child));
-}
-
-Node Node::getChild(int index) const {
+std::shared_ptr<Node> Node::getChild(int index) const {
     if (this->children.size() <= index) {
         throw std::runtime_error("No such child index.");
     }
 
-    return *(this->children.at(index));
+    return this->children.at(index);
 }
 
 Node &Node::operator=(const Node &other) {
@@ -59,12 +55,11 @@ std::string Node::getName() const {
 }
 
 void Node::setParent(const std::shared_ptr<Node>& parentPtr) {
-    std::weak_ptr<Node> as = std::weak_ptr<Node>(parentPtr);
-    this->parent = std::weak_ptr<Node>(parentPtr);
+    this->parent = parentPtr;
 }
 
-Node Node::getParent() const {
-    return *(this->parent.lock());
+std::shared_ptr<Node> Node::getParent() const {
+    return this->parent;
 }
 
 void Node::addAnnotation(const std::string& key, const std::string& annotation) {
@@ -93,4 +88,8 @@ std::vector<std::shared_ptr<Node>> Node::getChildren() const {
 
 void Node::clearChildren() {
     this->children.clear();
+}
+
+void Node::setName(const std::string& name) {
+    this->name = name;
 }

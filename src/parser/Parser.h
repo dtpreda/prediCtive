@@ -16,7 +16,7 @@ class Parser {
 public:
     Parser(Recognizer recognizer, const NonTerminal&  startSymbol);
 
-    Node parse(std::string toParse);
+    std::shared_ptr<Node> parse(std::string toParse);
 private:
     Recognizer recognizer;
     NonTerminal startSymbol;

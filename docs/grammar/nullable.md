@@ -22,13 +22,13 @@ NULLABLLE(Rules) = false
 
 NULLABLLE(NextRule) = false
 
-NULLABLLE(Rule) = false
+NULLABLLE(Expansion) = false
 
 NULLABLLE(Closure) = false
 
-NULLABLLE(RuleBlock) = false
+NULLABLLE(ExpansionBlock) = false
 
-NULLABLLE(NextRuleBlock) = false
+NULLABLLE(NextExpansionBlock) = false
 
 NULLABLLE(Annotation) = true
 

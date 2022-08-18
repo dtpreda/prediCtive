@@ -18,15 +18,15 @@ public:
     Node(const Node& other);
 
     std::string getName() const;
+    void setName(const std::string& name);
 
     void addChild(const std::shared_ptr<Node>& child);
-    void addChild(Node& child);
-    Node getChild(int index) const;
+    std::shared_ptr<Node> getChild(int index) const;
     std::vector<std::shared_ptr<Node>> getChildren() const;
     void clearChildren();
 
     void setParent(const std::shared_ptr<Node>& parent);
-    Node getParent() const;
+    std::shared_ptr<Node> getParent() const;
 
     void addAnnotation(const std::string& key, const std::string& annotation);
     std::string getAnnotation(const std::string& key) const;
@@ -35,7 +35,7 @@ public:
 private:
     std::string name;
     std::vector<std::shared_ptr<Node>> children;
-    std::weak_ptr<Node> parent;
+    std::shared_ptr<Node> parent;
     std::map<std::string, std::string> annotations;
 };
 
