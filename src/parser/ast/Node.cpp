@@ -11,7 +11,7 @@
 Node::Node(std::string name) : name(std::move(name)) {}
 
 void Node::addChild(const std::shared_ptr<Node>& child) {
-    this->children.push_back(std::make_shared<Node>(*child));
+    this->children.push_back(child);
 }
 
 std::shared_ptr<Node> Node::getChild(int index) const {

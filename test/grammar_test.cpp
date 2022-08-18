@@ -8,7 +8,7 @@
 #include "parser/prediCtiveParser.h"
 #include "parser/ast/TokenExtractorVisitor.h"
 #include "parser/ast/SkipExtractorVisitor.h"
-#include "parser/ast/RuleSimplifierVisitor.h"
+#include "parser/ast/RuleExtractorVisitor.h"
 
 class prediCtiveParserTest : public ::testing::Test {
 protected:
@@ -77,7 +77,16 @@ TEST_F(prediCtiveParserTest, RuleSimplification) {
 
     std::shared_ptr<Node> root = prediCtiveParser.parse(contents);
 
-    RuleSimplifierVisitor rsv;
+    RuleExtractorVisitor rsv;
 
     rsv.visit(root);
+
+    std::shared_ptr<Node> rules = root->getChild(0)->getChild(2);
+
+    ASSERT_EQ(4, rules->getChildren().size());
+
+    ASSERT_EQ("Start", rules->getChild(0)->getAnnotation("name"));
+    ASSERT_EQ("First", rules->getChild(1)->getAnnotation("name"));
+    ASSERT_EQ("First", rules->getChild(2)->getAnnotation("name"));
+    ASSERT_EQ("Second", rules->getChild(3)->getAnnotation("name"));
 }
