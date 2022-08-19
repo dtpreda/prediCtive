@@ -25,6 +25,7 @@ private:
 };
 
 template class Visitor<bool>;
+template class Visitor<std::string>;
 
 
 #endif //PARSER_VISITOR_H

@@ -27,7 +27,8 @@ set(SOURCE_FILES
         src/parser/utils.h src/parser/utils.cpp
         src/parser/ast/Visitor.cpp src/parser/ast/Visitor.h
         src/parser/ast/TokenExtractorVisitor.cpp src/parser/ast/TokenExtractorVisitor.h
-        src/parser/ast/SkipExtractorVisitor.cpp src/parser/ast/SkipExtractorVisitor.h src/parser/ast/RuleExtractorVisitor.cpp src/parser/ast/RuleExtractorVisitor.h)
+        src/parser/ast/SkipExtractorVisitor.cpp src/parser/ast/SkipExtractorVisitor.h src/parser/ast/RuleExtractorVisitor.cpp src/parser/ast/RuleExtractorVisitor.h
+        src/parser/ast/RuleSimplifierVisitor.cpp src/parser/ast/RuleSimplifierVisitor.h)
 set(TEST_ASSETS test/TestUtils.cpp test/TestUtils.h)
 add_library(testables ${SOURCE_FILES} ${TEST_ASSETS})
 

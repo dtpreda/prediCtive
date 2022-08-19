@@ -30,6 +30,7 @@ public:
 
     void addAnnotation(const std::string& key, const std::string& annotation);
     std::string getAnnotation(const std::string& key) const;
+    void changeAnnotationKey(const std::string& originalKey, const std::string& newKey);
 
     Node& operator=(const Node& other);
 private:

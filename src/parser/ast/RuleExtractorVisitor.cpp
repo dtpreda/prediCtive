@@ -20,10 +20,10 @@ static bool descend(Visitor<bool>* context, const std::shared_ptr<Node>& node) {
 }
 
 static bool visitRules(Visitor<bool>* context, const std::shared_ptr<Node>& node) {
-    auto ruleSimplifier = dynamic_cast<RuleExtractorVisitor*>(context);
-    if (!ruleSimplifier) {
+    auto ruleExtractor = dynamic_cast<RuleExtractorVisitor*>(context);
+    if (!ruleExtractor) {
         std::stringstream what;
-        what << "Wrong derived class of Visitor<bool>. Should be RuleSimplifierExtractor.";
+        what << "Wrong derived class of Visitor<bool>. Should be RuleExtractorVisitor.";
         throw std::runtime_error(what.str());
     }
 
@@ -36,12 +36,12 @@ static bool visitRules(Visitor<bool>* context, const std::shared_ptr<Node>& node
     rule->addAnnotation("name", leftSideName);
     rule->addChild(expansion);
     expansion->setParent(rule);
-    ruleSimplifier->addRule(rule);
+    ruleExtractor->addRule(rule);
 
-    ruleSimplifier->visit(nextRule);
+    ruleExtractor->visit(nextRule);
 
     node->clearChildren();
-    for (auto& child: ruleSimplifier->getRuleCollector()) {
+    for (auto& child: ruleExtractor->getRuleCollector()) {
         child->setParent(node);
         node->addChild(child);
     }
@@ -54,10 +54,10 @@ static bool visitNextRule(Visitor<bool>* context, const std::shared_ptr<Node>& n
         return false;
     }
 
-    auto ruleSimplifier = dynamic_cast<RuleExtractorVisitor*>(context);
-    if (!ruleSimplifier) {
+    auto ruleExtractor = dynamic_cast<RuleExtractorVisitor*>(context);
+    if (!ruleExtractor) {
         std::stringstream what;
-        what << "Wrong derived class of Visitor<bool>. Should be RuleSimplifierExtractor.";
+        what << "Wrong derived class of Visitor<bool>. Should be RuleExtractorVisitor.";
         throw std::runtime_error(what.str());
     }
 
@@ -68,9 +68,9 @@ static bool visitNextRule(Visitor<bool>* context, const std::shared_ptr<Node>& n
     std::shared_ptr<Node> rule = std::make_shared<Node>("Rule");
     rule->addAnnotation("name", leftSideName);
     rule->addChild(node->getChild(2));
-    ruleSimplifier->addRule(rule);
+    ruleExtractor->addRule(rule);
 
-    ruleSimplifier->visit(nextRule);
+    ruleExtractor->visit(nextRule);
 
     return true;
 }

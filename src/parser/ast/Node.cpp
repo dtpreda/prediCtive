@@ -28,7 +28,12 @@ Node &Node::operator=(const Node &other) {
 
         this->children.clear();
         for (auto& child : other.children) {
-            this->children.push_back(std::make_unique<Node>(*child));
+            this->children.push_back(std::make_shared<Node>(*child));
+        }
+
+        this->annotations.clear();
+        for (auto& annotation : other.annotations) {
+            this->annotations.insert(annotation);
         }
     }
     return *this;
@@ -92,4 +97,16 @@ void Node::clearChildren() {
 
 void Node::setName(const std::string& name) {
     this->name = name;
+}
+
+void Node::changeAnnotationKey(const std::string &originalKey, const std::string &newKey) {
+    if (this->annotations.find(originalKey) == this->annotations.end()) {
+        std::stringstream what;
+        what << "Node does not contain an annotation with a " << originalKey << " key.";
+        throw std::runtime_error(what.str());
+    }
+
+    std::string value = this->annotations.at(originalKey);
+    this->annotations.erase(originalKey);
+    this->addAnnotation(newKey, value);
 }
