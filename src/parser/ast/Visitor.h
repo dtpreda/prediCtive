@@ -8,6 +8,7 @@
 #include <map>
 #include <functional>
 #include <string>
+#include <memory>
 
 #include "Node.h"
 
@@ -26,6 +27,7 @@ private:
 
 template class Visitor<bool>;
 template class Visitor<std::string>;
+template class Visitor<std::shared_ptr<Node>>;
 
 
 #endif //PARSER_VISITOR_H

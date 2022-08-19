@@ -110,3 +110,31 @@ void Node::changeAnnotationKey(const std::string &originalKey, const std::string
     this->annotations.erase(originalKey);
     this->addAnnotation(newKey, value);
 }
+
+void Node::clearAnnotations() {
+    this->annotations.clear();
+}
+
+void Node::deleteAnnotation(const std::string &key) {
+    if (this->annotations.find(key) == this->annotations.end()) {
+        std::stringstream what;
+        what << "Node does not contain an annotation with a " << key << " key.";
+        throw std::runtime_error(what.str());
+    }
+
+    this->annotations.erase(key);
+}
+
+void Node::replaceChild(const std::shared_ptr<Node>& childToReplace, const std::vector<std::shared_ptr<Node>> &newChildren) {
+    for (auto it = this->children.begin(); it != this->children.end(); it++) {
+        if (*it == childToReplace) {
+            long index = it - this->children.begin();
+            this->children.erase(it);
+
+            this->children.insert(this->children.begin() + index, newChildren.begin(), newChildren.end());
+            return;
+        }
+    }
+
+    throw std::runtime_error("No such child exists so it can be replaced.");
+}

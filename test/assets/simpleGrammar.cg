@@ -10,7 +10,7 @@ SKIP {
     "\t"
 }
 
-Start -> (First)* { "name" : "first" } Second;
+Start -> (First)* { "test" : "first" } Second;
 
 First -> < INT > { "hello" : last_token } ;
 First -> < VOID >;

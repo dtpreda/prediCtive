@@ -23,7 +23,7 @@ static std::string visitRule(Visitor<std::string>* context, const std::shared_pt
     auto ruleSimplifier = dynamic_cast<RuleSimplifierVisitor*>(context);
     if (!ruleSimplifier) {
         std::stringstream what;
-        what << "Wrong derived class of Visitor<bool>. Should be RuleSimplifierExtractor.";
+        what << "Wrong derived class of Visitor<std::string>. Should be RuleSimplifierExtractor.";
         throw std::runtime_error(what.str());
     }
 
@@ -44,7 +44,7 @@ static std::string visitExpansion(Visitor<std::string>* context, const std::shar
     auto ruleSimplifier = dynamic_cast<RuleSimplifierVisitor*>(context);
     if (!ruleSimplifier) {
         std::stringstream what;
-        what << "Wrong derived class of Visitor<bool>. Should be RuleSimplifierExtractor.";
+        what << "Wrong derived class of Visitor<std::string>. Should be RuleSimplifierExtractor.";
         throw std::runtime_error(what.str());
     }
 
@@ -80,7 +80,7 @@ static std::string visitExpansionBlock(Visitor<std::string>* context, const std:
     auto ruleSimplifier = dynamic_cast<RuleSimplifierVisitor*>(context);
     if (!ruleSimplifier) {
         std::stringstream what;
-        what << "Wrong derived class of Visitor<bool>. Should be RuleSimplifierExtractor.";
+        what << "Wrong derived class of Visitor<std::string>. Should be RuleSimplifierExtractor.";
         throw std::runtime_error(what.str());
     }
 
@@ -111,7 +111,7 @@ static std::string visitNextExpansionBlock(Visitor<std::string>* context, const 
     auto ruleSimplifier = dynamic_cast<RuleSimplifierVisitor*>(context);
     if (!ruleSimplifier) {
         std::stringstream what;
-        what << "Wrong derived class of Visitor<bool>. Should be RuleSimplifierExtractor.";
+        what << "Wrong derived class of Visitor<std::string>. Should be RuleSimplifierExtractor.";
         throw std::runtime_error(what.str());
     }
 

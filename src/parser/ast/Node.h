@@ -22,6 +22,7 @@ public:
 
     void addChild(const std::shared_ptr<Node>& child);
     std::shared_ptr<Node> getChild(int index) const;
+    void replaceChild(const std::shared_ptr<Node>& childToReplace, const std::vector<std::shared_ptr<Node>>& newChildren);
     std::vector<std::shared_ptr<Node>> getChildren() const;
     void clearChildren();
 
@@ -31,6 +32,8 @@ public:
     void addAnnotation(const std::string& key, const std::string& annotation);
     std::string getAnnotation(const std::string& key) const;
     void changeAnnotationKey(const std::string& originalKey, const std::string& newKey);
+    void deleteAnnotation(const std::string& key);
+    void clearAnnotations();
 
     Node& operator=(const Node& other);
 private:
