@@ -12,10 +12,10 @@ The program will return a tree comprised of nodes related to the rules inputed b
 
 ## To-Do
 
-- Define grammar language;
-- Parse tokens and ignores;
-- Parse basic rules;
+- ~~Define grammar language~~;
+- Parse ~~tokens~~ and ignores;
+- ~~Parse basic rules~~;
 - Parse options;
-- Add annotations;
+- ~~Add annotations~~;
 - Parse complex rules (conditional);
 - Add look ahead.
