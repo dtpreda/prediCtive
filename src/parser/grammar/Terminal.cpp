@@ -16,6 +16,14 @@ bool Terminal::isNullable() const {
     return this->regex.empty() || this->regex == "$";
 }
 
+std::string Terminal::getLastMatch() const {
+    return this->lastMatch;
+}
+
+void Terminal::setLastMatch(std::string lastMatch) {
+    this->lastMatch = std::move(lastMatch);
+}
+
 Terminal::~Terminal() = default;
 
 Terminal& Terminal::operator=(const Terminal& other) = default;

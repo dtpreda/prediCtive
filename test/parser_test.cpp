@@ -7,9 +7,9 @@
 #include <sstream>
 #include <fstream>
 
-#include "parser/Terminal.h"
-#include "parser/NonTerminal.h"
-#include "parser/Recognizer.h"
+#include "parser/grammar/Terminal.h"
+#include "parser/grammar/NonTerminal.h"
+#include "parser/grammar/Recognizer.h"
 #include "parser/Parser.h"
 
 TEST(TerminalClass, TerminalCreation) {

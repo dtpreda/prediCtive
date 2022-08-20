@@ -16,14 +16,21 @@ FetchContent_MakeAvailable(googletest)
 
 include_directories(src)
 
-set(SOURCE_FILES src/parser/Terminal.cpp src/parser/Terminal.h
-        src/parser/Symbol.cpp src/parser/Symbol.h
-        src/parser/NonTerminal.cpp src/parser/NonTerminal.h
-        src/parser/Recognizer.cpp src/parser/Recognizer.h
+set(SOURCE_FILES
+        src/parser/grammar/Terminal.cpp src/parser/grammar/Terminal.h
+        src/parser/grammar/Symbol.cpp src/parser/grammar/Symbol.h
+        src/parser/grammar/NonTerminal.cpp src/parser/grammar/NonTerminal.h
+        src/parser/grammar/Recognizer.cpp src/parser/grammar/Recognizer.h
         src/parser/prediCtiveParser.cpp src/parser/prediCtiveParser.h
         src/parser/Parser.cpp src/parser/Parser.h
-        src/parser/Node.cpp src/parser/Node.h
+        src/parser/ast/Node.cpp src/parser/ast/Node.h
         src/parser/utils.h src/parser/utils.cpp
+        src/parser/ast/Visitor.cpp src/parser/ast/Visitor.h
+        src/parser/ast/TokenExtractorVisitor.cpp src/parser/ast/TokenExtractorVisitor.h
+        src/parser/ast/SkipExtractorVisitor.cpp src/parser/ast/SkipExtractorVisitor.h
+        src/parser/ast/RuleExtractorVisitor.cpp src/parser/ast/RuleExtractorVisitor.h
+        src/parser/ast/RuleSimplifierVisitor.cpp src/parser/ast/RuleSimplifierVisitor.h
+        src/parser/ast/ClosureSimplifierVisitor.cpp src/parser/ast/ClosureSimplifierVisitor.h
 )
 set(TEST_ASSETS test/TestUtils.cpp test/TestUtils.h)
 add_library(testables ${SOURCE_FILES} ${TEST_ASSETS})

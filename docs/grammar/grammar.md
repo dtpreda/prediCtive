@@ -18,23 +18,23 @@ SkipExpression -> < , > < QUOTE_EXPRESSION > SkipExpression
 
 SkipExpression -> ε
 
-Rules -> < ID > < -> > Rule < ; > NextRule
+Rules -> < ID > < -> > Expansion < ; > NextRule
 
-NextRule -> < ID > < -> > Rule < ; > NextRule
+NextRule -> < ID > < -> > Expansion < ; > NextRule
 
 NextRule -> ε
 
-Rule -> RuleBlock Annotation NextRuleBlock
+Expansion -> ExpansionBlock Annotation NextExpansionBlock
 
-NextRuleBlock -> RuleBlock Annotation NextRuleBlock
+NextExpansionBlock -> ExpansionBlock Annotation NextExpansionBlock
 
-NextRuleBlock -> ε
+NextExpansionBlock -> ε
 
-RuleBlock -> < < > < ID > < > >
+ExpansionBlock -> < < > < ID > < > >
 
-RuleBlock -> < ID >
+ExpansionBlock -> < ID >
 
-RuleBlock -> < ( > Rule < ) > Closure
+ExpansionBlock -> < ( > Expansion < ) > Closure
 
 Closure -> < * >
 

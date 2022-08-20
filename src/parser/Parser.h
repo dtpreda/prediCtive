@@ -8,20 +8,20 @@
 #include <vector>
 #include <memory>
 
-#include "Recognizer.h"
-#include "NonTerminal.h"
-#include "Node.h"
+#include "parser/grammar/Recognizer.h"
+#include "parser/grammar/NonTerminal.h"
+#include "parser/ast/Node.h"
 
 class Parser {
 public:
     Parser(Recognizer recognizer, const NonTerminal&  startSymbol);
 
-    Node parse(std::string toParse);
+    std::shared_ptr<Node> parse(std::string toParse);
 private:
     Recognizer recognizer;
     NonTerminal startSymbol;
 
-    Node parse(std::string& toParse, Terminal& currentTerminal, Node rootNode, const std::shared_ptr<Symbol>& currentSymbol);
+    std::shared_ptr<Node> parse(std::string& toParse, Terminal& currentTerminal, const std::shared_ptr<Node>& rootNode, const std::shared_ptr<Symbol>& currentSymbol);
 };
 
 

@@ -22,8 +22,12 @@ Terminal Recognizer::recognizeFirstTerminal(std::string &toRecognize) const {
     for (auto & terminal : this->terminals) {
         if (std::regex_search(toRecognize, matchResult, terminal.first) && matchResult.position() == 0) {
 
+            Terminal returnTerminal = terminal.second;
+            returnTerminal.setLastMatch(toRecognize.substr(0, matchResult.length()));
+
             toRecognize = toRecognize.substr(matchResult.length());
-            return terminal.second;
+
+            return returnTerminal;
         }
     }
 

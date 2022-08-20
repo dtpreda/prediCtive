@@ -7,13 +7,13 @@
 
 #include "prediCtiveParser.h"
 #include "utils.h"
-#include "Terminal.h"
-#include "NonTerminal.h"
+#include "parser/grammar/Terminal.h"
+#include "parser/grammar/NonTerminal.h"
 
 Parser buildPrediCtiveParser() {
-    std::shared_ptr<Terminal> TOKENS = std::make_shared<Terminal>(Terminal("Tokens", "TOKENS"));
+    std::shared_ptr<Terminal> TOKENS = std::make_shared<Terminal>(Terminal("TokensTerminal", "TOKENS"));
     std::shared_ptr<Terminal> ID = std::make_shared<Terminal>(Terminal("Identifier", "[[:alpha:]][[:alnum:]_]*"));
-    std::shared_ptr<Terminal> SKIP = std::make_shared<Terminal>(Terminal("Skip", "SKIP"));
+    std::shared_ptr<Terminal> SKIP = std::make_shared<Terminal>(Terminal("SkipTerminal", "SKIP"));
     std::shared_ptr<Terminal> QUOTE_EXPRESSION = std::make_shared<Terminal>(Terminal("Quote Expression", "\"(.*?)\""));
     std::shared_ptr<Terminal> COMMA = std::make_shared<Terminal>(Terminal("Comma", ","));
     std::shared_ptr<Terminal> LEFT_CURLY_BRACKET = std::make_shared<Terminal>(Terminal("Left Curly Bracket", "\\{"));
@@ -27,7 +27,7 @@ Parser buildPrediCtiveParser() {
     std::shared_ptr<Terminal> CLOSE_PARENTHESES = std::make_shared<Terminal>(Terminal("Close Parentheses", "\\)"));
     std::shared_ptr<Terminal> ASTERISK = std::make_shared<Terminal>(Terminal("Asterisk", "\\*"));
     std::shared_ptr<Terminal> PLUS = std::make_shared<Terminal>(Terminal("Plus", "\\+"));
-    std::shared_ptr<Terminal> LAST = std::make_shared<Terminal>(Terminal("Last", "last_token"));
+    std::shared_ptr<Terminal> LAST = std::make_shared<Terminal>(Terminal("Last Token", "last_token"));
 
     std::vector<std::shared_ptr<Terminal>> terminals = { TOKENS, SKIP, QUOTE_EXPRESSION, LAST, ASTERISK, PLUS, ID, OPEN_BRACKET,
                                                CLOSE_BRACKET, OPEN_PARENTHESES, CLOSE_PARENTHESES, COMMA, COLON, SEMICOLON,
@@ -49,32 +49,32 @@ Parser buildPrediCtiveParser() {
     Closure->addToRule(*ASTERISK, std::vector<std::shared_ptr<Symbol>>({ ASTERISK }));
     Closure->addToRule(*PLUS, std::vector<std::shared_ptr<Symbol>>({ PLUS }));
 
-    std::shared_ptr<NonTerminal> Rule = std::make_shared<NonTerminal>(("Rule"));
+    std::shared_ptr<NonTerminal> Expansion = std::make_shared<NonTerminal>(("Expansion"));
 
-    std::shared_ptr<NonTerminal> RuleBlock = std::make_shared<NonTerminal>(("RuleBlock"));
-    RuleBlock->addToRule(*ID, std::vector<std::shared_ptr<Symbol>>({ ID }));
-    RuleBlock->addToRule(*OPEN_BRACKET, std::vector<std::shared_ptr<Symbol>>({ OPEN_BRACKET, ID, CLOSE_BRACKET }));
-    RuleBlock->addToRule(*OPEN_PARENTHESES, std::vector<std::shared_ptr<Symbol>>({ OPEN_PARENTHESES, Rule, CLOSE_PARENTHESES, Closure }));
+    std::shared_ptr<NonTerminal> ExpansionBlock = std::make_shared<NonTerminal>(("ExpansionBlock"));
+    ExpansionBlock->addToRule(*ID, std::vector<std::shared_ptr<Symbol>>({ ID }));
+    ExpansionBlock->addToRule(*OPEN_BRACKET, std::vector<std::shared_ptr<Symbol>>({ OPEN_BRACKET, ID, CLOSE_BRACKET }));
+    ExpansionBlock->addToRule(*OPEN_PARENTHESES, std::vector<std::shared_ptr<Symbol>>({ OPEN_PARENTHESES, Expansion, CLOSE_PARENTHESES, Closure }));
 
-    std::shared_ptr<NonTerminal> NextRuleBlock = std::make_shared<NonTerminal>(("NextRuleBlock"));
-    NextRuleBlock->addToRule(*ID, std::vector<std::shared_ptr<Symbol>>({ RuleBlock, Annotation, NextRuleBlock }));
-    NextRuleBlock->addToRule(*LEFT_CURLY_BRACKET, std::vector<std::shared_ptr<Symbol>>({}));
-    NextRuleBlock->addToRule(*SEMICOLON, std::vector<std::shared_ptr<Symbol>>({}));
-    NextRuleBlock->addToRule(*OPEN_BRACKET, std::vector<std::shared_ptr<Symbol>>({ RuleBlock, AnnotationOption, NextRuleBlock }));
-    NextRuleBlock->addToRule(*OPEN_PARENTHESES, std::vector<std::shared_ptr<Symbol>>({ RuleBlock, Annotation, NextRuleBlock }));
-    NextRuleBlock->addToRule(*CLOSE_PARENTHESES, std::vector<std::shared_ptr<Symbol>>({}));
+    std::shared_ptr<NonTerminal> NextExpansionBlock = std::make_shared<NonTerminal>(("NextExpansionBlock"));
+    NextExpansionBlock->addToRule(*ID, std::vector<std::shared_ptr<Symbol>>({ ExpansionBlock, Annotation, NextExpansionBlock }));
+    NextExpansionBlock->addToRule(*LEFT_CURLY_BRACKET, std::vector<std::shared_ptr<Symbol>>({}));
+    NextExpansionBlock->addToRule(*SEMICOLON, std::vector<std::shared_ptr<Symbol>>({}));
+    NextExpansionBlock->addToRule(*OPEN_BRACKET, std::vector<std::shared_ptr<Symbol>>({ ExpansionBlock, AnnotationOption, NextExpansionBlock }));
+    NextExpansionBlock->addToRule(*OPEN_PARENTHESES, std::vector<std::shared_ptr<Symbol>>({ ExpansionBlock, Annotation, NextExpansionBlock }));
+    NextExpansionBlock->addToRule(*CLOSE_PARENTHESES, std::vector<std::shared_ptr<Symbol>>({}));
 
-    Rule->addToRule(*ID, std::vector<std::shared_ptr<Symbol>>({ RuleBlock, Annotation, NextRuleBlock }));
-    Rule->addToRule(*OPEN_BRACKET, std::vector<std::shared_ptr<Symbol>>({ RuleBlock, Annotation, NextRuleBlock }));
-    Rule->addToRule(*OPEN_PARENTHESES, std::vector<std::shared_ptr<Symbol>>({ RuleBlock, Annotation, NextRuleBlock }));
+    Expansion->addToRule(*ID, std::vector<std::shared_ptr<Symbol>>({ ExpansionBlock, Annotation, NextExpansionBlock }));
+    Expansion->addToRule(*OPEN_BRACKET, std::vector<std::shared_ptr<Symbol>>({ ExpansionBlock, Annotation, NextExpansionBlock }));
+    Expansion->addToRule(*OPEN_PARENTHESES, std::vector<std::shared_ptr<Symbol>>({ ExpansionBlock, Annotation, NextExpansionBlock }));
 
     std::shared_ptr<NonTerminal> Rules = std::make_shared<NonTerminal>(("Rules"));
 
     std::shared_ptr<NonTerminal> NextRule = std::make_shared<NonTerminal>(("NextRule"));
     NextRule->addToRule(*END_OF_INPUT, std::vector<std::shared_ptr<Symbol>>({}));
-    NextRule->addToRule(*ID, std::vector<std::shared_ptr<Symbol>>({ ID, RIGHT_ARROW, Rule, SEMICOLON, NextRule }));
+    NextRule->addToRule(*ID, std::vector<std::shared_ptr<Symbol>>({ ID, RIGHT_ARROW, Expansion, SEMICOLON, NextRule }));
 
-    Rules->addToRule(*ID, std::vector<std::shared_ptr<Symbol>>({ ID, RIGHT_ARROW, Rule, SEMICOLON, NextRule }));
+    Rules->addToRule(*ID, std::vector<std::shared_ptr<Symbol>>({ ID, RIGHT_ARROW, Expansion, SEMICOLON, NextRule }));
 
     std::shared_ptr<NonTerminal> Skip = std::make_shared<NonTerminal>(("Skip"));
 
