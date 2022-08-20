@@ -17,6 +17,7 @@ public:
 
     std::vector<std::shared_ptr<Node>> getNewRules();
     void addNewRule(const std::shared_ptr<Node>& node);
+    void clearNewRules();
 
     std::vector<std::shared_ptr<Node>> getNewBlocks();
     void addNewBlock(const std::shared_ptr<Node>& node);
