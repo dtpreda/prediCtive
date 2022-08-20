@@ -27,12 +27,19 @@ static bool visitRules(Visitor<bool>* context, const std::shared_ptr<Node>& node
         throw std::runtime_error(what.str());
     }
 
+    int initialNumberOfRules = node->getChildren().size();
+
     for (auto& child: node->getChildren()) {
         closureSimplifier->visit(child);
     }
 
     for (auto& rule: closureSimplifier->getNewRules()) {
         node->addChild(rule);
+    }
+
+    if (initialNumberOfRules != node->getChildren().size()) {
+        closureSimplifier->clearNewRules();
+        return closureSimplifier->visit(node);
     }
 
     return true;
@@ -119,6 +126,10 @@ std::vector<std::shared_ptr<Node>> ClosureSimplifierVisitor::getNewRules() {
 
 void ClosureSimplifierVisitor::addNewRule(const std::shared_ptr<Node> &node) {
     this->newRules.push_back(node);
+}
+
+void ClosureSimplifierVisitor::clearNewRules() {
+    this->newRules.clear();
 }
 
 std::vector<std::shared_ptr<Node>> ClosureSimplifierVisitor::getNewBlocks() {
