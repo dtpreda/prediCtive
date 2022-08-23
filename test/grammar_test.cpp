@@ -241,3 +241,28 @@ TEST_F(prediCtiveParserTest, ClosureSimplification) {
 
     ASSERT_EQ(0, emptyRule2->getChildren().size());
 }
+
+TEST_F(prediCtiveParserTest, ASTPrinting) {
+    std::string contents = TestUtils::openPrediCtiveFile("simpleGrammar.cg");
+
+    ASSERT_NO_THROW(prediCtiveParser.parse(contents));
+
+    std::shared_ptr<Node> root = prediCtiveParser.parse(contents);
+
+    TokenExtractorVisitor tev;
+    tev.visit(root);
+
+    SkipExtractorVisitor sev;
+    sev.visit(root);
+
+    RuleExtractorVisitor rev;
+    rev.visit(root);
+
+    RuleSimplifierVisitor rsv;
+    rsv.visit(root);
+
+    ClosureSimplifierVisitor csv;
+    csv.visit(root);
+
+    std::cout << root->print() << std::endl;
+}
