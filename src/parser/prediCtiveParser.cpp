@@ -104,3 +104,17 @@ Parser buildPrediCtiveParser() {
 
     return {Recognizer(terminals), *SStart};
 }
+
+void convertToAST(const std::shared_ptr<Node>& root) {
+    TokenExtractorVisitor tokenExtractorVisitor;
+    SkipExtractorVisitor skipExtractorVisitor;
+    RuleExtractorVisitor ruleExtractorVisitor;
+    RuleSimplifierVisitor ruleSimplifierVisitor;
+    ClosureSimplifierVisitor closureSimplifierVisitor;
+
+    tokenExtractorVisitor.visit(root);
+    skipExtractorVisitor.visit(root);
+    ruleExtractorVisitor.visit(root);
+    ruleSimplifierVisitor.visit(root);
+    closureSimplifierVisitor.visit(root);
+}
