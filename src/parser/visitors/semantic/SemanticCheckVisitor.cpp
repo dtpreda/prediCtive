@@ -128,6 +128,9 @@ void SemanticCheckVisitor::addTerminal(const std::string &terminal) {
 }
 
 void SemanticCheckVisitor::addNonTerminal(const std::string &nonTerminal) {
+    if (nonTerminal == "EOF") {
+        throw std::runtime_error("EOF is a prediCtive reserved keyword; it should not be used as a non-terminal name.");
+    }
     this->nonTerminals.insert(nonTerminal);
 }
 
