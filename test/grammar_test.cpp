@@ -6,11 +6,11 @@
 #include "TestUtils.h"
 
 #include "parser/prediCtiveParser.h"
-#include "parser/ast/TokenExtractorVisitor.h"
-#include "parser/ast/SkipExtractorVisitor.h"
-#include "parser/ast/RuleExtractorVisitor.h"
-#include "parser/ast/RuleSimplifierVisitor.h"
-#include "parser/ast/ClosureSimplifierVisitor.h"
+#include "parser/visitors/astConversion/TokenExtractorVisitor.h"
+#include "parser/visitors/astConversion/SkipExtractorVisitor.h"
+#include "parser/visitors/astConversion/RuleExtractorVisitor.h"
+#include "parser/visitors/astConversion/RuleSimplifierVisitor.h"
+#include "parser/visitors/astConversion/ClosureSimplifierVisitor.h"
 
 class prediCtiveParserTest : public ::testing::Test {
 protected:

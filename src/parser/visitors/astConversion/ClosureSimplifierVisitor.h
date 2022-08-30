@@ -5,7 +5,7 @@
 #ifndef PARSER_CLOSURESIMPLIFIERVISITOR_H
 #define PARSER_CLOSURESIMPLIFIERVISITOR_H
 
-#include "Visitor.h"
+#include "parser/visitors/Visitor.h"
 
 #include <vector>
 #include <memory>

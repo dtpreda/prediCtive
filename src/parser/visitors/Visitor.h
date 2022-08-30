@@ -10,7 +10,7 @@
 #include <string>
 #include <memory>
 
-#include "Node.h"
+#include "parser/node/Node.h"
 
 template <class T>
 class Visitor {

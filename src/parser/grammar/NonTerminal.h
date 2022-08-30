@@ -29,5 +29,16 @@ private:
     int nullExpansions = 0;
 };
 
+namespace std {
+    template<> struct hash<NonTerminal>
+    {
+        std::size_t operator()(const NonTerminal& t) const noexcept
+        {
+            std::hash<string> hasher;
+            return hasher(t.getName());
+        }
+    };
+}
+
 
 #endif //PARSER_NONTERMINAL_H

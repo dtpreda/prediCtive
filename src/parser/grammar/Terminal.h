@@ -27,5 +27,16 @@ private:
     std::string lastMatch;
 };
 
+namespace std {
+    template<> struct hash<Terminal>
+    {
+        std::size_t operator()(const Terminal& t) const noexcept
+        {
+            std::hash<string> hasher;
+            return hasher(t.getName());
+        }
+    };
+}
+
 
 #endif //PARSER_TERMINAL_H
