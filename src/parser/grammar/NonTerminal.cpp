@@ -10,7 +10,7 @@
 NonTerminal::NonTerminal(std::string name) : Symbol(std::move(name)) {}
 
 void NonTerminal::addToRule(const Terminal& first, const std::shared_ptr<Terminal>& expansion) {
-    auto expansionPtr(expansion);
+    const auto& expansionPtr(expansion);
     if (this->rules.find(first) == this->rules.end()) {
         this->rules.insert({first, std::vector<std::shared_ptr<Symbol>>({ expansionPtr })});
     } else {
@@ -22,7 +22,7 @@ void NonTerminal::addToRule(const Terminal& first, const std::shared_ptr<Termina
 }
 
 void NonTerminal::addToRule(const Terminal& first, const std::shared_ptr<NonTerminal>& expansion) {
-    auto expansionPtr(expansion);
+    const auto& expansionPtr(expansion);
     if (this->rules.find(first) == this->rules.end()) {
         this->rules.insert({first, std::vector<std::shared_ptr<Symbol>>({ expansionPtr })});
     } else {

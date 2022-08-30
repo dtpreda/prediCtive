@@ -7,6 +7,8 @@
 #include <sstream>
 #include <stdexcept>
 
+#include "parser/utils.h"
+
 static bool idle(Visitor<bool>* context, const std::shared_ptr<Node>& root) {
     return true;
 }
@@ -72,16 +74,16 @@ static bool visitExpansion(Visitor<bool>* context, const std::shared_ptr<Node>& 
         throw std::runtime_error(what.str());
     }
 
-    std::string closure = node->getAnnotation("closure");
-    node->deleteAnnotation("closure");
+    std::string closure = node->getAnnotation(CLOSURE);
+    node->deleteAnnotation(CLOSURE);
 
     std::string nonTerminalName = "Intermediate_NonTerminal_";
     nonTerminalName.append(std::to_string(closureSimplifier->getAndIntermediateCounter()));
 
     std::shared_ptr<Node> closureRule = std::make_shared<Node>("Rule");
     std::shared_ptr<Node> emptyRule = std::make_shared<Node>("Rule");
-    closureRule->addAnnotation("name", nonTerminalName);
-    emptyRule->addAnnotation("name", nonTerminalName);
+    closureRule->addAnnotation(SYMBOL_NAME, nonTerminalName);
+    emptyRule->addAnnotation(SYMBOL_NAME, nonTerminalName);
 
     for (auto& child: node->getChildren()) {
         std::shared_ptr<Node> newChild = std::make_shared<Node>(*child);
@@ -98,7 +100,7 @@ static bool visitExpansion(Visitor<bool>* context, const std::shared_ptr<Node>& 
     }
 
     node->setName("NonTerminal");
-    node->addAnnotation("name", nonTerminalName);
+    node->addAnnotation(SYMBOL_NAME, nonTerminalName);
     node->clearChildren();
     closureRule->addChild(node);
 

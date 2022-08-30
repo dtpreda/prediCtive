@@ -3,6 +3,7 @@
 //
 
 #include "TokenExtractorVisitor.h"
+#include "parser/utils.h"
 
 #include <sstream>
 #include <stdexcept>
@@ -43,12 +44,12 @@ static bool visitToken(Visitor<bool>* context, const std::shared_ptr<Node>& node
     std::shared_ptr<Node> identifier = node->getChild(0);
     std::shared_ptr<Node> regex = node->getChild(2);
 
-    node->addAnnotation("name", identifier->getAnnotation("consumed_token"));
+    node->addAnnotation(SYMBOL_NAME, identifier->getAnnotation(CONSUMED_TOKEN));
 
-    std::string regexExpr = regex->getAnnotation("consumed_token");
+    std::string regexExpr = regex->getAnnotation(CONSUMED_TOKEN);
     regexExpr = regexExpr.substr(1, regexExpr.length() - 2);
 
-    node->addAnnotation("regex", regexExpr);
+    node->addAnnotation(REGEX_LITERAL, regexExpr);
 
     parseTreeFlatenner->addToken(node);
     return true;

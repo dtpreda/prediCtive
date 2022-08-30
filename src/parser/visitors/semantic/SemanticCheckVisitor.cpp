@@ -28,7 +28,7 @@ static bool visitToken(Visitor<bool>* context, const std::shared_ptr<Node>& node
         throw std::runtime_error(what.str());
     }
 
-    semanticChecker->addTerminal(node->getAnnotation("name"));
+    semanticChecker->addTerminal(node->getAnnotation(SYMBOL_NAME));
 
     return true;
 }
@@ -41,7 +41,7 @@ static bool extractRuleNames(Visitor<bool>* context, const std::shared_ptr<Node>
         throw std::runtime_error(what.str());
     }
 
-    semanticChecker->addNonTerminal(node->getAnnotation("name"));
+    semanticChecker->addNonTerminal(node->getAnnotation(SYMBOL_NAME));
 
     return true;
 }
@@ -56,11 +56,11 @@ static bool verifyRuleExpansion(Visitor<bool>* context, const std::shared_ptr<No
 
     for (const auto& child: node->getChildren()) {
         if (node->getName() == "Terminal") {
-            if (!semanticChecker->verifyTerminalExistence(node->getAnnotation("name"))) {
+            if (!semanticChecker->verifyTerminalExistence(node->getAnnotation(SYMBOL_NAME))) {
                 return false;
             }
         } else if (node->getName() == "NonTerminal") {
-            if (!semanticChecker->verifyNonTerminalExistence(node->getAnnotation("name"))) {
+            if (!semanticChecker->verifyNonTerminalExistence(node->getAnnotation(SYMBOL_NAME))) {
                 return false;
             }
         }
@@ -88,7 +88,7 @@ static bool visitRules(Visitor<bool>* context, const std::shared_ptr<Node>& node
     for (const auto& child: node->getChildren()) {
         if (!semanticChecker->visit(child)) {
             std::stringstream what;
-            what << "At least one rule of " << child->getAnnotation("name") << " contains one or more undeclared symbols." << std::endl;
+            what << "At least one rule of " << child->getAnnotation(SYMBOL_NAME) << " contains one or more undeclared symbols." << std::endl;
             throw std::runtime_error(what.str());
         }
     }

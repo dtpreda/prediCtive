@@ -3,6 +3,7 @@
 // Created by dtpreda on 15/08/22.
 
 #include "RuleExtractorVisitor.h"
+#include "parser/utils.h"
 
 #include <sstream>
 #include <stdexcept>
@@ -30,10 +31,10 @@ static bool visitRules(Visitor<bool>* context, const std::shared_ptr<Node>& node
     std::shared_ptr<Node> nextRule = node->getChild(4);
     std::shared_ptr<Node> expansion = node->getChild(2);
 
-    std::string leftSideName = node->getChild(0)->getAnnotation("consumed_token");
+    std::string leftSideName = node->getChild(0)->getAnnotation(CONSUMED_TOKEN);
 
     std::shared_ptr<Node> rule = std::make_shared<Node>("Rule");
-    rule->addAnnotation("name", leftSideName);
+    rule->addAnnotation(SYMBOL_NAME, leftSideName);
     rule->addChild(expansion);
     expansion->setParent(rule);
     ruleExtractor->addRule(rule);
@@ -63,10 +64,10 @@ static bool visitNextRule(Visitor<bool>* context, const std::shared_ptr<Node>& n
 
     std::shared_ptr<Node> nextRule = node->getChild(4);
 
-    std::string leftSideName = node->getChild(0)->getAnnotation("consumed_token");
+    std::string leftSideName = node->getChild(0)->getAnnotation(CONSUMED_TOKEN);
 
     std::shared_ptr<Node> rule = std::make_shared<Node>("Rule");
-    rule->addAnnotation("name", leftSideName);
+    rule->addAnnotation(SYMBOL_NAME, leftSideName);
     rule->addChild(node->getChild(2));
     ruleExtractor->addRule(rule);
 
