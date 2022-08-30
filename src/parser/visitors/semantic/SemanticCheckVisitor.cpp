@@ -93,6 +93,12 @@ static bool visitRules(Visitor<bool>* context, const std::shared_ptr<Node>& node
         }
     }
 
+    if (!semanticChecker->verifyNonTerminalExistence("Start")) {
+        std::stringstream what;
+        what << "A Non-Terminal named Start should be defined to indicate the grammar's starting point." << std::endl;
+        throw std::runtime_error(what.str());
+    }
+
     return true;
 }
 
