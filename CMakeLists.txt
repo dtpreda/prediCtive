@@ -23,14 +23,15 @@ set(SOURCE_FILES
         src/parser/grammar/Recognizer.cpp src/parser/grammar/Recognizer.h
         src/parser/prediCtiveParser.cpp src/parser/prediCtiveParser.h
         src/parser/Parser.cpp src/parser/Parser.h
-        src/parser/ast/Node.cpp src/parser/ast/Node.h
+        src/parser/node/Node.cpp src/parser/node/Node.h
         src/parser/utils.h src/parser/utils.cpp
-        src/parser/ast/Visitor.cpp src/parser/ast/Visitor.h
-        src/parser/ast/TokenExtractorVisitor.cpp src/parser/ast/TokenExtractorVisitor.h
-        src/parser/ast/SkipExtractorVisitor.cpp src/parser/ast/SkipExtractorVisitor.h
-        src/parser/ast/RuleExtractorVisitor.cpp src/parser/ast/RuleExtractorVisitor.h
-        src/parser/ast/RuleSimplifierVisitor.cpp src/parser/ast/RuleSimplifierVisitor.h
-        src/parser/ast/ClosureSimplifierVisitor.cpp src/parser/ast/ClosureSimplifierVisitor.h
+        src/parser/visitors/Visitor.cpp src/parser/visitors/Visitor.h
+        src/parser/visitors/astConversion/TokenExtractorVisitor.cpp src/parser/visitors/astConversion/TokenExtractorVisitor.h
+        src/parser/visitors/astConversion/SkipExtractorVisitor.cpp src/parser/visitors/astConversion/SkipExtractorVisitor.h
+        src/parser/visitors/astConversion/RuleExtractorVisitor.cpp src/parser/visitors/astConversion/RuleExtractorVisitor.h
+        src/parser/visitors/astConversion/RuleSimplifierVisitor.cpp src/parser/visitors/astConversion/RuleSimplifierVisitor.h
+        src/parser/visitors/astConversion/ClosureSimplifierVisitor.cpp src/parser/visitors/astConversion/ClosureSimplifierVisitor.h
+        src/parser/visitors/semantic/SemanticCheckVisitor.cpp src/parser/visitors/semantic/SemanticCheckVisitor.h
 )
 set(TEST_ASSETS test/TestUtils.cpp test/TestUtils.h)
 add_library(testables ${SOURCE_FILES} ${TEST_ASSETS})

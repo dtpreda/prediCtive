@@ -10,7 +10,7 @@
 
 #include "parser/grammar/Recognizer.h"
 #include "parser/grammar/NonTerminal.h"
-#include "parser/ast/Node.h"
+#include "parser/node/Node.h"
 
 class Parser {
 public:

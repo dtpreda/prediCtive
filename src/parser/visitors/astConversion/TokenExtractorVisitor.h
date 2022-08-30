@@ -5,8 +5,8 @@
 #ifndef PARSER_TOKENEXTRACTORVISITOR_H
 #define PARSER_TOKENEXTRACTORVISITOR_H
 
-#include "Visitor.h"
-#include "Node.h"
+#include "parser/visitors/Visitor.h"
+#include "parser/node/Node.h"
 
 class TokenExtractorVisitor : public Visitor<bool> {
 public:

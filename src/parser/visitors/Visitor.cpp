@@ -25,9 +25,8 @@ T Visitor<T>::visit(std::shared_ptr<Node> node) {
 template<class T>
 void Visitor<T>::setVisit(std::string nodeName, std::function<T(Visitor<T>*, std::shared_ptr<Node>)> method) {
     if (this->methods.find(nodeName) != this->methods.end()) {
-        std::stringstream what;
-        what << "There is already a method set for nodes of type" << nodeName << ".";
-        throw std::runtime_error(what.str());
+        this->methods.find(nodeName)->second = method;
+        return;
     }
 
     this->methods.insert({nodeName, method});

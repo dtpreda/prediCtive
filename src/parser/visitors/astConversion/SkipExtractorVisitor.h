@@ -5,7 +5,7 @@
 #ifndef PARSER_SKIPEXTRACTORVISITOR_H
 #define PARSER_SKIPEXTRACTORVISITOR_H
 
-#include "Visitor.h"
+#include "parser/visitors/Visitor.h"
 
 #include <vector>
 #include <string>

@@ -6,7 +6,7 @@
 #define PARSER_RULEEXTRACTORVISITOR_H
 
 
-#include "Visitor.h"
+#include "parser/visitors/Visitor.h"
 
 class RuleExtractorVisitor : public Visitor<bool> {
 public:
