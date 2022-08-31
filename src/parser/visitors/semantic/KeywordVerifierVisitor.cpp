@@ -30,7 +30,7 @@ static bool visitToken(Visitor<bool>* context, const std::shared_ptr<Node>& node
     }
 
     std::string identifier = node->getChild(0)->getAnnotation(CONSUMED_TOKEN);
-    if (KEYWORDS.find(identifier) != KEYWORDS.end()) {
+    if (KEYWORDS.find(identifier.substr(1, identifier.size() - 2)) != KEYWORDS.end()) {
         std::stringstream what;
         what << identifier << " is a prediCtive keyword. It should not be used as a Symbol name." << std::endl;
         throw std::runtime_error(what.str());
@@ -129,7 +129,7 @@ static bool visitRules(Visitor<bool>* context, const std::shared_ptr<Node>& node
 
     std::string identifier = node->getChild(0)->getAnnotation(CONSUMED_TOKEN);
 
-    if (KEYWORDS.find(identifier) != KEYWORDS.end()) {
+    if (KEYWORDS.find(identifier.substr(1, identifier.size() - 2)) != KEYWORDS.end()) {
         std::stringstream what;
         what << identifier << " is a prediCtive keyword. It should not be used as a Symbol name." << std::endl;
         throw std::runtime_error(what.str());
@@ -161,7 +161,8 @@ static bool visitAnnotation(Visitor<bool>* context, const std::shared_ptr<Node>&
         return true;
     }
 
-    if (KEYWORDS.find(node->getChild(1)->getAnnotation(CONSUMED_TOKEN)) != KEYWORDS.end()) {
+    std::string identifier = node->getChild(1)->getAnnotation(CONSUMED_TOKEN);
+    if (KEYWORDS.find(identifier.substr(1, identifier.size() - 2)) != KEYWORDS.end()) {
         std::stringstream what;
         what << node->getChild(1)->getAnnotation(CONSUMED_TOKEN) << " is a prediCtive keyword. It should not be used as an annotation key." << std::endl;
         throw std::runtime_error(what.str());
