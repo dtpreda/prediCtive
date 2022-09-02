@@ -49,6 +49,10 @@ static std::string visitExpansion(Visitor<std::string>* context, const std::shar
         throw std::runtime_error(what.str());
     }
 
+    if (node->getChildren().empty()) {
+        return "";
+    }
+
     std::shared_ptr<Node> block = node->getChild(0);
     std::shared_ptr<Node> annotation = node->getChild(1);
     std::shared_ptr<Node> nextBlock = node->getChild(2);
@@ -95,11 +99,15 @@ static std::string visitExpansionBlock(Visitor<std::string>* context, const std:
         node->setName("Terminal");
         node->changeAnnotationKey(CONSUMED_TOKEN, SYMBOL_NAME);
     } else {
-        std::shared_ptr<Node> expansion = node->getChild(1);
+        std::shared_ptr<Node> expansion = std::make_shared<Node>("Expansion");
+        expansion->addChild(node->getChild(1));
+        expansion->addChild(node->getChild(2));
+        expansion->addChild(node->getChild(3));
+
         RuleSimplifierVisitor rsv;
         rsv.visit(expansion);
 
-        std::string closure = node->getChild(3)->getChild(0)->getAnnotation(CONSUMED_TOKEN);
+        std::string closure = node->getChild(5)->getChild(0)->getAnnotation(CONSUMED_TOKEN);
 
         *node = *(expansion);
         node->addAnnotation(CLOSURE, closure);

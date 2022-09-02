@@ -22,7 +22,7 @@ NULLABLLE(Rules) = false
 
 NULLABLLE(NextRule) = false
 
-NULLABLLE(Expansion) = false
+NULLABLLE(Expansion) = true
 
 NULLABLLE(Closure) = false
 

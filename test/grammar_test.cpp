@@ -116,10 +116,10 @@ TEST_F(prediCtiveParserTest, RuleSimplification) {
     std::shared_ptr<Node> root = prediCtiveParser.parse(contents);
 
     RuleExtractorVisitor rev;
-    rev.visit(root);
+    ASSERT_NO_THROW(rev.visit(root));
 
     RuleSimplifierVisitor rsv;
-    rsv.visit(root);
+    ASSERT_NO_THROW(rsv.visit(root));
 
     std::shared_ptr<Node> rules = root->getChild(0)->getChild(2);
 
@@ -171,13 +171,13 @@ TEST_F(prediCtiveParserTest, ClosureSimplification) {
     std::shared_ptr<Node> root = prediCtiveParser.parse(contents);
 
     RuleExtractorVisitor rev;
-    rev.visit(root);
+    ASSERT_NO_THROW(rev.visit(root));
 
     RuleSimplifierVisitor rsv;
-    rsv.visit(root);
+    ASSERT_NO_THROW(rsv.visit(root));
 
     ClosureSimplifierVisitor csv;
-    csv.visit(root);
+    ASSERT_NO_THROW(csv.visit(root));
 
     std::shared_ptr<Node> rules = root->getChild(0)->getChild(2);
 
@@ -264,7 +264,7 @@ TEST_F(prediCtiveParserTest, BundleVisiting) {
 
     std::shared_ptr<Node> root = prediCtiveParser.parse(contents);
 
-    convertToAST(root);
+    ASSERT_NO_THROW(convertToAST(root));
 
     std::shared_ptr<Node> tokens = root->getChild(0)->getChild(0);
 
@@ -372,7 +372,7 @@ TEST_F(prediCtiveParserTest, SemanticCheck) {
 
     std::shared_ptr<Node> root = prediCtiveParser.parse(contents);
 
-    convertToAST(root);
+    ASSERT_NO_THROW(convertToAST(root));
 
     SemanticCheckVisitor scv;
 

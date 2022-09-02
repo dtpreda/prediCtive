@@ -26,6 +26,8 @@ NextRule -> ε
 
 Expansion -> ExpansionBlock Annotation NextExpansionBlock
 
+Expansion -> ε
+
 NextExpansionBlock -> ExpansionBlock Annotation NextExpansionBlock
 
 NextExpansionBlock -> ε
@@ -34,7 +36,7 @@ ExpansionBlock -> < < > < ID > < > >
 
 ExpansionBlock -> < ID >
 
-ExpansionBlock -> < ( > Expansion < ) > Closure
+ExpansionBlock -> < ( > ExpansionBlock Annotation NextExpansionBlock < ) > Closure
 
 Closure -> < * >
 
