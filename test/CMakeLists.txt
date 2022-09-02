@@ -17,6 +17,11 @@ add_executable(
         grammar_test.cpp
 )
 
+add_executable(
+        parser_generation_test
+        parser_generation_test.cpp
+)
+
 target_link_libraries(
         configuration_test
         GTest::gtest_main
@@ -34,13 +39,20 @@ target_link_libraries(
         testables
 )
 
+target_link_libraries(
+        parser_generation_test
+        GTest::gtest_main
+        testables
+)
+
 include(GoogleTest)
 include(CTest)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/assets/simpleGrammar.cg ${CMAKE_CURRENT_BINARY_DIR} COPYONLY)
 
-gtest_discover_tests(configuration_test parser_test grammar_test)
+gtest_discover_tests(configuration_test parser_test grammar_test parser_generation_test)
 
 add_test(NAME configuration_test COMMAND configuration_test)
 add_test(NAME parser_test COMMAND parser_test)
 add_test(NAME grammar_test COMMAND grammar_test)
+add_test(NAME parser_generation_test COMMAND parser_generation_test)

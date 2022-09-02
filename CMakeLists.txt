@@ -33,6 +33,8 @@ set(SOURCE_FILES
         src/parser/visitors/astConversion/ClosureSimplifierVisitor.cpp src/parser/visitors/astConversion/ClosureSimplifierVisitor.h
         src/parser/visitors/semantic/SemanticCheckVisitor.cpp src/parser/visitors/semantic/SemanticCheckVisitor.h
         src/parser/visitors/semantic/KeywordVerifierVisitor.cpp src/parser/visitors/semantic/KeywordVerifierVisitor.h
+        src/parser/grammar/GrammarVerifier.cpp src/parser/grammar/GrammarVerifier.h
+        src/parser/visitors/grammar/GrammarBuilderVisitor.cpp src/parser/visitors/grammar/GrammarBuilderVisitor.h
 )
 set(TEST_ASSETS test/TestUtils.cpp test/TestUtils.h)
 add_library(testables ${SOURCE_FILES} ${TEST_ASSETS})
