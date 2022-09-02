@@ -28,10 +28,13 @@ void GrammarVerifier::addNonTerminal(const std::shared_ptr<NonTerminal> &nonTerm
     this->nonTerminals.insert({nonTerminal->getName(), nonTerminal});
 }
 
-void GrammarVerifier::addRule(const std::string& nonTerminalName, const std::vector<std::shared_ptr<Symbol>>& rule) {
+void GrammarVerifier::addRule(const std::string& nonTerminalName, const std::vector<std::shared_ptr<Symbol>>& rule,
+                              const std::vector<std::map<std::string, std::string>>& annotations) {
     if (this->rules.find(nonTerminalName) != this->rules.end()) {
         this->rules.find(nonTerminalName)->second.push_back(rule);
+        this->annotations.find(nonTerminalName)->second.push_back(annotations);
     } else {
         this->rules.insert({nonTerminalName, std::vector<std::vector<std::shared_ptr<Symbol>>>({rule})});
+        this->annotations.insert({nonTerminalName, std::vector<std::vector<std::map<std::string, std::string>>>({annotations})});
     }
 }

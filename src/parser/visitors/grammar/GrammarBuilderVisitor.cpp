@@ -36,6 +36,14 @@ static bool visitToken(Visitor<bool>* context, const std::shared_ptr<Node>& node
     return true;
 }
 
+static void cleanAnnotations(std::map<std::string, std::string>& annotations) {
+    for (const auto& keyword: KEYWORDS) {
+        if (annotations.find(keyword) != annotations.end()) {
+            annotations.erase(keyword);
+        }
+    }
+}
+
 static bool visitRule(Visitor<bool>* context, const std::shared_ptr<Node>& node) {
     auto grammarBuilder = dynamic_cast<GrammarBuilderVisitor*>(context);
     if (!grammarBuilder) {
@@ -53,6 +61,7 @@ static bool visitRule(Visitor<bool>* context, const std::shared_ptr<Node>& node)
     }
 
     std::vector<std::shared_ptr<Symbol>> rule;
+    std::vector<std::map<std::string, std::string>> annotations;
     for (const auto& child: node->getChildren()) {
         std::string symbolName = child->getAnnotation(SYMBOL_NAME);
         if (child->getName() == "Terminal") {
@@ -68,9 +77,13 @@ static bool visitRule(Visitor<bool>* context, const std::shared_ptr<Node>& node)
                 rule.push_back(rightSideNonTerminal);
             }
         }
+
+        auto grammarAnnotations = child->getAnnotations();
+        cleanAnnotations(grammarAnnotations);
+        annotations.push_back(grammarAnnotations);
     }
 
-    grammarBuilder->grammarVerifier.addRule(nonTerminalName, rule);
+    grammarBuilder->grammarVerifier.addRule(nonTerminalName, rule, annotations);
 
     return true;
 }
