@@ -24,8 +24,8 @@ public:
     std::unordered_set<std::shared_ptr<Symbol>> getFirst();
     std::unordered_set<std::shared_ptr<Symbol>> getFollow();
 
-    void addToFirst(const std::shared_ptr<Symbol>& symbol);
-    void addToFollow(const std::shared_ptr<Symbol>& symbol);
+    bool addToFirst(const std::shared_ptr<Symbol>& symbol);
+    bool addToFollow(const std::shared_ptr<Symbol>& symbol);
 private:
     std::string name;
     std::unordered_set<std::shared_ptr<Symbol>> first;

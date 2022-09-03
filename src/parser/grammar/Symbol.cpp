@@ -28,12 +28,14 @@ std::unordered_set<std::shared_ptr<Symbol>> Symbol::getFollow() {
     return this->follow;
 }
 
-void Symbol::addToFirst(const std::shared_ptr<Symbol> &symbol) {
-    this->first.insert(symbol);
+bool Symbol::addToFirst(const std::shared_ptr<Symbol> &symbol) {
+    auto result = this->first.insert(symbol);
+    return result.second;
 }
 
-void Symbol::addToFollow(const std::shared_ptr<Symbol> &symbol) {
-    this->follow.insert(symbol);
+bool Symbol::addToFollow(const std::shared_ptr<Symbol> &symbol) {
+    auto result = this->follow.insert(symbol);
+    return result.second;
 }
 
 Symbol& Symbol::operator=(const Symbol &other) = default;

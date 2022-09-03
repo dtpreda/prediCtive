@@ -26,11 +26,17 @@ public:
     void addNonTerminal(const std::shared_ptr<NonTerminal>& nonTerminal);
     void addRule(const std::string& nonTerminalName, const std::vector<std::shared_ptr<Symbol>>& rule,
                  const std::vector<std::map<std::string, std::string>>& annotations);
+
+    void computeSets();
 private:
     std::unordered_map<std::string, std::shared_ptr<Terminal>> terminals;
     std::unordered_map<std::string, std::shared_ptr<NonTerminal>> nonTerminals;
     std::unordered_map<std::string, std::vector<std::vector<std::shared_ptr<Symbol>>>> rules;
     std::unordered_map<std::string, std::vector<std::vector<std::map<std::string, std::string>>>> annotations;
+
+    static bool isNullable(const std::vector<std::shared_ptr<Symbol>>& expansion);
+    bool updateFollow(const std::shared_ptr<NonTerminal>& nonTerminal);
+    static std::unordered_set<std::shared_ptr<Symbol>> computeFirst(const std::vector<std::shared_ptr<Symbol>>& expansion);
 };
 
 

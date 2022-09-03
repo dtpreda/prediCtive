@@ -14,9 +14,6 @@ void NonTerminal::addToRule(const Terminal& first, const std::shared_ptr<Termina
     if (this->rules.find(first) == this->rules.end()) {
         this->rules.insert({first, std::vector<std::shared_ptr<Symbol>>({ expansionPtr })});
     } else {
-        if (this->rules.find(first)->second.empty()) {
-            this->nullExpansions -= 1;
-        }
         this->rules.find(first)->second.push_back(expansionPtr);
     }
 }
@@ -26,9 +23,6 @@ void NonTerminal::addToRule(const Terminal& first, const std::shared_ptr<NonTerm
     if (this->rules.find(first) == this->rules.end()) {
         this->rules.insert({first, std::vector<std::shared_ptr<Symbol>>({ expansionPtr })});
     } else {
-        if (this->rules.find(first)->second.empty()) {
-            this->nullExpansions -= 1;
-        }
         this->rules.find(first)->second.push_back(expansionPtr);
     }
 }
@@ -52,7 +46,7 @@ void NonTerminal::addToRule(const Terminal &first, const std::shared_ptr<Symbol>
 void NonTerminal::addToRule(const Terminal &first, const std::vector<std::shared_ptr<Symbol>>& expansion) {
     if (expansion.empty()) {
         this->rules.insert({ first, std::vector<std::shared_ptr<Symbol>>() });
-        this->nullExpansions += 1;
+        this->nullable = true;
     }
     for(auto &expansionElement : expansion) {
         this->addToRule(first, expansionElement);
@@ -72,7 +66,11 @@ std::vector<std::shared_ptr<Symbol>> NonTerminal::getRule(const Terminal& first)
 }
 
 bool NonTerminal::isNullable() const {
-    return this->nullExpansions > 0;
+    return this->nullable;
+}
+
+void NonTerminal::setNullable(bool nullable) {
+    this->nullable = nullable;
 }
 
 NonTerminal::~NonTerminal() = default;
