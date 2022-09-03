@@ -45,6 +45,6 @@ TEST_F(parserGenerationTest, GrammarVerifier) {
 
     ASSERT_NO_THROW(gbv.visit(root));
 
-    GrammarVerifier gv = gbv.grammarVerifier;
+    GrammarBuilder gv = gbv.grammarBuilder;
     gv.computeSets();
 }

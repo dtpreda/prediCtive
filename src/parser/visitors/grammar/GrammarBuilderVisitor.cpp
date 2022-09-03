@@ -31,7 +31,7 @@ static bool visitToken(Visitor<bool>* context, const std::shared_ptr<Node>& node
 
     std::shared_ptr<Terminal> terminal = std::make_shared<Terminal>(node->getAnnotation(SYMBOL_NAME), node->getAnnotation(REGEX_LITERAL));
 
-    grammarBuilder->grammarVerifier.addTerminal(terminal);
+    grammarBuilder->grammarBuilder.addTerminal(terminal);
 
     return true;
 }
@@ -54,10 +54,10 @@ static bool visitRule(Visitor<bool>* context, const std::shared_ptr<Node>& node)
 
     std::string nonTerminalName = node->getAnnotation(SYMBOL_NAME);
 
-    if (!grammarBuilder->grammarVerifier.verifyNonTerminalExistence(nonTerminalName)) {
+    if (!grammarBuilder->grammarBuilder.verifyNonTerminalExistence(nonTerminalName)) {
         std::shared_ptr<NonTerminal> nonTerminal = std::make_shared<NonTerminal>(nonTerminalName);
 
-        grammarBuilder->grammarVerifier.addNonTerminal(nonTerminal);
+        grammarBuilder->grammarBuilder.addNonTerminal(nonTerminal);
     }
 
     std::vector<std::shared_ptr<Symbol>> rule;
@@ -65,15 +65,15 @@ static bool visitRule(Visitor<bool>* context, const std::shared_ptr<Node>& node)
     for (const auto& child: node->getChildren()) {
         std::string symbolName = child->getAnnotation(SYMBOL_NAME);
         if (child->getName() == "Terminal") {
-            if (grammarBuilder->grammarVerifier.verifyTerminalExistence(symbolName)) {
-                rule.push_back(grammarBuilder->grammarVerifier.getTerminal(symbolName));
+            if (grammarBuilder->grammarBuilder.verifyTerminalExistence(symbolName)) {
+                rule.push_back(grammarBuilder->grammarBuilder.getTerminal(symbolName));
             }
         } else if (child->getName() == "NonTerminal") {
-            if (grammarBuilder->grammarVerifier.verifyNonTerminalExistence(symbolName)) {
-                rule.push_back(grammarBuilder->grammarVerifier.getNonTerminal(symbolName));
+            if (grammarBuilder->grammarBuilder.verifyNonTerminalExistence(symbolName)) {
+                rule.push_back(grammarBuilder->grammarBuilder.getNonTerminal(symbolName));
             } else {
                 std::shared_ptr<NonTerminal> rightSideNonTerminal = std::make_shared<NonTerminal>(symbolName);
-                grammarBuilder->grammarVerifier.addNonTerminal(rightSideNonTerminal);
+                grammarBuilder->grammarBuilder.addNonTerminal(rightSideNonTerminal);
                 rule.push_back(rightSideNonTerminal);
             }
         }
@@ -83,7 +83,7 @@ static bool visitRule(Visitor<bool>* context, const std::shared_ptr<Node>& node)
         annotations.push_back(grammarAnnotations);
     }
 
-    grammarBuilder->grammarVerifier.addRule(nonTerminalName, rule, annotations);
+    grammarBuilder->grammarBuilder.addRule(nonTerminalName, rule, annotations);
 
     return true;
 }
