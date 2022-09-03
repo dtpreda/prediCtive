@@ -44,6 +44,12 @@ void NonTerminal::addToRule(const Terminal &first, const std::shared_ptr<Symbol>
 }
 
 void NonTerminal::addToRule(const Terminal &first, const std::vector<std::shared_ptr<Symbol>>& expansion) {
+    auto correspondingRule = this->rules.find(first);
+    if (correspondingRule != this->rules.end()) {
+        std::stringstream what;
+        what << "Non Terminal " << this->getName() << " already contains a rule for Terminal " << first.getName() << std::endl;
+        throw std::runtime_error(what.str());
+    }
     if (expansion.empty()) {
         this->rules.insert({ first, std::vector<std::shared_ptr<Symbol>>() });
         this->nullable = true;

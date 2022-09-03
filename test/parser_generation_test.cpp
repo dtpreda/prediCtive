@@ -45,6 +45,25 @@ TEST_F(parserGenerationTest, GrammarVerifier) {
 
     ASSERT_NO_THROW(gbv.visit(root));
 
-    GrammarVerifier gv = gbv.grammarVerifier;
+    GrammarBuilder gv = gbv.grammarBuilder;
     gv.computeSets();
+}
+
+TEST_F(parserGenerationTest, ParserGeneration) {
+    std::string contents = TestUtils::openPrediCtiveFile("simpleGrammar.cg");
+
+    ASSERT_NO_THROW(prediCtiveParser.parse(contents));
+
+    std::shared_ptr<Node> root = prediCtiveParser.parse(contents);
+
+    ASSERT_NO_THROW(convertToAST(root));
+
+    GrammarBuilderVisitor gbv;
+
+    ASSERT_NO_THROW(gbv.visit(root));
+
+    GrammarBuilder gv = gbv.grammarBuilder;
+    gv.computeSets();
+
+    ASSERT_NO_THROW(gv.buildGrammar());
 }

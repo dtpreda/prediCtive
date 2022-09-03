@@ -2,8 +2,8 @@
 // Created by dtpreda on 02/09/22.
 //
 
-#ifndef PARSER_GRAMMARVERIFIER_H
-#define PARSER_GRAMMARVERIFIER_H
+#ifndef PARSER_GRAMMARBUILDER_H
+#define PARSER_GRAMMARBUILDER_H
 
 #include <unordered_set>
 #include <unordered_map>
@@ -11,10 +11,11 @@
 #include "Terminal.h"
 #include "NonTerminal.h"
 #include "Symbol.h"
+#include "parser/Parser.h"
 
-class GrammarVerifier {
+class GrammarBuilder {
 public:
-    GrammarVerifier() = default;
+    GrammarBuilder() = default;
 
     bool verifyTerminalExistence(const std::string& name);
     bool verifyNonTerminalExistence(const std::string& name);
@@ -28,8 +29,10 @@ public:
                  const std::vector<std::map<std::string, std::string>>& annotations);
 
     void computeSets();
+    Parser buildGrammar();
 private:
     std::unordered_map<std::string, std::shared_ptr<Terminal>> terminals;
+    std::vector<std::shared_ptr<Terminal>> ordered_terminals;
     std::unordered_map<std::string, std::shared_ptr<NonTerminal>> nonTerminals;
     std::unordered_map<std::string, std::vector<std::vector<std::shared_ptr<Symbol>>>> rules;
     std::unordered_map<std::string, std::vector<std::vector<std::map<std::string, std::string>>>> annotations;
@@ -40,4 +43,4 @@ private:
 };
 
 
-#endif //PARSER_GRAMMARVERIFIER_H
+#endif //PARSER_GRAMMARBUILDER_H

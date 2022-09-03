@@ -6,14 +6,14 @@
 #define PARSER_GRAMMARBUILDERVISITOR_H
 
 #include "parser/visitors/Visitor.h"
-#include "parser/grammar/GrammarVerifier.h"
+#include "parser/grammar/GrammarBuilder.h"
 
 class GrammarBuilderVisitor : public Visitor<bool>{
 public:
     GrammarBuilderVisitor();
     ~GrammarBuilderVisitor() override = default;
 
-    GrammarVerifier grammarVerifier;
+    GrammarBuilder grammarBuilder;
 };
 
 

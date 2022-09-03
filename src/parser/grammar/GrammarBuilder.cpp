@@ -2,34 +2,41 @@
 // Created by dtpreda on 02/09/22.
 //
 
-#include "GrammarVerifier.h"
+#include "GrammarBuilder.h"
 
-bool GrammarVerifier::verifyTerminalExistence(const std::string &name) {
+#include <sstream>
+#include <stdexcept>
+
+bool GrammarBuilder::verifyTerminalExistence(const std::string &name) {
     return this->terminals.find(name) != this->terminals.end();
 }
 
-bool GrammarVerifier::verifyNonTerminalExistence(const std::string &name) {
+bool GrammarBuilder::verifyNonTerminalExistence(const std::string &name) {
     return this->nonTerminals.find(name) != this->nonTerminals.end();
 }
 
-std::shared_ptr<Terminal> GrammarVerifier::getTerminal(const std::string &name) {
+std::shared_ptr<Terminal> GrammarBuilder::getTerminal(const std::string &name) {
     return this->terminals.find(name)->second;
 }
 
-std::shared_ptr<NonTerminal> GrammarVerifier::getNonTerminal(const std::string &name) {
+std::shared_ptr<NonTerminal> GrammarBuilder::getNonTerminal(const std::string &name) {
     return this->nonTerminals.find(name)->second;
 }
 
-void GrammarVerifier::addTerminal(const std::shared_ptr<Terminal> &terminal) {
-    this->terminals.insert({terminal->getName(), terminal});
+void GrammarBuilder::addTerminal(const std::shared_ptr<Terminal> &terminal) {
+    auto result = this->terminals.insert({terminal->getName(), terminal});
+
+    if (result.second) {
+        this->ordered_terminals.push_back(terminal);
+    }
 }
 
-void GrammarVerifier::addNonTerminal(const std::shared_ptr<NonTerminal> &nonTerminal) {
+void GrammarBuilder::addNonTerminal(const std::shared_ptr<NonTerminal> &nonTerminal) {
     this->nonTerminals.insert({nonTerminal->getName(), nonTerminal});
 }
 
-void GrammarVerifier::addRule(const std::string& nonTerminalName, const std::vector<std::shared_ptr<Symbol>>& rule,
-                              const std::vector<std::map<std::string, std::string>>& annotations) {
+void GrammarBuilder::addRule(const std::string& nonTerminalName, const std::vector<std::shared_ptr<Symbol>>& rule,
+                             const std::vector<std::map<std::string, std::string>>& annotations) {
     if (this->rules.find(nonTerminalName) != this->rules.end()) {
         this->rules.find(nonTerminalName)->second.push_back(rule);
         this->annotations.find(nonTerminalName)->second.push_back(annotations);
@@ -39,7 +46,7 @@ void GrammarVerifier::addRule(const std::string& nonTerminalName, const std::vec
     }
 }
 
-bool GrammarVerifier::isNullable(const std::vector<std::shared_ptr<Symbol>> &expansion) {
+bool GrammarBuilder::isNullable(const std::vector<std::shared_ptr<Symbol>> &expansion) {
     if (!expansion.empty()) {
         for (const auto& symbol: expansion) {
             if (!symbol->isNullable()) {
@@ -51,7 +58,7 @@ bool GrammarVerifier::isNullable(const std::vector<std::shared_ptr<Symbol>> &exp
     return true;
 }
 
-bool GrammarVerifier::updateFollow(const std::shared_ptr<NonTerminal> &nonTerminal) {
+bool GrammarBuilder::updateFollow(const std::shared_ptr<NonTerminal> &nonTerminal) {
     bool hasChanges = false;
 
     for (const auto& setOfRules: this->rules) {
@@ -67,7 +74,7 @@ bool GrammarVerifier::updateFollow(const std::shared_ptr<NonTerminal> &nonTermin
                         }
                     }
 
-                    if (GrammarVerifier::isNullable(ruleRemainder)) {
+                    if (GrammarBuilder::isNullable(ruleRemainder)) {
                         for (const auto& terminal: this->nonTerminals.find(setOfRules.first)->second->getFollow()) {
                             if (nonTerminal->addToFollow(terminal)) {
                                 hasChanges = true;
@@ -82,7 +89,7 @@ bool GrammarVerifier::updateFollow(const std::shared_ptr<NonTerminal> &nonTermin
     return hasChanges;
 }
 
-std::unordered_set<std::shared_ptr<Symbol>> GrammarVerifier::computeFirst(const std::vector<std::shared_ptr<Symbol>>& expansion) {
+std::unordered_set<std::shared_ptr<Symbol>> GrammarBuilder::computeFirst(const std::vector<std::shared_ptr<Symbol>>& expansion) {
     std::unordered_set<std::shared_ptr<Symbol>> first;
 
     for (const auto& symbol: expansion) {
@@ -98,7 +105,7 @@ std::unordered_set<std::shared_ptr<Symbol>> GrammarVerifier::computeFirst(const 
     return first;
 }
 
-void GrammarVerifier::computeSets() {
+void GrammarBuilder::computeSets() {
     bool hasChanges = true;
 
     for (const auto& terminal: this->terminals) {
@@ -150,4 +157,38 @@ void GrammarVerifier::computeSets() {
             }
         }
     }
+}
+
+Parser GrammarBuilder::buildGrammar() {
+    for (const auto& setOfRules: this->rules) {
+        std::shared_ptr<NonTerminal> nonTerminal = this->nonTerminals.find(setOfRules.first)->second;
+        for (const auto& rule: setOfRules.second) {
+            for (const auto& terminalSymbol: GrammarBuilder::computeFirst(rule)) {
+                auto terminal = std::dynamic_pointer_cast<Terminal>(terminalSymbol);
+
+                if (terminal) {
+                    nonTerminal->addToRule(*terminal, rule);
+                } else {
+                    throw std::runtime_error("Wrong type of symbol passed to FIRST set.");
+                }
+            }
+
+            if (GrammarBuilder::isNullable(rule)) {
+                for (const auto& terminalSymbol: nonTerminal->getFollow()) {
+                    auto terminal = std::dynamic_pointer_cast<Terminal>(terminalSymbol);
+
+                    if (terminal) {
+                        nonTerminal->addToRule(*terminal, rule);
+                    } else {
+                        throw std::runtime_error("Wrong type of symbol passed to FIRST set.");
+                    }
+                }
+            }
+        }
+    }
+
+    Recognizer grammarRecognizer(this->ordered_terminals);
+    NonTerminal start = *(this->nonTerminals.find("Start")->second);
+
+    return {grammarRecognizer, start};
 }
