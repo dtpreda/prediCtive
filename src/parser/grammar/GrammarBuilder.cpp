@@ -4,6 +4,9 @@
 
 #include "GrammarBuilder.h"
 
+#include <sstream>
+#include <stdexcept>
+
 bool GrammarBuilder::verifyTerminalExistence(const std::string &name) {
     return this->terminals.find(name) != this->terminals.end();
 }
@@ -156,6 +159,36 @@ void GrammarBuilder::computeSets() {
     }
 }
 
-void GrammarBuilder::buildGrammar() {
+Parser GrammarBuilder::buildGrammar() {
+    for (const auto& setOfRules: this->rules) {
+        std::shared_ptr<NonTerminal> nonTerminal = this->nonTerminals.find(setOfRules.first)->second;
+        for (const auto& rule: setOfRules.second) {
+            for (const auto& terminalSymbol: GrammarBuilder::computeFirst(rule)) {
+                auto terminal = std::dynamic_pointer_cast<Terminal>(terminalSymbol);
 
+                if (terminal) {
+                    nonTerminal->addToRule(*terminal, rule);
+                } else {
+                    throw std::runtime_error("Wrong type of symbol passed to FIRST set.");
+                }
+            }
+
+            if (GrammarBuilder::isNullable(rule)) {
+                for (const auto& terminalSymbol: nonTerminal->getFollow()) {
+                    auto terminal = std::dynamic_pointer_cast<Terminal>(terminalSymbol);
+
+                    if (terminal) {
+                        nonTerminal->addToRule(*terminal, rule);
+                    } else {
+                        throw std::runtime_error("Wrong type of symbol passed to FIRST set.");
+                    }
+                }
+            }
+        }
+    }
+
+    Recognizer grammarRecognizer(this->ordered_terminals);
+    NonTerminal start = *(this->nonTerminals.find("Start")->second);
+
+    return {grammarRecognizer, start};
 }

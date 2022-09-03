@@ -11,6 +11,7 @@
 #include "Terminal.h"
 #include "NonTerminal.h"
 #include "Symbol.h"
+#include "parser/Parser.h"
 
 class GrammarBuilder {
 public:
@@ -28,7 +29,7 @@ public:
                  const std::vector<std::map<std::string, std::string>>& annotations);
 
     void computeSets();
-    void buildGrammar();
+    Parser buildGrammar();
 private:
     std::unordered_map<std::string, std::shared_ptr<Terminal>> terminals;
     std::vector<std::shared_ptr<Terminal>> ordered_terminals;
