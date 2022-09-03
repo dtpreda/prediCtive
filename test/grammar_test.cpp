@@ -257,6 +257,7 @@ TEST_F(prediCtiveParserTest, ClosureSimplification) {
     ASSERT_EQ(0, emptyRule2->getChildren().size());
 }
 
+
 TEST_F(prediCtiveParserTest, BundleVisiting) {
     std::string contents = TestUtils::openPrediCtiveFile("simpleGrammar.cg");
 
@@ -377,4 +378,16 @@ TEST_F(prediCtiveParserTest, SemanticCheck) {
     SemanticCheckVisitor scv;
 
     ASSERT_NO_THROW(scv.visit(root));
+}
+
+TEST_F(prediCtiveParserTest, ASTPrinting) {
+    std::string contents = TestUtils::openPrediCtiveFile("simpleGrammar.cg");
+
+    ASSERT_NO_THROW(prediCtiveParser.parse(contents));
+
+    std::shared_ptr<Node> root = prediCtiveParser.parse(contents);
+
+    ASSERT_NO_THROW(convertToAST(root));
+
+    std::cout << root->print() << std::endl;
 }

@@ -142,3 +142,28 @@ void Node::replaceChild(const std::shared_ptr<Node>& childToReplace, const std::
 
     throw std::runtime_error("No such child exists so it can be replaced.");
 }
+
+std::string Node::print() const {
+    return this->print(0);
+}
+
+std::string Node::print(int depth) const {
+    std::stringstream printedAST;
+    for (int i = 0; i < depth; i++) {
+        printedAST << '\t';
+    }
+
+    printedAST << this->getName();
+
+    for (auto & annotation : annotations) {
+        printedAST << " (" << annotation.first << ": " << annotation.second << ")" ;
+    }
+
+    printedAST << std::endl;
+
+    for (auto& child: this->children) {
+        printedAST << child->print(depth + 1);
+    }
+
+    return printedAST.str();
+}

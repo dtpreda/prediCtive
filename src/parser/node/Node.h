@@ -9,6 +9,7 @@
 #include <memory>
 #include <map>
 #include <string>
+#include <iostream>
 
 #include "parser/grammar/Symbol.h"
 
@@ -37,11 +38,15 @@ public:
     void clearAnnotations();
 
     Node& operator=(const Node& other);
+
+    std::string print() const;
 private:
     std::string name;
     std::vector<std::shared_ptr<Node>> children;
     std::shared_ptr<Node> parent;
     std::map<std::string, std::string> annotations;
+
+    std::string print(int depth) const;
 };
 
 
