@@ -51,12 +51,12 @@ Parser buildPrediCtiveParser() {
 
     std::shared_ptr<NonTerminal> Expansion = std::make_shared<NonTerminal>(("Expansion"));
 
+    std::shared_ptr<NonTerminal> NextExpansionBlock = std::make_shared<NonTerminal>(("NextExpansionBlock"));
     std::shared_ptr<NonTerminal> ExpansionBlock = std::make_shared<NonTerminal>(("ExpansionBlock"));
     ExpansionBlock->addToRule(*ID, std::vector<std::shared_ptr<Symbol>>({ ID }));
     ExpansionBlock->addToRule(*OPEN_BRACKET, std::vector<std::shared_ptr<Symbol>>({ OPEN_BRACKET, ID, CLOSE_BRACKET }));
-    ExpansionBlock->addToRule(*OPEN_PARENTHESES, std::vector<std::shared_ptr<Symbol>>({ OPEN_PARENTHESES, Expansion, CLOSE_PARENTHESES, Closure }));
+    ExpansionBlock->addToRule(*OPEN_PARENTHESES, std::vector<std::shared_ptr<Symbol>>({ OPEN_PARENTHESES, ExpansionBlock, Annotation, NextExpansionBlock, CLOSE_PARENTHESES, Closure }));
 
-    std::shared_ptr<NonTerminal> NextExpansionBlock = std::make_shared<NonTerminal>(("NextExpansionBlock"));
     NextExpansionBlock->addToRule(*ID, std::vector<std::shared_ptr<Symbol>>({ ExpansionBlock, Annotation, NextExpansionBlock }));
     NextExpansionBlock->addToRule(*LEFT_CURLY_BRACKET, std::vector<std::shared_ptr<Symbol>>({}));
     NextExpansionBlock->addToRule(*SEMICOLON, std::vector<std::shared_ptr<Symbol>>({}));
@@ -67,6 +67,7 @@ Parser buildPrediCtiveParser() {
     Expansion->addToRule(*ID, std::vector<std::shared_ptr<Symbol>>({ ExpansionBlock, Annotation, NextExpansionBlock }));
     Expansion->addToRule(*OPEN_BRACKET, std::vector<std::shared_ptr<Symbol>>({ ExpansionBlock, Annotation, NextExpansionBlock }));
     Expansion->addToRule(*OPEN_PARENTHESES, std::vector<std::shared_ptr<Symbol>>({ ExpansionBlock, Annotation, NextExpansionBlock }));
+    Expansion->addToRule(*SEMICOLON, std::vector<std::shared_ptr<Symbol>>({}));
 
     std::shared_ptr<NonTerminal> Rules = std::make_shared<NonTerminal>(("Rules"));
 
@@ -103,4 +104,18 @@ Parser buildPrediCtiveParser() {
     SStart->addToRule(*TOKENS, std::vector<std::shared_ptr<Symbol>>({ Start, END_OF_INPUT }));
 
     return {Recognizer(terminals), *SStart};
+}
+
+void convertToAST(const std::shared_ptr<Node>& root) {
+    TokenExtractorVisitor tokenExtractorVisitor;
+    SkipExtractorVisitor skipExtractorVisitor;
+    RuleExtractorVisitor ruleExtractorVisitor;
+    RuleSimplifierVisitor ruleSimplifierVisitor;
+    ClosureSimplifierVisitor closureSimplifierVisitor;
+
+    tokenExtractorVisitor.visit(root);
+    skipExtractorVisitor.visit(root);
+    ruleExtractorVisitor.visit(root);
+    ruleSimplifierVisitor.visit(root);
+    closureSimplifierVisitor.visit(root);
 }

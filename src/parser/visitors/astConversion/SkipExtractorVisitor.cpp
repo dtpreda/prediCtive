@@ -3,6 +3,7 @@
 //
 
 #include "SkipExtractorVisitor.h"
+#include "parser/utils.h"
 
 #include <sstream>
 #include <stdexcept>
@@ -18,7 +19,7 @@ bool visitSkip(Visitor<bool>* context, const std::shared_ptr<Node>& node) {
     std::shared_ptr<Node> regex = node->getChild(2);
     std::shared_ptr<Node> skipExpression = node->getChild(3);
 
-    std::string regexExpr = regex->getAnnotation("consumed_token");
+    std::string regexExpr = regex->getAnnotation(CONSUMED_TOKEN);
     regexExpr = regexExpr.substr(1, regexExpr.length() - 2);
 
     skipExtractor->addRegexExpression(regexExpr);
@@ -28,7 +29,7 @@ bool visitSkip(Visitor<bool>* context, const std::shared_ptr<Node>& node) {
     node->clearChildren();
     for (auto& regexExpression: skipExtractor->getRegexExpressions()) {
         std::shared_ptr<Node> child = std::make_shared<Node>("SkipExpression");
-        child->addAnnotation("regex", regexExpression);
+        child->addAnnotation(REGEX_LITERAL, regexExpression);
 
         node->addChild(child);
     }
@@ -51,7 +52,7 @@ bool visitSkipExpression(Visitor<bool>* context, const std::shared_ptr<Node>& no
     std::shared_ptr<Node> regex = node->getChild(1);
     std::shared_ptr<Node> skipExpression = node->getChild(2);
 
-    std::string regexExpr = regex->getAnnotation("consumed_token");
+    std::string regexExpr = regex->getAnnotation(CONSUMED_TOKEN);
     regexExpr = regexExpr.substr(1, regexExpr.length() - 2);
 
     skipExtractor->addRegexExpression(regexExpr);

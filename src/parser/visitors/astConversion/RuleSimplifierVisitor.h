@@ -5,7 +5,7 @@
 #ifndef PARSER_RULESIMPLIFIERVISITOR_H
 #define PARSER_RULESIMPLIFIERVISITOR_H
 
-#include "Visitor.h"
+#include "parser/visitors/Visitor.h"
 
 class RuleSimplifierVisitor : public Visitor<std::string> {
 public:

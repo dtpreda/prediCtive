@@ -6,7 +6,7 @@
 #include "parser/grammar/Symbol.h"
 #include "parser/grammar/Terminal.h"
 #include "parser/grammar/NonTerminal.h"
-#include "parser/ast/Node.h"
+#include "parser/node/Node.h"
 #include "utils.h"
 
 #include <utility>

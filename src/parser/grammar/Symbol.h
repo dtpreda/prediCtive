@@ -6,6 +6,8 @@
 #define PARSER_SYMBOL_H
 
 #include <string>
+#include <unordered_set>
+#include <memory>
 
 class Symbol {
 public:
@@ -18,8 +20,16 @@ public:
     Symbol& operator=(const Symbol& other);
 
     virtual bool isNullable() const = 0;
+
+    std::unordered_set<std::shared_ptr<Symbol>> getFirst();
+    std::unordered_set<std::shared_ptr<Symbol>> getFollow();
+
+    bool addToFirst(const std::shared_ptr<Symbol>& symbol);
+    bool addToFollow(const std::shared_ptr<Symbol>& symbol);
 private:
     std::string name;
+    std::unordered_set<std::shared_ptr<Symbol>> first;
+    std::unordered_set<std::shared_ptr<Symbol>> follow;
 };
 
 

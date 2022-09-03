@@ -3,6 +3,7 @@
 //
 
 #include "RuleSimplifierVisitor.h"
+#include "parser/utils.h"
 
 #include <sstream>
 #include <stdexcept>
@@ -48,6 +49,10 @@ static std::string visitExpansion(Visitor<std::string>* context, const std::shar
         throw std::runtime_error(what.str());
     }
 
+    if (node->getChildren().empty()) {
+        return "";
+    }
+
     std::shared_ptr<Node> block = node->getChild(0);
     std::shared_ptr<Node> annotation = node->getChild(1);
     std::shared_ptr<Node> nextBlock = node->getChild(2);
@@ -88,20 +93,24 @@ static std::string visitExpansionBlock(Visitor<std::string>* context, const std:
     if (nChildren == 1) {
         *node = *(node->getChild(0));
         node->setName("NonTerminal");
-        node->changeAnnotationKey("consumed_token", "name");
+        node->changeAnnotationKey(CONSUMED_TOKEN, SYMBOL_NAME);
     } else if (nChildren == 3) {
         *node = *(node->getChild(1));
         node->setName("Terminal");
-        node->changeAnnotationKey("consumed_token", "name");
+        node->changeAnnotationKey(CONSUMED_TOKEN, SYMBOL_NAME);
     } else {
-        std::shared_ptr<Node> expansion = node->getChild(1);
+        std::shared_ptr<Node> expansion = std::make_shared<Node>("Expansion");
+        expansion->addChild(node->getChild(1));
+        expansion->addChild(node->getChild(2));
+        expansion->addChild(node->getChild(3));
+
         RuleSimplifierVisitor rsv;
         rsv.visit(expansion);
 
-        std::string closure = node->getChild(3)->getChild(0)->getAnnotation("consumed_token");
+        std::string closure = node->getChild(5)->getChild(0)->getAnnotation(CONSUMED_TOKEN);
 
         *node = *(expansion);
-        node->addAnnotation("closure", closure);
+        node->addAnnotation(CLOSURE, closure);
     }
 
     return "";
@@ -140,12 +149,12 @@ static std::string visitNextExpansionBlock(Visitor<std::string>* context, const 
 }
 
 static std::string visitQuoteExpression(Visitor<std::string>* context, const std::shared_ptr<Node>& node) {
-    std::string annotation = node->getAnnotation("consumed_token");
+    std::string annotation = node->getAnnotation(CONSUMED_TOKEN);
     return annotation.substr(1, annotation.size() - 2);
 }
 
 static std::string visitLastToken(Visitor<std::string>* context, const std::shared_ptr<Node>& node) {
-    return node->getAnnotation("consumed_token");
+    return node->getAnnotation(CONSUMED_TOKEN);
 }
 
 static std::string visitAnnotation(Visitor<std::string>* context, const std::shared_ptr<Node>& node) {
