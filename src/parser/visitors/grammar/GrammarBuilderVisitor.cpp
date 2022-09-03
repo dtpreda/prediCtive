@@ -84,6 +84,33 @@ static bool visitRule(Visitor<bool>* context, const std::shared_ptr<Node>& node)
     }
 
     grammarBuilder->grammarBuilder.addRule(nonTerminalName, rule, annotations);
+    return true;
+}
+
+static bool descendAndAdd(Visitor<bool>* context, const std::shared_ptr<Node>& node) {
+    auto grammarBuilder = dynamic_cast<GrammarBuilderVisitor*>(context);
+    if (!grammarBuilder) {
+        std::stringstream what;
+        what << "Wrong derived class of Visitor<bool>. Should be GrammarBuilderVisitor.";
+        throw std::runtime_error(what.str());
+    }
+
+    for (const auto& child: node->getChildren()) {
+        grammarBuilder->visit(child);
+    }
+
+    std::shared_ptr<NonTerminal> beforeStart = std::make_shared<NonTerminal>(BEFORE_START_NAME);
+    grammarBuilder->grammarBuilder.addNonTerminal(beforeStart);
+    grammarBuilder->grammarBuilder.addTerminal(END_OF_INPUT);
+
+    std::vector<std::shared_ptr<Symbol>> rule;
+    std::shared_ptr<NonTerminal> start = grammarBuilder->grammarBuilder.getNonTerminal("Start");
+    rule.push_back(start);
+    rule.push_back(END_OF_INPUT);
+
+    std::vector<std::map<std::string, std::string>> annotations(2, std::map<std::string, std::string>({}));
+
+    grammarBuilder->grammarBuilder.addRule(BEFORE_START_NAME, rule, annotations);
 
     return true;
 }
@@ -93,7 +120,7 @@ GrammarBuilderVisitor::GrammarBuilderVisitor() {
     this->setVisit("Start", descend);
     this->setVisit("Tokens", descend);
     this->setVisit("Token", visitToken);
-    this->setVisit("Rules", descend);
+    this->setVisit("Rules", descendAndAdd);
     this->setVisit("Rule", visitRule);
 
     this->setDefaultVisit(idle);

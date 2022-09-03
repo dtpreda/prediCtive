@@ -65,5 +65,11 @@ TEST_F(parserGenerationTest, ParserGeneration) {
     GrammarBuilder gv = gbv.grammarBuilder;
     gv.computeSets();
 
-    ASSERT_NO_THROW(gv.buildGrammar());
+    Parser simpleGrammarParser = gv.buildGrammar();
+
+    std::string simpleGrammarContents = TestUtils::openPrediCtiveFile("testFile.sg");
+
+    std::shared_ptr<Node> parseRoot = simpleGrammarParser.parse(simpleGrammarContents);
+
+    std::cout << parseRoot->print() << std::endl;
 }
