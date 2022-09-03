@@ -31,6 +31,7 @@ public:
 
     void addAnnotation(const std::string& key, const std::string& annotation);
     std::string getAnnotation(const std::string& key) const;
+    std::map<std::string, std::string> getAnnotations() const;
     void changeAnnotationKey(const std::string& originalKey, const std::string& newKey);
     void deleteAnnotation(const std::string& key);
     void clearAnnotations();

@@ -87,6 +87,10 @@ std::string Node::getAnnotation(const std::string& key) const {
     return this->annotations.at(key);
 }
 
+std::map<std::string, std::string> Node::getAnnotations() const {
+    return this->annotations;
+}
+
 std::vector<std::shared_ptr<Node>> Node::getChildren() const {
     return this->children;
 }

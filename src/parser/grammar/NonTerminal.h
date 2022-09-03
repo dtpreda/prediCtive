@@ -24,9 +24,10 @@ public:
     std::vector<std::shared_ptr<Symbol>> getRule(const Terminal& first) const;
 
     bool isNullable() const override;
+    void setNullable(bool nullable);
 private:
     std::map<Terminal, std::vector<std::shared_ptr<Symbol>>> rules;
-    int nullExpansions = 0;
+    bool nullable = false;
 };
 
 namespace std {

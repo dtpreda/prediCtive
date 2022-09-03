@@ -16,7 +16,7 @@ FOLLOW(Rules) = { < EOF > }
 
 FOLLOW(NextRule) = { < EOF > }
 
-FOLLOW(Expansion) = { < ) >, < ; > }
+FOLLOW(Expansion) = { < ; > }
 
 FOLLOW(Closure) = { < ( >, < < >, < ID >, < { >, < ) >, < ; > }
 
