@@ -190,5 +190,9 @@ Parser GrammarBuilder::buildGrammar() {
     Recognizer grammarRecognizer(this->ordered_terminals);
     NonTerminal start = *(this->nonTerminals.find("Start")->second);
 
-    return {grammarRecognizer, start};
+    return {grammarRecognizer, start, skipExpressions};
+}
+
+void GrammarBuilder::addSkipExpression(const Terminal &terminal) {
+    this->skipExpressions.push_back(terminal);
 }

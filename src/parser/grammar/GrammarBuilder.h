@@ -28,6 +28,8 @@ public:
     void addRule(const std::string& nonTerminalName, const std::vector<std::shared_ptr<Symbol>>& rule,
                  const std::vector<std::map<std::string, std::string>>& annotations);
 
+    void addSkipExpression(const Terminal& terminal);
+
     void computeSets();
     Parser buildGrammar();
 private:
@@ -36,6 +38,7 @@ private:
     std::unordered_map<std::string, std::shared_ptr<NonTerminal>> nonTerminals;
     std::unordered_map<std::string, std::vector<std::vector<std::shared_ptr<Symbol>>>> rules;
     std::unordered_map<std::string, std::vector<std::vector<std::map<std::string, std::string>>>> annotations;
+    std::vector<Terminal> skipExpressions;
 
     static bool isNullable(const std::vector<std::shared_ptr<Symbol>>& expansion);
     bool updateFollow(const std::shared_ptr<NonTerminal>& nonTerminal);

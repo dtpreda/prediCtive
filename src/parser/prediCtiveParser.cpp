@@ -11,6 +11,13 @@
 #include "parser/grammar/NonTerminal.h"
 
 Parser buildPrediCtiveParser() {
+    std::shared_ptr<Terminal> SKIP_WHITESPACE = std::make_shared<Terminal>(Terminal("SKIP_WHITESPACE", " "));
+    std::shared_ptr<Terminal> SKIP_NEWLINE = std::make_shared<Terminal>(Terminal("SKIP_NEWLINE", "\n"));
+    std::shared_ptr<Terminal> SKIP_CARRIAGE_RETURN = std::make_shared<Terminal>(Terminal("SKIP_CARRIAGE_RETURN", "\r"));
+    std::shared_ptr<Terminal> SKIP_TAB = std::make_shared<Terminal>(Terminal("SKIP_TAB", "\t"));
+
+    std::vector<Terminal> skipExpressions = {*SKIP_WHITESPACE, *SKIP_NEWLINE, *SKIP_CARRIAGE_RETURN, *SKIP_TAB};
+
     std::shared_ptr<Terminal> TOKENS = std::make_shared<Terminal>(Terminal("TokensTerminal", "TOKENS"));
     std::shared_ptr<Terminal> ID = std::make_shared<Terminal>(Terminal("Identifier", "[[:alpha:]][[:alnum:]_]*"));
     std::shared_ptr<Terminal> SKIP = std::make_shared<Terminal>(Terminal("SkipTerminal", "SKIP"));
@@ -103,7 +110,7 @@ Parser buildPrediCtiveParser() {
     std::shared_ptr<NonTerminal> SStart = std::make_shared<NonTerminal>(("SStart"));
     SStart->addToRule(*TOKENS, std::vector<std::shared_ptr<Symbol>>({ Start, END_OF_INPUT }));
 
-    return {Recognizer(terminals), *SStart};
+    return {Recognizer(terminals), *SStart, skipExpressions};
 }
 
 void convertToAST(const std::shared_ptr<Node>& root) {

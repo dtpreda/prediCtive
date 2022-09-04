@@ -36,6 +36,21 @@ static bool visitToken(Visitor<bool>* context, const std::shared_ptr<Node>& node
     return true;
 }
 
+static bool visitSkipExpression(Visitor<bool>* context, const std::shared_ptr<Node>& node) {
+    auto grammarBuilder = dynamic_cast<GrammarBuilderVisitor*>(context);
+    if (!grammarBuilder) {
+        std::stringstream what;
+        what << "Wrong derived class of Visitor<bool>. Should be GrammarBuilderVisitor.";
+        throw std::runtime_error(what.str());
+    }
+
+    std::shared_ptr<Terminal> skipExpression = std::make_shared<Terminal>("", node->getAnnotation(REGEX_LITERAL));
+
+    grammarBuilder->grammarBuilder.addSkipExpression(*skipExpression);
+
+    return true;
+}
+
 static void cleanAnnotations(std::map<std::string, std::string>& annotations) {
     for (const auto& keyword: KEYWORDS) {
         if (annotations.find(keyword) != annotations.end()) {
@@ -120,6 +135,8 @@ GrammarBuilderVisitor::GrammarBuilderVisitor() {
     this->setVisit("Start", descend);
     this->setVisit("Tokens", descend);
     this->setVisit("Token", visitToken);
+    this->setVisit("Skip", descend);
+    this->setVisit("SkipExpression", visitSkipExpression);
     this->setVisit("Rules", descendAndAdd);
     this->setVisit("Rule", visitRule);
 
