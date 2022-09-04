@@ -52,10 +52,43 @@ void NonTerminal::addToRule(const Terminal &first, const std::vector<std::shared
     }
     if (expansion.empty()) {
         this->rules.insert({ first, std::vector<std::shared_ptr<Symbol>>() });
+        this->annotations.insert({first, std::vector<std::map<std::string, std::string>>( {})});
         this->nullable = true;
+        return;
     }
-    for(auto &expansionElement : expansion) {
-        this->addToRule(first, expansionElement);
+
+    this->annotations.insert({ first, std::vector<std::map<std::string, std::string>>({})});
+    auto annotationVec = this->annotations.find(first);
+    for(const auto & i : expansion) {
+        this->addToRule(first, i);
+        annotationVec->second.push_back({});
+    }
+}
+
+void NonTerminal::addToRule(const Terminal &first, const std::vector<std::shared_ptr<Symbol>>& expansion,
+                            const std::vector<std::map<std::string, std::string>>& annotations) {
+    if (expansion.size() != annotations.size()) {
+        throw std::runtime_error("Expansion size and annotations size should be the same.");
+    }
+
+    auto correspondingRule = this->rules.find(first);
+    if (correspondingRule != this->rules.end()) {
+        std::stringstream what;
+        what << "Non Terminal " << this->getName() << " already contains a rule for Terminal " << first.getName() << std::endl;
+        throw std::runtime_error(what.str());
+    }
+    if (expansion.empty()) {
+        this->rules.insert({ first, std::vector<std::shared_ptr<Symbol>>() });
+        this->annotations.insert({ first, std::vector<std::map<std::string, std::string>>({})});
+        this->nullable = true;
+        return;
+    }
+
+    this->annotations.insert({ first, std::vector<std::map<std::string, std::string>>({})});
+    auto annotationVec = this->annotations.find(first);
+    for(int i = 0; i < expansion.size(); i++) {
+        this->addToRule(first, expansion[i]);
+        annotationVec->second.push_back(annotations[i]);
     }
 }
 
@@ -77,6 +110,18 @@ bool NonTerminal::isNullable() const {
 
 void NonTerminal::setNullable(bool nullable) {
     this->nullable = nullable;
+}
+
+std::vector<std::map<std::string, std::string>> NonTerminal::getAnnotation(const Terminal &first) const {
+    auto correspondingRule = this->annotations.find(first);
+    if (correspondingRule == this->annotations.end()) {
+        std::stringstream what;
+        what << "Non-terminal symbol " << this->getName() << " has no rules for terminal symbol " << first.getName()
+             << "." << std::endl;
+        throw std::runtime_error(what.str());
+    }
+
+    return this->annotations.find(first)->second;
 }
 
 NonTerminal::~NonTerminal() = default;
