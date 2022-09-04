@@ -16,6 +16,7 @@ extern std::string SYMBOL_NAME;
 extern std::string CLOSURE;
 extern std::string INTERMEDIATE_NON_TERMINAL_PATTERN;
 extern std::string REGEX_LITERAL;
+extern std::string BEFORE_START_NAME;
 extern std::unordered_set<std::string> KEYWORDS;
 
 #endif //PARSER_UTILS_H
