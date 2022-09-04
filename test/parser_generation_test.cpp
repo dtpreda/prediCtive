@@ -8,6 +8,7 @@
 #include "parser/prediCtiveParser.h"
 #include "parser/utils.h"
 #include "parser/visitors/grammar/GrammarBuilderVisitor.h"
+#include "parser/visitors/astConversion/ParseTreeSimplifierVisitor.h"
 
 class parserGenerationTest : public ::testing::Test {
 protected:
@@ -66,6 +67,31 @@ TEST_F(parserGenerationTest, ParserGeneration) {
     Parser simpleGrammarParser = gv.buildGrammar();
 
     std::shared_ptr<Node> parseRoot = simpleGrammarParser.openAndParse("testFile.sg");
+
+    std::cout << parseRoot->print() << std::endl;
+}
+
+TEST_F(parserGenerationTest, FinalTest) {
+    ASSERT_NO_THROW(prediCtiveParser.openAndParse("simpleGrammar.cg"));
+
+    std::shared_ptr<Node> root = prediCtiveParser.openAndParse("simpleGrammar.cg");
+
+    ASSERT_NO_THROW(convertToAST(root));
+
+    GrammarBuilderVisitor gbv;
+
+    ASSERT_NO_THROW(gbv.visit(root));
+
+    GrammarBuilder gv = gbv.grammarBuilder;
+    gv.computeSets();
+
+    Parser simpleGrammarParser = gv.buildGrammar();
+
+    std::shared_ptr<Node> parseRoot = simpleGrammarParser.openAndParse("testFile.sg");
+
+    ParseTreeSimplifierVisitor ptsv;
+
+    ptsv.visit(parseRoot);
 
     std::cout << parseRoot->print() << std::endl;
 }

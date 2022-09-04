@@ -219,10 +219,9 @@ TEST(ParserClass, ParserParseSimple) {
     std::shared_ptr<Terminal> testTerminal3 = std::make_shared<Terminal>("World", "World!");
     std::shared_ptr<Terminal> testTerminal4 = std::make_shared<Terminal>("Dollar Sign", "\\$");
 
-    testStartSymbol.addToRule(*testTerminal1, testTerminal1);
-    testStartSymbol.addToRule(*testTerminal1, testTerminal2);
-    testStartSymbol.addToRule(*testTerminal1, testTerminal3);
-    testStartSymbol.addToRule(*testTerminal1, testTerminal4);
+    std::vector<std::shared_ptr<Symbol>> expansion = {testTerminal1, testTerminal2, testTerminal3, testTerminal4} ;
+
+    testStartSymbol.addToRule(*testTerminal1, expansion);
 
     Recognizer testRecognizer;
     testRecognizer.addTerminal(*testTerminal1);
@@ -249,17 +248,14 @@ TEST(ParserClass, ParserParseWithNonTerminals) {
     std::shared_ptr<NonTerminal> testExpansion1 = std::make_shared<NonTerminal>("Hello World!");
     std::shared_ptr<NonTerminal> testExpansion2 = std::make_shared<NonTerminal>("World! Hello");
 
-    testExpansion1->addToRule(*testTerminal1, testTerminal1);
-    testExpansion1->addToRule(*testTerminal1, testTerminal2);
-    testExpansion1->addToRule(*testTerminal1, testTerminal3);
+    std::vector<std::shared_ptr<Symbol>> expansion1 = {testTerminal1, testTerminal2, testTerminal3};
+    testExpansion1->addToRule(*testTerminal1, expansion1);
 
-    testExpansion2->addToRule(*testTerminal3, testTerminal3);
-    testExpansion2->addToRule(*testTerminal3, testTerminal2);
-    testExpansion2->addToRule(*testTerminal3, testTerminal1);
-    testExpansion2->addToRule(*testTerminal3, testTerminal4);
+    std::vector<std::shared_ptr<Symbol>> expansion2 = {testTerminal3, testTerminal2, testTerminal1, testTerminal4};
+    testExpansion2->addToRule(*testTerminal3, expansion2);
 
-    testStartSymbol.addToRule(*testTerminal1, testExpansion1);
-    testStartSymbol.addToRule(*testTerminal1, testExpansion2);
+    std::vector<std::shared_ptr<Symbol>> expansion3 = {testExpansion1, testExpansion2};
+    testStartSymbol.addToRule(*testTerminal1, expansion3);
 
     Recognizer testRecognizer;
     testRecognizer.addTerminal(*testTerminal1);
