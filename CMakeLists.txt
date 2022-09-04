@@ -35,6 +35,7 @@ set(SOURCE_FILES
         src/parser/visitors/semantic/KeywordVerifierVisitor.cpp src/parser/visitors/semantic/KeywordVerifierVisitor.h
         src/parser/grammar/GrammarBuilder.cpp src/parser/grammar/GrammarBuilder.h
         src/parser/visitors/grammar/GrammarBuilderVisitor.cpp src/parser/visitors/grammar/GrammarBuilderVisitor.h
+        src/parser/visitors/astConversion/ParseTreeSimplifierVisitor.cpp src/parser/visitors/astConversion/ParseTreeSimplifierVisitor.h
 )
 set(TEST_ASSETS test/TestUtils.cpp test/TestUtils.h)
 add_library(testables ${SOURCE_FILES} ${TEST_ASSETS})

@@ -116,7 +116,7 @@ std::vector<std::map<std::string, std::string>> NonTerminal::getAnnotation(const
     auto correspondingRule = this->annotations.find(first);
     if (correspondingRule == this->annotations.end()) {
         std::stringstream what;
-        what << "Non-terminal symbol " << this->getName() << " has no rules for terminal symbol " << first.getName()
+        what << "Non-terminal symbol " << this->getName() << " has no annotations for a rule with terminal symbol " << first.getName()
              << "." << std::endl;
         throw std::runtime_error(what.str());
     }
