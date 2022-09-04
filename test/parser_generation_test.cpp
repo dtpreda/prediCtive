@@ -50,11 +50,9 @@ TEST_F(parserGenerationTest, GrammarVerifier) {
 }
 
 TEST_F(parserGenerationTest, ParserGeneration) {
-    std::string contents = TestUtils::openPrediCtiveFile("simpleGrammar.cg");
+    ASSERT_NO_THROW(prediCtiveParser.openAndParse("simpleGrammar.cg"));
 
-    ASSERT_NO_THROW(prediCtiveParser.parse(contents));
-
-    std::shared_ptr<Node> root = prediCtiveParser.parse(contents);
+    std::shared_ptr<Node> root = prediCtiveParser.openAndParse("simpleGrammar.cg");
 
     ASSERT_NO_THROW(convertToAST(root));
 
@@ -67,9 +65,7 @@ TEST_F(parserGenerationTest, ParserGeneration) {
 
     Parser simpleGrammarParser = gv.buildGrammar();
 
-    std::string simpleGrammarContents = TestUtils::openPrediCtiveFile("testFile.sg");
-
-    std::shared_ptr<Node> parseRoot = simpleGrammarParser.parse(simpleGrammarContents);
+    std::shared_ptr<Node> parseRoot = simpleGrammarParser.openAndParse("testFile.sg");
 
     std::cout << parseRoot->print() << std::endl;
 }

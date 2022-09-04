@@ -15,11 +15,14 @@
 class Parser {
 public:
     Parser(Recognizer recognizer, const NonTerminal&  startSymbol);
+    Parser(Recognizer recognizer, const NonTerminal&  startSymbol, std::vector<Terminal>  skipExpressions);
 
     std::shared_ptr<Node> parse(std::string toParse);
+    std::shared_ptr<Node> openAndParse(const std::string& path);
 private:
     Recognizer recognizer;
     NonTerminal startSymbol;
+    std::vector<Terminal> skipExpressions;
 
     std::shared_ptr<Node> parse(std::string& toParse, Terminal& currentTerminal, const std::shared_ptr<Node>& rootNode, const std::shared_ptr<Symbol>& currentSymbol);
 };
