@@ -12,6 +12,7 @@ std::string SYMBOL_NAME = "symbol_name";
 std::string CLOSURE = "closure";
 std::string REGEX_LITERAL = "regex";
 std::string BEFORE_START_NAME = "SStart";
+std::string LAST_TOKEN = "last_token";
 std::string INTERMEDIATE_NON_TERMINAL_PATTERN = "Intermediate_NonTerminal_";
 
-std::unordered_set<std::string> KEYWORDS = std::unordered_set<std::string>({CONSUMED_TOKEN, SYMBOL_NAME, CLOSURE, REGEX_LITERAL, BEFORE_START_NAME});
+std::unordered_set<std::string> KEYWORDS = std::unordered_set<std::string>({CONSUMED_TOKEN, SYMBOL_NAME, CLOSURE, REGEX_LITERAL, BEFORE_START_NAME, LAST_TOKEN});

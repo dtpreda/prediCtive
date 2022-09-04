@@ -162,23 +162,24 @@ void GrammarBuilder::computeSets() {
 Parser GrammarBuilder::buildGrammar() {
     for (const auto& setOfRules: this->rules) {
         std::shared_ptr<NonTerminal> nonTerminal = this->nonTerminals.find(setOfRules.first)->second;
-        for (const auto& rule: setOfRules.second) {
-            for (const auto& terminalSymbol: GrammarBuilder::computeFirst(rule)) {
+        auto annotationsVec = this->annotations.find(setOfRules.first)->second;
+        for (int i = 0; i < setOfRules.second.size(); i++) {
+            for (const auto& terminalSymbol: GrammarBuilder::computeFirst(setOfRules.second[i])) {
                 auto terminal = std::dynamic_pointer_cast<Terminal>(terminalSymbol);
 
                 if (terminal) {
-                    nonTerminal->addToRule(*terminal, rule);
+                    nonTerminal->addToRule(*terminal, setOfRules.second[i], annotationsVec[i]);
                 } else {
                     throw std::runtime_error("Wrong type of symbol passed to FIRST set.");
                 }
             }
 
-            if (GrammarBuilder::isNullable(rule)) {
+            if (GrammarBuilder::isNullable(setOfRules.second[i])) {
                 for (const auto& terminalSymbol: nonTerminal->getFollow()) {
                     auto terminal = std::dynamic_pointer_cast<Terminal>(terminalSymbol);
 
                     if (terminal) {
-                        nonTerminal->addToRule(*terminal, rule);
+                        nonTerminal->addToRule(*terminal, setOfRules.second[i], annotationsVec[i]);
                     } else {
                         throw std::runtime_error("Wrong type of symbol passed to FIRST set.");
                     }

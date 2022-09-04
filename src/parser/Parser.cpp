@@ -25,15 +25,24 @@ std::shared_ptr<Node> Parser::parse(std::string toParse) {
     Terminal currentTerminal = (this->recognizer).recognizeFirstTerminal(toParse);
 
     std::vector<std::shared_ptr<Symbol>> nextSymbols = this->startSymbol.getRule(currentTerminal);
+    std::vector<std::map<std::string, std::string>> annotations = this->startSymbol.getAnnotation(currentTerminal);
 
-    for (auto & nextSymbol : nextSymbols) {
-        if (currentTerminal.getName() == END_OF_INPUT->getName() && !nextSymbol->isNullable()) {
+    for (int index = 0; index < nextSymbols.size(); index++) {
+        if (currentTerminal.getName() == END_OF_INPUT->getName() && !nextSymbols[index]->isNullable()) {
             throw std::runtime_error("Unable to correctly match expression given.");
+        }
+        for (auto& annotation: annotations[index]) {
+            if (annotation.second == LAST_TOKEN) {
+                annotation.second = currentTerminal.getLastMatch();
+            }
         }
         std::shared_ptr<Node> childNode = this->parse(
                 toParse, currentTerminal,
-                std::make_shared<Node>(Node(nextSymbol->getName())), nextSymbol
+                std::make_shared<Node>(Node(nextSymbols[index]->getName())), nextSymbols[index]
                 );
+        for (const auto& annotation: annotations[index]) {
+            childNode->addAnnotation(annotation.first, annotation.second);
+        }
         childNode->setParent(root);
         root->addChild(childNode);
     }
@@ -51,15 +60,24 @@ std::shared_ptr<Node> Parser::parse(std::string& toParse, Terminal& currentTermi
 
     if (nextNonTerminal) {
         std::vector<std::shared_ptr<Symbol>> nextSymbols = nextNonTerminal->getRule(currentTerminal);
+        std::vector<std::map<std::string, std::string>> annotations = nextNonTerminal->getAnnotation(currentTerminal);
 
-        for (auto & nextSymbol : nextSymbols) {
-            if (currentTerminal.getName() == END_OF_INPUT->getName() && !nextSymbol->isNullable()) {
+        for (int index = 0; index < nextSymbols.size(); index++) {
+            if (currentTerminal.getName() == END_OF_INPUT->getName() && !nextSymbols[index]->isNullable()) {
                 throw std::runtime_error("Unable to correctly match expression given.");
+            }
+            for (auto& annotation: annotations[index]) {
+                if (annotation.second == LAST_TOKEN) {
+                    annotation.second = currentTerminal.getLastMatch();
+                }
             }
             std::shared_ptr<Node> childNode = this->parse(
                     toParse, currentTerminal,
-                    std::make_shared<Node>(Node(nextSymbol->getName())), nextSymbol
+                    std::make_shared<Node>(Node(nextSymbols[index]->getName())), nextSymbols[index]
                     );
+            for (const auto& annotation: annotations[index]) {
+                childNode->addAnnotation(annotation.first, annotation.second);
+            }
             childNode->setParent(rootNode);
             rootNode->addChild(childNode);
         }
