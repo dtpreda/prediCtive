@@ -1,6 +1,8 @@
 TOKENS {
     INT: "int",
     VOID: "void",
+    A: "asd",
+    B: "basd",
     ID: "[[:alpha:]][[:alnum:]_]*"
 }
 
@@ -14,5 +16,9 @@ Start -> (First)* { "test" : "first" } Second;
 
 First -> < INT > { "hello" : last_token } ;
 First -> < VOID >;
+First -> Third Fourth;
+
+Third -> < A >;
+Fourth -> < B >;
 
 Second -> (< ID >)+;

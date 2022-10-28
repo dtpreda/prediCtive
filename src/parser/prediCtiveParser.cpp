@@ -67,7 +67,7 @@ Parser buildPrediCtiveParser() {
     NextExpansionBlock->addToRule(*ID, std::vector<std::shared_ptr<Symbol>>({ ExpansionBlock, Annotation, NextExpansionBlock }));
     NextExpansionBlock->addToRule(*LEFT_CURLY_BRACKET, std::vector<std::shared_ptr<Symbol>>({}));
     NextExpansionBlock->addToRule(*SEMICOLON, std::vector<std::shared_ptr<Symbol>>({}));
-    NextExpansionBlock->addToRule(*OPEN_BRACKET, std::vector<std::shared_ptr<Symbol>>({ ExpansionBlock, AnnotationOption, NextExpansionBlock }));
+    NextExpansionBlock->addToRule(*OPEN_BRACKET, std::vector<std::shared_ptr<Symbol>>({ ExpansionBlock, Annotation, NextExpansionBlock }));
     NextExpansionBlock->addToRule(*OPEN_PARENTHESES, std::vector<std::shared_ptr<Symbol>>({ ExpansionBlock, Annotation, NextExpansionBlock }));
     NextExpansionBlock->addToRule(*CLOSE_PARENTHESES, std::vector<std::shared_ptr<Symbol>>({}));
 
