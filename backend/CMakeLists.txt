@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.22)
-project(parser)
+project(prediCtive_backend)
 
 # GoogleTest requires at least C++14
 set(CMAKE_CXX_STANDARD 17)
@@ -40,5 +40,8 @@ set(SOURCE_FILES
 set(TEST_ASSETS test/TestUtils.cpp test/TestUtils.h)
 add_library(testables ${SOURCE_FILES} ${TEST_ASSETS})
 
-add_executable(parser src/main.cpp ${SOURCE_FILES})
+find_package(Crow)
+
+add_executable(${CMAKE_PROJECT_NAME} src/main.cpp ${SOURCE_FILES})
+target_link_libraries(${CMAKE_PROJECT_NAME} PUBLIC Crow::Crow)
 add_subdirectory(test)
