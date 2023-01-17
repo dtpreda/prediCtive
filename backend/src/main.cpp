@@ -1,7 +1,11 @@
 #include <crow.h>
+#include "parser/prediCtiveParser.h"
+#include "parser/Parser.h"
 
 int main() {
     crow::SimpleApp app;
+
+    Parser prediCtiveParser = buildPrediCtiveParser();
 
     CROW_ROUTE(app, "/")([](){
         return "Hello world";

@@ -10,6 +10,11 @@
 #include "parser/grammar/Terminal.h"
 #include "parser/grammar/NonTerminal.h"
 
+#include "parser/visitors/grammar/GrammarBuilderVisitor.h"
+#include "parser/grammar/GrammarBuilder.h"
+#include "parser/visitors/astConversion/ParseTreeSimplifierVisitor.h"
+
+
 Parser buildPrediCtiveParser() {
     std::shared_ptr<Terminal> SKIP_WHITESPACE = std::make_shared<Terminal>(Terminal("SKIP_WHITESPACE", " "));
     std::shared_ptr<Terminal> SKIP_NEWLINE = std::make_shared<Terminal>(Terminal("SKIP_NEWLINE", "\n"));
@@ -125,4 +130,26 @@ void convertToAST(const std::shared_ptr<Node>& root) {
     ruleExtractorVisitor.visit(root);
     ruleSimplifierVisitor.visit(root);
     closureSimplifierVisitor.visit(root);
+}
+
+Parser buildParser(Parser& prediCtiveParser, std::string& grammar) {
+    std::shared_ptr<Node> root = prediCtiveParser.parseUnfiltered(grammar);
+
+    convertToAST(root);
+
+    GrammarBuilderVisitor gbv;
+
+    gbv.visit(root);
+
+    GrammarBuilder gv = gbv.grammarBuilder;
+    gv.computeSets();
+
+    return gv.buildGrammar();
+}
+
+std::string parseResult(Parser& parser, std::string& content) {
+    std::shared_ptr<Node> parseTree = parser.parseUnfiltered(content);
+    ParseTreeSimplifierVisitor ptsv;
+    ptsv.visit(parseTree);
+    return parseTree->print();
 }
