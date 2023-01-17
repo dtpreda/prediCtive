@@ -2,15 +2,7 @@
 
 `prediCtive` is a C++ parser generator for LL(1) grammars. It aims to provide users with a simple syntax to express their own grammars and generate parsers for those same grammars.
 
-## Usage
-
-To use the demonstration program, which generates a parser and prints the parsing tree for a file written in that language, use the following command:
-
-  > ./parser < grammar-definition-file > < file-written-in-grammar >
-
-The `prediCtive` code is best used, however, as a library.
-
-## Technical Details
+## Details
 
 ### Grammar Definition
 
