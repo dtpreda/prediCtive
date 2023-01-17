@@ -132,7 +132,7 @@ void convertToAST(const std::shared_ptr<Node>& root) {
     closureSimplifierVisitor.visit(root);
 }
 
-Parser buildParser(Parser& prediCtiveParser, std::string& grammar) {
+Parser buildParser(Parser prediCtiveParser, std::string& grammar) {
     std::shared_ptr<Node> root = prediCtiveParser.parseUnfiltered(grammar);
 
     convertToAST(root);

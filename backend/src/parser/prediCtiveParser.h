@@ -13,7 +13,7 @@
 #include "visitors/astConversion/ClosureSimplifierVisitor.h"
 
 Parser buildPrediCtiveParser();
-Parser buildParser(Parser& prediCtiveParser, std::string& grammar);
+Parser buildParser(Parser prediCtiveParser, std::string& grammar);
 std::string parseResult(Parser& parser, std::string& content);
 
 #endif //PARSER_PREDICTIVEPARSER_H
