@@ -105,42 +105,44 @@ std::shared_ptr<Node> Parser::parse(std::string& toParse, Terminal& currentTermi
     return rootNode;
 }
 
-std::shared_ptr<Node> Parser::openAndParse(const std::string& path) {
+std::shared_ptr<Node> Parser::openAndParse(const std::string &path) {
     std::ifstream file(path);
     std::string fileStr((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
-    std::stringstream filteredFile;
+    return this->parseUnfiltered(fileStr);
+}
+
+std::shared_ptr<Node> Parser::parseUnfiltered(std::string toParse) {
+    std::stringstream filtered;
 
     std::regex quoteExpression("\"(.*?)\"");
 
-    while (!fileStr.empty()) {
+    while (!toParse.empty()) {
         std::smatch matchResult;
 
-        if (std::regex_search(fileStr, matchResult, quoteExpression) && matchResult.position() == 0) {
-            filteredFile << fileStr.substr(0, matchResult.length());
+        if (std::regex_search(toParse, matchResult, quoteExpression) && matchResult.position() == 0) {
+            filtered << toParse.substr(0, matchResult.length());
 
-            fileStr = fileStr.substr(matchResult.length());
+            toParse = toParse.substr(matchResult.length());
         } else {
             bool hasMatch = false;
             for (const auto& skipExpression: this->skipExpressions) {
                 std::regex skipExpressionRegex(skipExpression.getRegexExpression());
 
-                if (std::regex_search(fileStr, matchResult, skipExpressionRegex) && matchResult.position() == 0) {
-                    fileStr = fileStr.substr(matchResult.length());
+                if (std::regex_search(toParse, matchResult, skipExpressionRegex) && matchResult.position() == 0) {
+                    toParse = toParse.substr(matchResult.length());
                     hasMatch = true;
                     break;
                 }
             }
 
             if (!hasMatch) {
-                filteredFile << fileStr[0];
-                fileStr = fileStr.substr(1);
+                filtered << toParse[0];
+                toParse = toParse.substr(1);
             }
         }
     }
 
-    std::string str = filteredFile.str();
-
-    return parse(filteredFile.str());
+    return parse(filtered.str());
 }
 
 

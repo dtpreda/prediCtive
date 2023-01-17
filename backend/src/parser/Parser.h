@@ -18,6 +18,7 @@ public:
     Parser(Recognizer recognizer, const NonTerminal&  startSymbol, std::vector<Terminal>  skipExpressions);
 
     std::shared_ptr<Node> parse(std::string toParse);
+    std::shared_ptr<Node> parseUnfiltered(std::string toParse);
     std::shared_ptr<Node> openAndParse(const std::string& path);
 private:
     Recognizer recognizer;
